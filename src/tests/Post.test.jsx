@@ -62,7 +62,7 @@ describe('Post component', () => {
     render(<Post replies={[]} number={254} />);
     expect(
       screen.getByRole('generic', { name: 'post number' }).textContent,
-    ).toBe('254');
+    ).toBe('#254');
   });
 
   it('displays correct number of replies', () => {

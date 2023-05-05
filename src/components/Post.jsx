@@ -10,14 +10,14 @@ export default function Post({
   time,
 }) {
   return (
-    <article id={number}>
-      <span>
+    <article className="post" id={number}>
+      <span className="post-info">
         {subject ? <span aria-label="subject">{subject}</span> : null}
         <span aria-label="author">
           {author !== undefined ? author : 'Anonymous'}
         </span>
         <span aria-label="timestamp">{new Date(time).toLocaleString()}</span>
-        <span aria-label="post number">{number}</span>
+        <span aria-label="post number">{`#${number}`}</span>
         {replies.length === 0
           ? null
           : replies.map((reply) => (
@@ -26,8 +26,10 @@ export default function Post({
             </a>
           ))}
       </span>
-      {image ? <img src={image} alt="" /> : null}
-      <span aria-label="post content">{content}</span>
+      <span>
+        {image ? <img src={image} alt="" /> : null}
+        <span aria-label="post content">{content}</span>
+      </span>
     </article>
   );
 }

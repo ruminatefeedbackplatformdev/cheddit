@@ -34,7 +34,7 @@ export default function Thread({ board, op }) {
 
   if (posts.length > 0) {
     return (
-      <div aria-label="thread">
+      <div aria-label="thread" className="thread">
         {posts.map((post) => (
           <Post
             author={post.author}

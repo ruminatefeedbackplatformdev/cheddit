@@ -51,7 +51,7 @@ describe('Board component', () => {
       expect(screen.getByText('John Doe')).toBeInTheDocument();
       expect(screen.getByText('Hello world!')).toBeInTheDocument();
       expect(screen.getByText('Greetings')).toBeInTheDocument();
-      expect(screen.getByText('1')).toBeInTheDocument();
+      expect(screen.getByText('#1')).toBeInTheDocument();
       expect(screen.getByText('5/4/2023, 1:27:26 PM')).toBeInTheDocument();
     });
   });
