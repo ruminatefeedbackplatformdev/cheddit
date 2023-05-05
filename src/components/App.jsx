@@ -1,10 +1,10 @@
 import React from 'react';
-import Board from './Board';
+import Thread from './Thread';
 
 export default function App() {
   return (
     <div>
-      <Board id="mu" />
+      <Thread board="mu" op={1} />
     </div>
   );
 }

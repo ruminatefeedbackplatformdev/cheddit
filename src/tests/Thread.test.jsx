@@ -1,33 +1,64 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import {
+  act, render, screen, waitFor,
+} from '@testing-library/react';
+// eslint-disable-next-line
+import { toBeInTheDocument } from '@testing-library/jest-dom';
 import Thread from '../components/Thread';
 
-describe('Thread component', () => {
-  const posts = [
-    {
-      number: 1,
-      content: 'test post content',
-      image: '#',
-      replies: [7],
-      subject: 'test subject',
-      time: 1683055000000,
-    },
-    {
-      number: 7,
-      content: 'some more content here',
-      image: null,
-      replies: [],
-      time: 1683055751230,
-    },
-  ];
+jest.mock('firebase/firestore', () => ({
+  doc: jest.fn(),
+  getFirestore: jest.fn(),
+  getDoc: () => ({
+    data: () => ({
+      posts: {
+        1: {
+          author: 'John Doe',
+          content: 'Hello world!',
+          image: undefined,
+          replies: [],
+          subject: 'Greetings',
+          thread: 1,
+          time: 1683232046656,
+        },
+        2: {
+          author: undefined,
+          content: 'More content',
+          image: undefined,
+          replies: [],
+          subject: undefined,
+          thread: 1,
+          time: 1683232546656,
+        },
+      },
+      threads: [1],
+    }),
+  }),
+}));
 
-  it('exists', () => {
-    render(<Thread posts={posts} />);
+describe('Thread component', () => {
+  it('exists', async () => {
+    await act(async () => {
+      render(<Thread board="123" op={1} />);
+    });
     expect(screen.getByRole('generic', { name: 'thread' })).toBeTruthy();
   });
 
-  it('displays correct number of posts', () => {
-    render(<Thread posts={posts} />);
+  it('loads posts from database', async () => {
+    await act(async () => {
+      render(<Thread board="123" op={1} />);
+    });
+
+    await waitFor(() => {
+      expect(screen.getByText('Hello world!')).toBeInTheDocument();
+      expect(screen.getByText('More content')).toBeInTheDocument();
+    });
+  });
+
+  it('shows correct number of boards', async () => {
+    await act(async () => {
+      render(<Thread board="123" op={1} />);
+    });
     expect(screen.getAllByRole('article').length).toBe(2);
   });
 });

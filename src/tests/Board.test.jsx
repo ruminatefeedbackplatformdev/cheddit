@@ -15,13 +15,21 @@ jest.mock('firebase/firestore', () => ({
         1: {
           author: 'John Doe',
           content: 'Hello world!',
-          image: null,
+          image: undefined,
           replies: [],
           subject: 'Greetings',
           time: 1683232046656,
         },
+        2: {
+          author: undefined,
+          content: 'More content',
+          image: undefined,
+          replies: [],
+          subject: undefined,
+          time: 1683232546656,
+        },
       },
-      threads: ['1'],
+      threads: [1, 2],
     }),
   }),
 }));
@@ -46,5 +54,12 @@ describe('Board component', () => {
       expect(screen.getByText('1')).toBeInTheDocument();
       expect(screen.getByText('5/4/2023, 1:27:26 PM')).toBeInTheDocument();
     });
+  });
+
+  it('shows correct number of threads', async () => {
+    await act(async () => {
+      render(<Board id="123" />);
+    });
+    expect(screen.getAllByRole('article').length).toBe(2);
   });
 });
