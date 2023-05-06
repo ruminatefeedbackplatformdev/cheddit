@@ -36,6 +36,11 @@ body {
   }
 }
 
+.post [aria-label="post content"] {
+  display: flex;
+  flex-direction: column;
+}
+
 .post-info {
   display: flex;
   flex-wrap: wrap;
