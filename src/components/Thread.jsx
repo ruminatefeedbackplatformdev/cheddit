@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { doc, getDoc } from 'firebase/firestore';
 import database from '../util/firestore';
+import Reply from './Reply';
 import Post from './Post';
 
 async function loadBoard(id) {
@@ -35,6 +36,7 @@ export default function Thread({ board, op }) {
   if (posts.length > 0) {
     return (
       <div aria-label="thread" className="thread">
+        <Reply />
         {posts.map((post) => (
           <Post
             author={post.author}
