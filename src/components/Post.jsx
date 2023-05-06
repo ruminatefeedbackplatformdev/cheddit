@@ -9,8 +9,19 @@ export default function Post({
   subject,
   time,
 }) {
-  const splitContent = content.split('\\n');
-  console.log(splitContent);
+  const handleReplies = (string) => {
+    // turn any proper ">>" reply into a link to the post
+    const reply = /^>>\d+$/;
+    if (string.match(reply)) {
+      return (
+        <span>
+          <a href={`#${string.slice(2)}`}>{string}</a>
+        </span>
+      );
+    }
+    return <span>{string}</span>;
+  };
+
   return (
     <article className="post" id={number}>
       <span className="post-info">
@@ -29,17 +40,21 @@ export default function Post({
       <span>
         {image ? <img src={image} alt="" /> : null}
         <span aria-label="post content">
-          {content.split('\\n').map((line, index) => (
-            // post content comes from a <textarea> which can contain
-            // newline "\n" characters as part of the string stored in
-            // the cloud firestore database.
+          {content
+            ? content.split('\\n').map((line, index) => (
+              // post content comes from a <textarea> which can contain
+              // newline "\n" characters as part of the string stored in
+              // the cloud firestore database.
 
-            // seem safe to use the index as part of the key here, since
-            // we're also using the unique post number.
+              // seem safe to use the index as part of the key here, since
+              // we're also using the unique post number.
 
-            // eslint-disable-next-line
-            <span key={`#${number}-line${index}`}>{line}</span>
-          ))}
+                // eslint-disable-next-line
+                <p key={`#${number}-line${index}`}>
+                  {handleReplies(line, index)}
+                </p>
+            ))
+            : null}
         </span>
       </span>
     </article>
