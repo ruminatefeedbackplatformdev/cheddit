@@ -1,6 +1,20 @@
 import React, { useState } from 'react';
+import { doc, getDoc, updateDoc } from 'firebase/firestore';
+import database from '../util/firestore';
 
-export default function Reply() {
+async function loadBoard(id) {
+  const boardRef = doc(database, 'boards', id);
+  const boardSnap = await getDoc(boardRef);
+  return boardSnap.data();
+}
+
+async function getNewPostNumber(id) {
+  const board = await loadBoard(id);
+  const lastPost = Object.keys(board.posts);
+  return +lastPost[lastPost.length - 1] + 1;
+}
+
+export default function Reply({ board, thread }) {
   const [enabled, setEnabled] = useState(false);
   const [postAuthor, setPostAuthor] = useState('');
   const [postContent, setPostContent] = useState('');
@@ -17,9 +31,24 @@ export default function Reply() {
     setEnabled(!enabled);
   };
 
-  const submitPost = () => {
-    // XXX
-    // do something
+  const submitPost = async () => {
+    const newPost = {
+      author: postAuthor === '' ? null : postAuthor,
+      content: postContent,
+      // XXX
+      image: '#',
+      replies: [],
+      subject: null,
+      thread,
+      time: Date.now(),
+    };
+    const newPostNumber = await getNewPostNumber(board);
+    const update = {};
+    const updateKey = `posts.${newPostNumber}`;
+    update[updateKey] = newPost;
+
+    const boardRef = doc(database, 'boards', board);
+    await updateDoc(boardRef, update);
   };
 
   if (enabled) {

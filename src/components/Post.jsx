@@ -38,7 +38,7 @@ export default function Post({
           ))}
       </span>
       <span>
-        {image ? <img src={image} alt="" /> : null}
+        {image ? <img alt="" src={image} /> : null}
         <span aria-label="post content">
           {content
             ? content.split('\\n').map((line, index) => (
