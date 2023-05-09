@@ -24,6 +24,12 @@ header {
   justify-content: space-between;
 }
 
+header nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
 header .account {
   align-items: center;
   display: flex;
@@ -33,9 +39,13 @@ header .account img {
   height: 40px;
 }
 
+.board {
+  position: relative;
+}
+
 .container {
   display: grid;
-  grid-template-rows: 64px 1fr 64px;
+  grid-template-rows: auto 1fr 32px;
   min-height: 100vh;
 }
 

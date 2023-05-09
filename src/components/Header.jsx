@@ -7,7 +7,7 @@ export default function Header() {
     <header>
       <nav>
         <NavLink to="/">Home</NavLink>
-        <NavLink to="/rules">Rules</NavLink>
+        <NavLink to="/dash">Dashboard</NavLink>
       </nav>
       <span>
         Cheddit

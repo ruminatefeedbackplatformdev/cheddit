@@ -31,7 +31,7 @@ async function loadThreads(id) {
   return firstPosts;
 }
 
-export default function Board({ id }) {
+export default function Board({ id, name }) {
   const [threads, setThreads] = useState([]);
 
   const readDatabase = async () => {
@@ -45,6 +45,7 @@ export default function Board({ id }) {
   if (threads.length > 0) {
     return (
       <main className="board">
+        <h1>{`/${id}/ - ${name}`}</h1>
         <NewThread board={id} readDatabase={readDatabase} />
         {threads.map((thread) => (
           <Post
