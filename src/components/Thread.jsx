@@ -26,17 +26,18 @@ async function loadPosts(board, op) {
 export default function Thread({ board, op }) {
   const [posts, setPosts] = useState([]);
 
+  const readDatabase = async () => {
+    setPosts(await loadPosts(board, op));
+  };
+
   useEffect(() => {
-    const readDatabase = async () => {
-      setPosts(await loadPosts(board, op));
-    };
     readDatabase();
-  }, [posts]);
+  }, []);
 
   if (posts.length > 0) {
     return (
       <div aria-label="thread" className="thread">
-        <Reply board={board} thread={op} />
+        <Reply board={board} thread={op} readDatabase={readDatabase} />
         {posts.map((post) => (
           <Post
             author={post.author}
@@ -46,6 +47,7 @@ export default function Thread({ board, op }) {
             key={post.number}
             replies={post.replies}
             subject={post.subject}
+            thread={op}
             time={post.time}
           />
         ))}

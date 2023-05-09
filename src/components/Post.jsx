@@ -7,6 +7,7 @@ export default function Post({
   number,
   replies,
   subject,
+  thread,
   time,
 }) {
   const handleReplies = (string) => {
@@ -23,7 +24,7 @@ export default function Post({
   };
 
   return (
-    <article className="post" id={number}>
+    <article className={number === thread ? 'post' : 'post reply'} id={number}>
       <span className="post-info">
         {subject ? <span aria-label="subject">{subject}</span> : null}
         <span aria-label="author">{author || 'Anonymous'}</span>
@@ -41,7 +42,7 @@ export default function Post({
         {image ? <img alt="" src={image} /> : null}
         <span aria-label="post content">
           {content
-            ? content.split('\\n').map((line, index) => (
+            ? content.split('\n').map((line, index) => (
               // post content comes from a <textarea> which can contain
               // newline "\n" characters as part of the string stored in
               // the cloud firestore database.

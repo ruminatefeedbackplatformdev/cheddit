@@ -34,6 +34,7 @@ jest.mock('firebase/firestore', () => ({
       threads: [1],
     }),
   }),
+  onSnapshot: jest.fn(),
 }));
 
 describe('Thread component', () => {
@@ -55,7 +56,7 @@ describe('Thread component', () => {
     });
   });
 
-  it('shows correct number of boards', async () => {
+  it('shows correct number of posts', async () => {
     await act(async () => {
       render(<Thread board="123" op={1} />);
     });

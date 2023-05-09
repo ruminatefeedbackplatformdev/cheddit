@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { doc, getDoc } from 'firebase/firestore';
+import NewThread from './NewThread';
 import Post from './Post';
 import database from '../util/firestore';
 
@@ -33,16 +34,18 @@ async function loadThreads(id) {
 export default function Board({ id }) {
   const [threads, setThreads] = useState([]);
 
+  const readDatabase = async () => {
+    setThreads(await loadThreads(id));
+  };
+
   useEffect(() => {
-    const readDatabase = async () => {
-      setThreads(await loadThreads(id));
-    };
     readDatabase();
   }, []);
 
   if (threads.length > 0) {
     return (
-      <main>
+      <main className="board">
+        <NewThread board={id} readDatabase={readDatabase} />
         {threads.map((thread) => (
           <Post
             author={thread.author}
@@ -52,6 +55,7 @@ export default function Board({ id }) {
             number={thread.number}
             replies={thread.replies}
             subject={thread.subject}
+            thread={thread.number}
             time={thread.time}
           />
         ))}

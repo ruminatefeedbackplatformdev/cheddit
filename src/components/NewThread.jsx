@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { doc, getDoc, updateDoc } from 'firebase/firestore';
+import {
+  arrayUnion, doc, getDoc, updateDoc,
+} from 'firebase/firestore';
 import {
   getDownloadURL, getStorage, ref, uploadBytes,
 } from 'firebase/storage';
@@ -17,26 +19,31 @@ async function getNewPostNumber(id) {
   return +lastPost[lastPost.length - 1] + 1;
 }
 
-export default function Reply({ board, readDatabase, thread }) {
+export default function NewThread({ board, readDatabase }) {
   const [enabled, setEnabled] = useState(false);
-  const [postAuthor, setPostAuthor] = useState('');
-  const [postContent, setPostContent] = useState('');
+  const [threadAuthor, setThreadAuthor] = useState('');
+  const [threadSubject, setThreadSubject] = useState('');
+  const [threadContent, setThreadContent] = useState('');
   const [file, setFile] = useState(null);
 
+  const enableForm = () => {
+    setEnabled(!enabled);
+  };
+
   const changeAuthor = (event) => {
-    setPostAuthor(event.target.value);
+    setThreadAuthor(event.target.value);
+  };
+
+  const changeSubject = (event) => {
+    setThreadSubject(event.target.value);
   };
 
   const changeContent = (event) => {
-    setPostContent(event.target.value);
+    setThreadContent(event.target.value);
   };
 
   const changeFile = (event) => {
     setFile(event.target.files[0]);
-  };
-
-  const enableForm = () => {
-    setEnabled(!enabled);
   };
 
   const uploadImage = async (newPostNumber) => {
@@ -53,20 +60,21 @@ export default function Reply({ board, readDatabase, thread }) {
     return downloadURL;
   };
 
-  const submitPost = async () => {
+  const submitThread = async () => {
     const newPost = {
-      author: postAuthor === '' ? null : postAuthor,
-      content: postContent,
+      author: threadAuthor === '' ? null : threadAuthor,
+      content: threadContent,
       image: null,
       replies: [],
-      subject: null,
-      thread,
+      subject: threadSubject,
+      thread: null,
       time: Date.now(),
     };
     const newPostNumber = await getNewPostNumber(board);
     const update = {};
     const updateKey = `posts.${newPostNumber}`;
     update[updateKey] = newPost;
+    update[updateKey].thread = newPostNumber;
 
     if (file) {
       const URL = await uploadImage(newPostNumber);
@@ -75,8 +83,12 @@ export default function Reply({ board, readDatabase, thread }) {
 
     const boardRef = doc(database, 'boards', board);
     await updateDoc(boardRef, update);
-    setPostAuthor('');
-    setPostContent('');
+    await updateDoc(boardRef, {
+      threads: arrayUnion(newPostNumber),
+    });
+    setThreadAuthor('');
+    setThreadSubject('');
+    setThreadContent('');
     setFile(null);
     enableForm();
     await readDatabase();
@@ -84,35 +96,45 @@ export default function Reply({ board, readDatabase, thread }) {
 
   if (enabled) {
     return (
-      <div className="reply-container">
-        <form aria-label="reply form" className="reply-form">
-          <label htmlFor="post-author">
+      <div className="new-thread-container">
+        <form aria-label="thread form" className="thread-form">
+          <label htmlFor="thread-author">
             Name:
             <input
-              id="post-author"
-              name="post-author"
+              id="thread-author"
+              name="thread-author"
               onChange={changeAuthor}
               type="text"
               placeholder="Anonymous"
-              value={postAuthor}
+              value={threadAuthor}
             />
           </label>
-          <label htmlFor="post-content">
+          <label htmlFor="thread-subject">
+            Subject:
+            <input
+              id="thread-subject"
+              name="thread-subject"
+              onChange={changeSubject}
+              type="text"
+              value={threadSubject}
+            />
+          </label>
+          <label htmlFor="thread-content">
             Comment:
             <textarea
-              id="post-content"
-              name="post-content"
+              id="thread-content"
+              name="thread-content"
               onChange={changeContent}
               rows="6"
-              value={postContent}
+              value={threadContent}
             />
           </label>
-          <label htmlFor="post-image">
+          <label htmlFor="thread-image">
             Image:
             <input
               accept="image/jpeg, image/gif, image/png"
-              id="post-image"
-              name="post=image"
+              id="thread-image"
+              name="thread-image"
               onChange={changeFile}
               type="file"
             />
@@ -121,7 +143,7 @@ export default function Reply({ board, readDatabase, thread }) {
             <button onClick={enableForm} type="button">
               CANCEL
             </button>
-            <button onClick={submitPost} type="button">
+            <button onClick={submitThread} type="button">
               POST
             </button>
           </div>
@@ -131,9 +153,9 @@ export default function Reply({ board, readDatabase, thread }) {
   }
 
   return (
-    <div className="reply-container">
+    <div>
       <button onClick={enableForm} type="button">
-        [ Post a Reply ]
+        Start a Thread
       </button>
     </div>
   );

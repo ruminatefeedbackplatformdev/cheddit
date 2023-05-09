@@ -10,7 +10,7 @@ body {
 }
 
 .post {
-  background: #d6daf0;
+  background: #c5ccf2;
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -36,15 +36,21 @@ body {
   }
 }
 
+.post.reply {
+  background: #d6daf0;
+  margin-left: 32px;
+}
+
 .post [aria-label="post content"] {
   display: flex;
   flex-direction: column;
 }
 
 .post-info {
+  align-items: center;
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 16px;
 }
 
 .post-info [aria-label="author"] {
@@ -61,31 +67,46 @@ body {
   font-style: italic;
 }
 
-.reply-form {
+.reply-container,
+.new-thread-container {
+  background: #e6eafa;
+  padding: 16px;
+  position: sticky;
+  top: 0;
+}
+
+.reply-form,
+.thread-form {
   display: flex;
   flex-direction: column;
 }
 
-.reply-form > * {
+.reply-form > *,
+.thread-form > * {
   max-width: 400px;
   width: 100%;
 }
 
 .reply-form input,
-.reply-form textarea {
+.thread-form input,
+.reply-form textarea 
+.thread-form textarea, {
   font-family: "Noto Sans", sans-serif;
   font-size: 1rem;
 }
 
-.reply-form label {
+.reply-form label,
+.thread-form label {
   display: flex;
   flex-direction: column;
   gap: 4px;
 }
 
-.thread {
+.thread,
+.board {
   display: flex;
   flex-direction: column;
   gap: 32px;
   padding: 16px;
+  position: relative;
 }
