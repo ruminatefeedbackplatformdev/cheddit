@@ -31,7 +31,7 @@ export default function Thread({ board, op }) {
       setPosts(await loadPosts(board, op));
     };
     readDatabase();
-  }, []);
+  }, [posts]);
 
   if (posts.length > 0) {
     return (

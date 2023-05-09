@@ -57,7 +57,6 @@ export default function Reply({ board, thread }) {
     const newPost = {
       author: postAuthor === '' ? null : postAuthor,
       content: postContent,
-      // XXX
       image: null,
       replies: [],
       subject: null,
@@ -76,11 +75,15 @@ export default function Reply({ board, thread }) {
 
     const boardRef = doc(database, 'boards', board);
     await updateDoc(boardRef, update);
+    setPostAuthor('');
+    setPostContent('');
+    setFile(null);
+    enableForm();
   };
 
   if (enabled) {
     return (
-      <form aria-label="reply form">
+      <form aria-label="reply form" className="reply-form">
         <label htmlFor="post-author">
           Name:
           <input
@@ -98,6 +101,7 @@ export default function Reply({ board, thread }) {
             id="post-content"
             name="post-content"
             onChange={changeContent}
+            rows="6"
             value={postContent}
           />
         </label>
@@ -111,12 +115,14 @@ export default function Reply({ board, thread }) {
             type="file"
           />
         </label>
-        <button onClick={enableForm} type="button">
-          CANCEL
-        </button>
-        <button onClick={submitPost} type="button">
-          POST
-        </button>
+        <div className="buttons">
+          <button onClick={enableForm} type="button">
+            CANCEL
+          </button>
+          <button onClick={submitPost} type="button">
+            POST
+          </button>
+        </div>
       </form>
     );
   }
