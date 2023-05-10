@@ -88,8 +88,8 @@ export default function Board({ id, name }) {
     );
   }
   return (
-    <main>
-      <span>Nothing to see here...</span>
+    <main className="board">
+      <span>Loading...</span>
     </main>
   );
 }

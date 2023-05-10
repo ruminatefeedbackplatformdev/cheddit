@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import {
   getDownloadURL, getStorage, ref, uploadBytes,
@@ -126,6 +127,7 @@ export default function Reply({ board, readDatabase, thread }) {
             </button>
           </div>
         </form>
+        <Link to={`/${board}`}>{`Back to /${board}/`}</Link>
       </div>
     );
   }
@@ -135,6 +137,7 @@ export default function Reply({ board, readDatabase, thread }) {
       <button onClick={enableForm} type="button">
         [ Post a Reply ]
       </button>
+      <Link to={`/${board}`}>{`Back to /${board}/`}</Link>
     </div>
   );
 }

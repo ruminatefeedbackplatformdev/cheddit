@@ -46,7 +46,7 @@ export default function App() {
           <Route
             key={`route-${board.id}_thread-${thread}`}
             path={`${board.id}_t${thread}`}
-            element={<Thread board={board.id} op={thread} />}
+            element={<Thread board={board.id} name={board.name} op={thread} />}
           />
         )))}
       </Routes>

@@ -23,7 +23,7 @@ async function loadPosts(board, op) {
   return threadPosts;
 }
 
-export default function Thread({ board, op }) {
+export default function Thread({ board, name, op }) {
   const [posts, setPosts] = useState([]);
 
   const readDatabase = async () => {
@@ -37,6 +37,7 @@ export default function Thread({ board, op }) {
   if (posts.length > 0) {
     return (
       <div aria-label="thread" className="thread">
+        <h1>{`/${board}/ - ${name}`}</h1>
         <Reply board={board} thread={op} readDatabase={readDatabase} />
         {posts.map((post) => (
           <Post
@@ -54,5 +55,9 @@ export default function Thread({ board, op }) {
       </div>
     );
   }
-  return (<span>Nothing to see here...</span>);
+  return (
+    <div aria-label="thread" className="thread">
+      <span>Loading...</span>
+    </div>
+  );
 }

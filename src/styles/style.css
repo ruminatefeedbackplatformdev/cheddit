@@ -113,7 +113,11 @@ header .account img {
 
 .reply-container,
 .new-thread-container {
+  align-items: flex-start;
   background: #e6eafa;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
   padding: 16px;
   position: sticky;
   top: 0;
