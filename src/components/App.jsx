@@ -5,6 +5,7 @@ import database from '../util/firestore';
 import Header from './Header';
 import Home from './Home';
 import Board from './Board';
+import Thread from './Thread';
 import Footer from './Footer';
 
 export default function App() {
@@ -18,6 +19,7 @@ export default function App() {
         const thisBoard = {};
         thisBoard.id = doc.id;
         thisBoard.name = doc.data().name;
+        thisBoard.threads = doc.data().threads;
         allBoards.push(thisBoard);
       });
       setBoards(allBoards);
@@ -36,10 +38,17 @@ export default function App() {
         {boards.map((board) => (
           <Route
             key={`route-${board.id}`}
-            path={`/${board.id}`}
+            path={`${board.id}`}
             element={<Board id={board.id} name={board.name} />}
           />
         ))}
+        {boards.map((board) => board.threads.map((thread) => (
+          <Route
+            key={`route-${board.id}_thread-${thread}`}
+            path={`${board.id}_t${thread}`}
+            element={<Thread board={board.id} op={thread} />}
+          />
+        )))}
       </Routes>
       <Footer />
     </div>

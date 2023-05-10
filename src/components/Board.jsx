@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { doc, getDoc } from 'firebase/firestore';
 import NewThread from './NewThread';
 import Post from './Post';
@@ -16,17 +17,15 @@ async function loadThreads(id) {
   const firstPosts = [];
   threads.forEach((thread) => {
     const op = posts[thread];
-    firstPosts.push(
-      {
-        author: op.author,
-        content: op.content,
-        image: op.image,
-        number: thread,
-        replies: op.replies,
-        subject: op.subject,
-        time: op.time,
-      },
-    );
+    firstPosts.push({
+      author: op.author,
+      content: op.content,
+      image: op.image,
+      number: thread,
+      replies: op.replies,
+      subject: op.subject,
+      time: op.time,
+    });
   });
   return firstPosts;
 }
@@ -77,7 +76,12 @@ export default function Board({ id, name }) {
               thread={thread.number}
               time={thread.time}
             />
-            <span>{`${postCounts[thread.number] - 1} replies.`}</span>
+            <span>
+              {`${postCounts[thread.number]} ${
+                postCounts[thread.number] === 1 ? 'post' : 'posts'
+              } - `}
+              <Link to={`/${id}_t${thread.number}`}>View thread</Link>
+            </span>
           </div>
         ))}
       </main>

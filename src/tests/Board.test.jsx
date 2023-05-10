@@ -1,9 +1,10 @@
 import React from 'react';
+import { BrowserRouter } from 'react-router-dom';
 import {
   act, render, screen, waitFor,
 } from '@testing-library/react';
 // eslint-disable-next-line
-import { toBeInTheDocument } from '@testing-library/jest-dom';
+import { toBeInTheDocument } from "@testing-library/jest-dom";
 import Board from '../components/Board';
 
 jest.mock('firebase/firestore', () => ({
@@ -37,14 +38,22 @@ jest.mock('firebase/firestore', () => ({
 describe('Board component', () => {
   it('exists', async () => {
     await act(async () => {
-      render(<Board id="123" />);
+      render(
+        <BrowserRouter>
+          <Board id="123" />
+        </BrowserRouter>,
+      );
     });
     expect(screen.getByRole('main')).toBeTruthy();
   });
 
   it('loads thread OPs from database', async () => {
     await act(async () => {
-      render(<Board id="123" />);
+      render(
+        <BrowserRouter>
+          <Board id="123" />
+        </BrowserRouter>,
+      );
     });
 
     await waitFor(() => {
@@ -58,7 +67,11 @@ describe('Board component', () => {
 
   it('shows correct number of threads', async () => {
     await act(async () => {
-      render(<Board id="123" />);
+      render(
+        <BrowserRouter>
+          <Board id="123" />
+        </BrowserRouter>,
+      );
     });
     expect(screen.getAllByRole('article').length).toBe(2);
   });

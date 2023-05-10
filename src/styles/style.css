@@ -133,8 +133,8 @@ header .account img {
 
 .reply-form input,
 .thread-form input,
-.reply-form textarea 
-.thread-form textarea, {
+.reply-form textarea,
+.thread-form textarea {
   font-family: "Noto Sans", sans-serif;
   font-size: 1rem;
 }
