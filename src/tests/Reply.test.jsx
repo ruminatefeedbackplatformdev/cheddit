@@ -1,18 +1,27 @@
 import React from 'react';
+import { BrowserRouter } from 'react-router-dom';
 import { act, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import Reply from '../components/Reply';
 
 describe('Reply component', () => {
   it('displays reply button', () => {
-    render(<Reply />);
+    render(
+      <BrowserRouter>
+        <Reply />
+      </BrowserRouter>,
+    );
     expect(
       screen.getByRole('button', { name: '[ Post a Reply ]' }),
     ).toBeTruthy();
   });
 
   it('displays reply form when button clicked', () => {
-    render(<Reply />);
+    render(
+      <BrowserRouter>
+        <Reply />
+      </BrowserRouter>,
+    );
     act(() => {
       userEvent.click(screen.getByRole('button', { name: '[ Post a Reply ]' }));
     });
@@ -20,7 +29,11 @@ describe('Reply component', () => {
   });
 
   it('displays correct input fields', () => {
-    render(<Reply />);
+    render(
+      <BrowserRouter>
+        <Reply />
+      </BrowserRouter>,
+    );
     act(() => {
       userEvent.click(screen.getByRole('button', { name: '[ Post a Reply ]' }));
     });

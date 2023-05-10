@@ -4,6 +4,10 @@
   box-sizing: border-box;
 }
 
+a {
+  color: #da2834;
+}
+
 body {
   background: #e6eafa;
   font-family: "Noto Sans", sans-serif;
@@ -11,17 +15,25 @@ body {
 
 footer {
   align-items: center;
-  border: 2px solid yellow;
+  background: #9988ee;
   display: flex;
   justify-content: center;
 }
 
 header {
   align-items: center;
-  border: 2px solid red;
+  background: #9988ee;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 9;
+}
+
+header a,
+footer a {
+  color: #ffa;
 }
 
 header nav {
@@ -47,10 +59,6 @@ header .account img {
   display: grid;
   grid-template-rows: auto 1fr 32px;
   min-height: 100vh;
-}
-
-.home {
-  border: 2px solid magenta;
 }
 
 .post {
@@ -118,15 +126,15 @@ header .account img {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  padding: 16px;
   position: sticky;
-  top: 0;
+  top: 40px;
 }
 
 .reply-form,
 .thread-form {
   display: flex;
   flex-direction: column;
+  gap: 8px;
 }
 
 .reply-form > *,
@@ -155,6 +163,5 @@ header .account img {
   display: flex;
   flex-direction: column;
   gap: 32px;
-  padding: 16px;
   position: relative;
 }
