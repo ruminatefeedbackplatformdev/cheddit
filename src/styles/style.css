@@ -76,6 +76,11 @@ header .account img {
   width: 100%;
 }
 
+.post p {
+  word-break: break-word;
+  width: 100%;
+}
+
 .post span:last-child {
   align-items: flex-start;
   display: flex;
@@ -90,7 +95,6 @@ header .account img {
 
 .post.reply {
   background: #d6daf0;
-  margin-left: 32px;
 }
 
 .post [aria-label="post content"] {
