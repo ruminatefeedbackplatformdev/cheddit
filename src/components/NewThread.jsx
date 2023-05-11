@@ -15,8 +15,11 @@ async function loadBoard(id) {
 
 async function getNewPostNumber(id) {
   const board = await loadBoard(id);
-  const lastPost = Object.keys(board.posts);
-  return +lastPost[lastPost.length - 1] + 1;
+  const boardPosts = Object.keys(board.posts);
+  if (Object.keys(boardPosts).length === 0) {
+    return 1;
+  }
+  return +boardPosts[boardPosts.length - 1] + 1;
 }
 
 export default function NewThread({ board, readDatabase }) {
