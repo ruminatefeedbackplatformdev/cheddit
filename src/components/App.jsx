@@ -1,15 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { Routes, Route } from 'react-router-dom';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { collection, getDocs } from 'firebase/firestore';
 import database from '../util/firestore';
 import Header from './Header';
 import Home from './Home';
+import Dashboard from './Dashboard';
 import Board from './Board';
 import Thread from './Thread';
 import Footer from './Footer';
 
 export default function App() {
   const [boards, setBoards] = useState([]);
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
     const readDatabase = async () => {
@@ -25,15 +28,23 @@ export default function App() {
       setBoards(allBoards);
     };
     readDatabase();
+    const auth = getAuth();
+    onAuthStateChanged(auth, (authUser) => {
+      setUser(authUser);
+    });
   }, []);
 
   return (
     <div className="container">
-      <Header />
+      <Header user={user} />
       <Routes>
         <Route
           path="/"
           element={<Home boards={boards} setBoards={setBoards} />}
+        />
+        <Route
+          path="/dash"
+          element={<Dashboard user={user} />}
         />
         {boards.map((board) => (
           <Route

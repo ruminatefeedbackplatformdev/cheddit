@@ -1,4 +1,5 @@
 import React from 'react';
+import { BrowserRouter } from 'react-router-dom';
 import {
   act, render, screen, waitFor,
 } from '@testing-library/react';
@@ -15,18 +16,18 @@ jest.mock('firebase/firestore', () => ({
         1: {
           author: 'John Doe',
           content: 'Hello world!',
-          image: undefined,
+          image: null,
           replies: [],
           subject: 'Greetings',
           thread: 1,
           time: 1683232046656,
         },
         2: {
-          author: undefined,
+          author: null,
           content: 'More content',
-          image: undefined,
+          image: null,
           replies: [],
-          subject: undefined,
+          subject: null,
           thread: 1,
           time: 1683232546656,
         },
@@ -40,14 +41,22 @@ jest.mock('firebase/firestore', () => ({
 describe('Thread component', () => {
   it('exists', async () => {
     await act(async () => {
-      render(<Thread board="123" op={1} />);
+      render(
+        <BrowserRouter>
+          <Thread board="123" op={1} />
+        </BrowserRouter>,
+      );
     });
     expect(screen.getByRole('generic', { name: 'thread' })).toBeTruthy();
   });
 
   it('loads posts from database', async () => {
     await act(async () => {
-      render(<Thread board="123" op={1} />);
+      render(
+        <BrowserRouter>
+          <Thread board="123" op={1} />
+        </BrowserRouter>,
+      );
     });
 
     await waitFor(() => {
@@ -58,7 +67,11 @@ describe('Thread component', () => {
 
   it('shows correct number of posts', async () => {
     await act(async () => {
-      render(<Thread board="123" op={1} />);
+      render(
+        <BrowserRouter>
+          <Thread board="123" op={1} />
+        </BrowserRouter>,
+      );
     });
     expect(screen.getAllByRole('article').length).toBe(2);
   });

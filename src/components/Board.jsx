@@ -89,7 +89,9 @@ export default function Board({ id, name }) {
   }
   return (
     <main className="board">
-      <span>Loading...</span>
+      <h1>{`/${id}/ - ${name}`}</h1>
+      <NewThread board={id} readDatabase={readDatabase} />
+      <span>Nothing to see here...</span>
     </main>
   );
 }

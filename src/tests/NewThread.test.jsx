@@ -6,9 +6,7 @@ import NewThread from '../components/NewThread';
 describe('NewThread component', () => {
   it('exists', () => {
     render(<NewThread />);
-    expect(
-      screen.getByRole('button', { name: 'Start a Thread' }),
-    ).toBeTruthy();
+    expect(screen.getByRole('button', { name: 'Start a Thread' })).toBeTruthy();
   });
 
   it('displays thread form when button clicked', () => {
