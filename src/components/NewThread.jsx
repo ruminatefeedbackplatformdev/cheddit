@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   arrayUnion, doc, getDoc, updateDoc,
 } from 'firebase/firestore';
@@ -28,6 +29,8 @@ export default function NewThread({ board, readDatabase }) {
   const [threadSubject, setThreadSubject] = useState('');
   const [threadContent, setThreadContent] = useState('');
   const [file, setFile] = useState(null);
+
+  const navigate = useNavigate();
 
   const enableForm = () => {
     setEnabled(!enabled);
@@ -95,6 +98,7 @@ export default function NewThread({ board, readDatabase }) {
     setFile(null);
     enableForm();
     await readDatabase();
+    navigate(`/${board}_t${newPostNumber}`);
   };
 
   if (enabled) {
