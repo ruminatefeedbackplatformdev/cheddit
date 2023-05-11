@@ -19,6 +19,7 @@ jest.mock('firebase/firestore', () => ({
           image: undefined,
           replies: [],
           subject: 'Greetings',
+          thread: 1,
           time: 1683232046656,
         },
         2: {
@@ -27,6 +28,7 @@ jest.mock('firebase/firestore', () => ({
           image: undefined,
           replies: [],
           subject: undefined,
+          thread: 2,
           time: 1683232546656,
         },
       },

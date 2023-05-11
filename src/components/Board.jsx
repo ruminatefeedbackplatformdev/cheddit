@@ -30,19 +30,28 @@ async function loadThreads(id) {
   return firstPosts;
 }
 
-async function getPostCounts(id) {
+async function getPostsInfo(id) {
   const { posts, threads } = await loadBoard(id);
   const postKeys = Object.keys(posts);
-  const postCounts = {};
+  const threadPosts = {};
   threads.forEach((thread) => {
-    postCounts[thread] = 0;
+    threadPosts[thread] = [];
   });
 
   postKeys.forEach((key) => {
     const thisPost = posts[key];
-    postCounts[thisPost.thread] += 1;
+    threadPosts[thisPost.thread].push(+key);
   });
 
+  return threadPosts;
+}
+
+function getPostCounts(posts) {
+  const postCounts = {};
+  const keys = Object.keys(posts);
+  keys.forEach((key) => {
+    postCounts[key] = posts[key].length;
+  });
   return postCounts;
 }
 
@@ -51,8 +60,15 @@ export default function Board({ id, name }) {
   const [postCounts, setPostCounts] = useState({});
 
   const readDatabase = async () => {
-    setThreads(await loadThreads(id));
-    setPostCounts(await getPostCounts(id));
+    const threadPosts = await getPostsInfo(id);
+    setPostCounts(getPostCounts(threadPosts));
+    const threadsFromDB = await (loadThreads(id));
+    threadsFromDB.sort((a, b) => {
+      const threadA = threadPosts[a.number];
+      const threadB = threadPosts[b.number];
+      return threadB[threadB.length - 1] - threadA[threadA.length - 1];
+    });
+    setThreads(threadsFromDB);
   };
 
   useEffect(() => {
