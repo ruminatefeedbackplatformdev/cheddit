@@ -1,8 +1,32 @@
 import React, { useEffect, useState } from 'react';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import {
+  collection, doc, getDocs, setDoc,
+} from 'firebase/firestore';
+import database from '../util/firestore';
 import Header from './Header';
 import RouteSwitch from './RouteSwitch';
 import Footer from './Footer';
+
+async function createNewUserDoc(user) {
+  await setDoc(doc(database, 'users', user.uid), {
+    boards: [],
+    threads: {},
+    posts: {},
+  });
+}
+
+async function checkIfNewUser(user) {
+  // create user document in firestore if this is their first login
+  const querySnapshot = await getDocs(collection(database, 'users'));
+  const { docs } = querySnapshot;
+  for (let i = 0; i < docs.length; i += 1) {
+    if (docs[i].id === user.uid) {
+      return false;
+    }
+  }
+  return true;
+}
 
 export default function App() {
   const [boards, setBoards] = useState([]);
@@ -10,8 +34,19 @@ export default function App() {
 
   useEffect(() => {
     const auth = getAuth();
-    onAuthStateChanged(auth, (authUser) => {
-      setUser(authUser);
+    onAuthStateChanged(auth, async (authUser) => {
+      if (authUser) {
+        if (await checkIfNewUser(authUser)) {
+          await createNewUserDoc(authUser);
+        }
+      }
+      setUser(
+        {
+          displayName: authUser.displayName,
+          photoURL: authUser.photoURL,
+          uid: authUser.uid,
+        },
+      );
     });
   }, []);
 

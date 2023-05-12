@@ -64,6 +64,7 @@ export default function Board({ id, name }) {
     setPostCounts(getPostCounts(threadPosts));
     const threadsFromDB = await (loadThreads(id));
     threadsFromDB.sort((a, b) => {
+      // will sort threads by their last post numbers (descending)
       const threadA = threadPosts[a.number];
       const threadB = threadPosts[b.number];
       return threadB[threadB.length - 1] - threadA[threadA.length - 1];

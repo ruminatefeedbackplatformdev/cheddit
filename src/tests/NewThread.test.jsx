@@ -1,16 +1,25 @@
 import React from 'react';
+import { BrowserRouter } from 'react-router-dom';
 import { act, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import NewThread from '../components/NewThread';
 
 describe('NewThread component', () => {
   it('exists', () => {
-    render(<NewThread />);
+    render(
+      <BrowserRouter>
+        <NewThread />
+      </BrowserRouter>,
+    );
     expect(screen.getByRole('button', { name: 'Start a Thread' })).toBeTruthy();
   });
 
   it('displays thread form when button clicked', () => {
-    render(<NewThread />);
+    render(
+      <BrowserRouter>
+        <NewThread />
+      </BrowserRouter>,
+    );
     act(() => {
       userEvent.click(screen.getByRole('button', { name: 'Start a Thread' }));
     });
@@ -18,7 +27,11 @@ describe('NewThread component', () => {
   });
 
   it('displays correct input fields', () => {
-    render(<NewThread />);
+    render(
+      <BrowserRouter>
+        <NewThread />
+      </BrowserRouter>,
+    );
     act(() => {
       userEvent.click(screen.getByRole('button', { name: 'Start a Thread' }));
     });
