@@ -1,7 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import {
-  collection, doc, getDocs, setDoc,
+  collection,
+  doc,
+  getDocs,
+  query,
+  setDoc,
+  where,
 } from 'firebase/firestore';
 import database from '../util/firestore';
 import Header from './Header';
@@ -28,6 +33,19 @@ async function checkIfNewUser(user) {
   return true;
 }
 
+async function getOwnedBoards(user) {
+  const boardsQuery = query(
+    collection(database, 'boards'),
+    where('owner', '==', user.uid),
+  );
+  const ownedBoards = await getDocs(boardsQuery);
+  const boards = [];
+  ownedBoards.forEach((board) => {
+    boards.push({ id: board.id, name: board.data().name });
+  });
+  return boards;
+}
+
 export default function App() {
   const [boards, setBoards] = useState([]);
   const [user, setUser] = useState(null);
@@ -39,14 +57,15 @@ export default function App() {
         if (await checkIfNewUser(authUser)) {
           await createNewUserDoc(authUser);
         }
-      }
-      setUser(
-        {
+        setUser({
+          boards: await getOwnedBoards(authUser),
           displayName: authUser.displayName,
           photoURL: authUser.photoURL,
           uid: authUser.uid,
-        },
-      );
+        });
+      } else {
+        setUser(null);
+      }
     });
   }, []);
 
