@@ -9,6 +9,7 @@ import Thread from './Thread';
 
 export default function RouteSwitch({ boards, setBoards, user }) {
   useEffect(() => {
+    // get info on all the boards from the database
     const q = query(collection(database, 'boards'));
     onSnapshot(q, (querySnapshot) => {
       const allBoards = [];
@@ -16,6 +17,7 @@ export default function RouteSwitch({ boards, setBoards, user }) {
         const thisBoard = {};
         thisBoard.id = doc.id;
         thisBoard.name = doc.data().name;
+        thisBoard.owner = doc.data().owner;
         thisBoard.threads = doc.data().threads;
         allBoards.push(thisBoard);
       });

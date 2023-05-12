@@ -6,6 +6,7 @@ import Post from './Post';
 import database from '../util/firestore';
 
 async function loadBoard(id) {
+  // get the board info from firebase
   const boardRef = doc(database, 'boards', id);
   const boardSnap = await getDoc(boardRef);
   return boardSnap.data();
@@ -31,6 +32,7 @@ async function loadThreads(id) {
 }
 
 async function getPostsInfo(id) {
+  // get all the post numbers in each thread
   const { posts, threads } = await loadBoard(id);
   const postKeys = Object.keys(posts);
   const threadPosts = {};
@@ -47,6 +49,7 @@ async function getPostsInfo(id) {
 }
 
 function getPostCounts(posts) {
+  // count up how many post each thread has
   const postCounts = {};
   const keys = Object.keys(posts);
   keys.forEach((key) => {
@@ -62,6 +65,7 @@ export default function Board({ id, name }) {
   const readDatabase = async () => {
     const threadPosts = await getPostsInfo(id);
     setPostCounts(getPostCounts(threadPosts));
+
     const threadsFromDB = await (loadThreads(id));
     threadsFromDB.sort((a, b) => {
       // will sort threads by their last post numbers (descending)

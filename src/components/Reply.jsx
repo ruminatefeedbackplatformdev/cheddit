@@ -7,12 +7,14 @@ import {
 import database from '../util/firestore';
 
 async function loadBoard(id) {
+  // get the board info
   const boardRef = doc(database, 'boards', id);
   const boardSnap = await getDoc(boardRef);
   return boardSnap.data();
 }
 
 async function getNewPostNumber(id) {
+  // gotta determine a number for the new post
   const board = await loadBoard(id);
   const lastPost = Object.keys(board.posts);
   return +lastPost[lastPost.length - 1] + 1;
@@ -43,12 +45,15 @@ export default function Reply({ board, readDatabase, thread }) {
   const uploadImage = async (newPostNumber) => {
     const storage = getStorage();
     const extension = file.name.match(/\.[a-zA-Z0-9]+$/).join();
+    // don't preserve the original file names - images are referred to
+    // by their respective post's number
     const imageRef = ref(storage, `${board}/${newPostNumber}${extension}`);
     let downloadURL = null;
     try {
       const snapshot = await uploadBytes(imageRef, file);
       downloadURL = await getDownloadURL(snapshot.ref);
     } catch (error) {
+      // TODO - need to handle this better
       console.error(`Error uploading file: ${error}`);
     }
     return downloadURL;
@@ -64,6 +69,8 @@ export default function Reply({ board, readDatabase, thread }) {
       thread,
       time: Date.now(),
     };
+
+    // we're updating nested fields in firestore
     const newPostNumber = await getNewPostNumber(board);
     const update = {};
     const updateKey = `posts.${newPostNumber}`;
@@ -76,10 +83,14 @@ export default function Reply({ board, readDatabase, thread }) {
 
     const boardRef = doc(database, 'boards', board);
     await updateDoc(boardRef, update);
+
+    // reset the form
     setPostAuthor('');
     setPostContent('');
     setFile(null);
     enableForm();
+
+    // this will update the posts for the parent thread
     await readDatabase();
   };
 

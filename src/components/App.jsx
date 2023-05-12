@@ -14,6 +14,7 @@ import RouteSwitch from './RouteSwitch';
 import Footer from './Footer';
 
 async function createNewUserDoc(user) {
+  // give 'em some empty fields on their first login
   await setDoc(doc(database, 'users', user.uid), {
     boards: [],
     threads: {},
@@ -34,6 +35,7 @@ async function checkIfNewUser(user) {
 }
 
 async function getOwnedBoards(user) {
+  // figure out which boards the user owns
   const boardsQuery = query(
     collection(database, 'boards'),
     where('owner', '==', user.uid),
@@ -51,12 +53,15 @@ export default function App() {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
+    // listen for auth changes & update state accordingly
     const auth = getAuth();
     onAuthStateChanged(auth, async (authUser) => {
       if (authUser) {
+        // new user?
         if (await checkIfNewUser(authUser)) {
           await createNewUserDoc(authUser);
         }
+        // just load up the info we need from firebase
         setUser({
           boards: await getOwnedBoards(authUser),
           displayName: authUser.displayName,
@@ -64,6 +69,7 @@ export default function App() {
           uid: authUser.uid,
         });
       } else {
+        // nobody is logged in
         setUser(null);
       }
     });

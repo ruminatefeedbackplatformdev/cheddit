@@ -5,12 +5,14 @@ import Reply from './Reply';
 import Post from './Post';
 
 async function loadBoard(id) {
+  // get the board info from firebase
   const boardRef = doc(database, 'boards', id);
   const boardSnap = await getDoc(boardRef);
   return boardSnap.data();
 }
 
 async function loadPosts(board, op) {
+  // get all the posts for this thread
   const { posts } = await loadBoard(board);
   const postKeys = Object.keys(posts);
   const threadPosts = [];
