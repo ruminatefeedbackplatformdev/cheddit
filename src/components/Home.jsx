@@ -1,9 +1,27 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import Disclaimer from './Disclaimer';
 
 export default function Home({ boards }) {
+  const [agreed, setAgreed] = useState(localStorage.getItem('disclaimer'));
+  const [visible, setVisible] = useState(false);
+  const [pendingRoute, setPendingRoute] = useState('#');
+
+  const showDisclaimer = (event) => {
+    if (!agreed) {
+      setVisible(true);
+      setPendingRoute(`/${event.target.dataset.board}`);
+    }
+  };
+
   return (
     <div className="home">
+      <Disclaimer
+        pendingRoute={pendingRoute}
+        visible={visible}
+        setAgreed={setAgreed}
+        setVisible={setVisible}
+      />
       <div className="site-info">
         <p>
           Cheddit is yet another imageboard site, where you can create and
@@ -14,7 +32,7 @@ export default function Home({ boards }) {
         <p>
           Be sure to familiarize yourself with the
           {' '}
-          <Link to="/rules">rules</Link>
+          <Link to="/rules">Rules</Link>
           {' '}
           before posting.
         </p>
@@ -22,7 +40,12 @@ export default function Home({ boards }) {
       <div className="boards">
         {boards.length ? (
           boards.map((board) => (
-            <Link key={board.id} to={`/${board.id}`}>
+            <Link
+              data-board={board.id}
+              key={board.id}
+              onClick={showDisclaimer}
+              to={agreed ? `/${board.id}` : null}
+            >
               {`/${board.id}/ - ${board.name}`}
             </Link>
           ))

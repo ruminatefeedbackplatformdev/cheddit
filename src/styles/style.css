@@ -72,6 +72,30 @@ header .account img {
   min-height: 100vh;
 }
 
+.disclaimer {
+  align-items: flex-start;
+  background: #c5ccf2;
+  box-shadow: 0 2px 4px rgba(128, 128, 128, 0.5);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  position: absolute;
+}
+
+.disclaimer h2 {
+  background: #da2834;
+  color: #eee;
+  font-size: 1.2rem;
+  font-weight: bold;
+  text-align: center;
+  width: 100%;
+}
+
+.disclaimer.hidden {
+  display: none;
+  visibility: hidden;
+}
+
 .home {
   display: flex;
   flex-direction: column;
@@ -211,7 +235,7 @@ header .account img {
   font-weight: bold;
 }
 
-.rules ol {
+ol {
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -220,7 +244,7 @@ header .account img {
   list-style: decimal inside;
 }
 
-.rules ol > li::marker {
+ol > li::marker {
   font-weight: bold;
 }
 
