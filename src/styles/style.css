@@ -55,10 +55,34 @@ header .account img {
   position: relative;
 }
 
+.button.hidden {
+  visibility: hidden;
+}
+
 .container {
   display: grid;
   grid-template-rows: auto 1fr 32px;
   min-height: 100vh;
+}
+
+.new-board-form {
+  gap: 16px;
+}
+
+.new-board-form.hidden {
+  display: none;
+  visibility: hidden;
+}
+
+.new-bord-form.visible {
+  display: flex;
+  visibility: visible;
+}
+
+.new-board-form,
+.new-board-form label {
+  display: flex;
+  flex-direction: column;
 }
 
 .post {
@@ -168,4 +192,11 @@ header .account img {
   flex-direction: column;
   gap: 32px;
   position: relative;
+}
+
+.user-boards {
+  align-items: flex-start;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }

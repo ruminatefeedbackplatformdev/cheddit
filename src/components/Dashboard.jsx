@@ -5,7 +5,7 @@ import UserBoards from './UserBoards';
 export default function Dashboard({ user }) {
   if (user) {
     return (
-      <div>
+      <div className="dashboard">
         <h1>{`Welcome ${user.displayName}`}</h1>
         <UserBoards user={user} />
       </div>
