@@ -11,6 +11,7 @@ a {
 body {
   background: #e6eafa;
   font-family: "Noto Sans", sans-serif;
+  line-height: 1.2;
 }
 
 footer {
@@ -55,6 +56,12 @@ header .account img {
   position: relative;
 }
 
+.boards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
 .button.hidden {
   visibility: hidden;
 }
@@ -63,6 +70,12 @@ header .account img {
   display: grid;
   grid-template-rows: auto 1fr 32px;
   min-height: 100vh;
+}
+
+.home {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
 }
 
 .new-board-form {

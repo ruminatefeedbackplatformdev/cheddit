@@ -19,7 +19,7 @@ export default function Home({ boards }) {
               key={board.id}
               to={`/${board.id}`}
             >
-              {board.name}
+              {`/${board.id}/ - ${board.name}`}
             </Link>
           ))
         ) : (
