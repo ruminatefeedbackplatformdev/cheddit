@@ -1,37 +1,18 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Routes, Route } from 'react-router-dom';
-import { collection, onSnapshot, query } from 'firebase/firestore';
-import database from '../util/firestore';
 import Home from './Home';
 import Dashboard from './Dashboard';
 import Board from './Board';
 import Thread from './Thread';
 
-export default function RouteSwitch({ boards, setBoards, user }) {
-  useEffect(() => {
-    // get info on all the boards from the database
-    const q = query(collection(database, 'boards'));
-    onSnapshot(q, (querySnapshot) => {
-      const allBoards = [];
-      querySnapshot.forEach((doc) => {
-        const thisBoard = {};
-        thisBoard.id = doc.id;
-        thisBoard.name = doc.data().name;
-        thisBoard.owner = doc.data().owner;
-        thisBoard.threads = doc.data().threads;
-        allBoards.push(thisBoard);
-      });
-      setBoards(allBoards);
-    });
-  }, []);
-
+export default function RouteSwitch({ boards, setUser, user }) {
   return (
     <Routes>
+      <Route path="/" element={<Home boards={boards} />} />
       <Route
-        path="/"
-        element={<Home boards={boards} setBoards={setBoards} />}
+        path="/dash"
+        element={<Dashboard boards={boards} user={user} setUser={setUser} />}
       />
-      <Route path="/dash" element={<Dashboard user={user} />} />
       {boards.map((board) => (
         <Route
           key={`route-${board.id}`}

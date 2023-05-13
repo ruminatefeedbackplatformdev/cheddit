@@ -1,9 +1,15 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { doc, getDoc, setDoc } from 'firebase/firestore';
+import { doc, setDoc } from 'firebase/firestore';
 import database from '../util/firestore';
 
-export default function NewBoard({ enabled, enableForm, user }) {
+export default function NewBoard({
+  boards,
+  enabled,
+  enableForm,
+  setUser,
+  user,
+}) {
   const [boardID, setBoardID] = useState('');
   const [boardName, setBoardName] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
@@ -27,6 +33,12 @@ export default function NewBoard({ enabled, enableForm, user }) {
     enableForm();
   };
 
+  const updateUserBoards = () => {
+    const userBoards = [...user.boards];
+    userBoards.push({ id: boardID, name: boardName });
+    setUser({ boards: userBoards });
+  };
+
   const submitForm = async () => {
     if (
       boardID.length >= 1
@@ -38,10 +50,12 @@ export default function NewBoard({ enabled, enableForm, user }) {
       // matches our form requirements
       setErrorMessage('');
 
-      const boardRef = doc(database, 'boards', boardID);
-      const boardSnap = await getDoc(boardRef);
+      const boardKeys = [];
+      boards.forEach((board) => {
+        boardKeys.push(board.id);
+      });
 
-      if (boardSnap.exists()) {
+      if (boardKeys.includes(boardID)) {
         // already a board with this id
         setErrorMessage('Board ID already used. Try another.');
       } else {
@@ -52,6 +66,7 @@ export default function NewBoard({ enabled, enableForm, user }) {
           posts: {},
           threads: [],
         });
+        updateUserBoards();
         navigate(`/${boardID}`);
         setErrorMessage('');
         setBoardID('');

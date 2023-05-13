@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import NewBoard from './NewBoard';
 
-export default function UserBoards({ user }) {
+export default function UserBoards({ boards, setUser, user }) {
   const [enabled, setEnabled] = useState(false);
 
   const enableForm = () => {
@@ -24,7 +24,13 @@ export default function UserBoards({ user }) {
       >
         ADD NEW BOARD
       </button>
-      <NewBoard enabled={enabled} enableForm={enableForm} user={user} />
+      <NewBoard
+        boards={boards}
+        enabled={enabled}
+        enableForm={enableForm}
+        setUser={setUser}
+        user={user}
+      />
     </div>
   );
 }

@@ -4,6 +4,7 @@ import {
   collection,
   doc,
   getDocs,
+  onSnapshot,
   query,
   setDoc,
   where,
@@ -16,7 +17,6 @@ import Footer from './Footer';
 async function createNewUserDoc(user) {
   // give 'em some empty fields on their first login
   await setDoc(doc(database, 'users', user.uid), {
-    boards: [],
     threads: {},
     posts: {},
   });
@@ -73,12 +73,32 @@ export default function App() {
         setUser(null);
       }
     });
+
+    // get info on all the boards from the database
+    const q = query(collection(database, 'boards'));
+    onSnapshot(q, (querySnapshot) => {
+      const allBoards = [];
+      querySnapshot.forEach((docu) => {
+        const thisBoard = {};
+        thisBoard.id = docu.id;
+        thisBoard.name = docu.data().name;
+        thisBoard.owner = docu.data().owner;
+        thisBoard.threads = docu.data().threads;
+        allBoards.push(thisBoard);
+      });
+      setBoards(allBoards);
+    });
   }, []);
 
   return (
     <div className="container">
       <Header user={user} />
-      <RouteSwitch boards={boards} setBoards={setBoards} user={user} />
+      <RouteSwitch
+        boards={boards}
+        setBoards={setBoards}
+        setUser={setUser}
+        user={user}
+      />
       <Footer />
     </div>
   );
