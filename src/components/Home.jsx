@@ -7,18 +7,22 @@ export default function Home({ boards }) {
       <div className="site-info">
         <p>
           Cheddit is yet another imageboard site, where you can create and
-          moderate your very own boards. Users can participate in discussions
+          moderate your very own discusson boards. Anyone can participate
           anonymously, but only authenticed users can create boards. Check out
-          what communities are available below and join the conversations!
+          the communities below and join in!
+        </p>
+        <p>
+          Be sure to familiarize yourself with the
+          {' '}
+          <Link to="/rules">rules</Link>
+          {' '}
+          before posting.
         </p>
       </div>
       <div className="boards">
         {boards.length ? (
           boards.map((board) => (
-            <Link
-              key={board.id}
-              to={`/${board.id}`}
-            >
+            <Link key={board.id} to={`/${board.id}`}>
               {`/${board.id}/ - ${board.name}`}
             </Link>
           ))

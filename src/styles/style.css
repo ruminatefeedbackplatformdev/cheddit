@@ -199,6 +199,37 @@ header .account img {
   gap: 4px;
 }
 
+.rules {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.rules h1 {
+  align-self: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.rules ol {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-left: 16px;
+  margin-right: 16px;
+  list-style: decimal inside;
+}
+
+.rules ol > li::marker {
+  font-weight: bold;
+}
+
+.site-info {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
 .thread,
 .board {
   display: flex;

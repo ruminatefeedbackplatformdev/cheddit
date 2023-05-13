@@ -3,6 +3,7 @@ import { Routes, Route } from 'react-router-dom';
 import Home from './Home';
 import Dashboard from './Dashboard';
 import Board from './Board';
+import Rules from './Rules';
 import Thread from './Thread';
 
 export default function RouteSwitch({ boards, setUser, user }) {
@@ -12,6 +13,10 @@ export default function RouteSwitch({ boards, setUser, user }) {
       <Route
         path="/dash"
         element={<Dashboard boards={boards} user={user} setUser={setUser} />}
+      />
+      <Route
+        path="/rules"
+        element={<Rules />}
       />
       {boards.map((board) => (
         <Route
