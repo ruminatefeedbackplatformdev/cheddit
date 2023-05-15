@@ -262,7 +262,8 @@ ol > li::marker {
   position: relative;
 }
 
-.user-boards {
+.user-boards,
+.user-threads {
   align-items: flex-start;
   display: flex;
   flex-direction: column;

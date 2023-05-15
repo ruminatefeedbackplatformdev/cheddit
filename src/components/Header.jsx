@@ -25,7 +25,11 @@ export default function Header({ user }) {
           </span>
         ) : null}
         <span>{user ? user.displayName : 'Anonymous'}</span>
-        <img src={user ? user.photoURL : anonIcon} alt="" />
+        <img
+          referrerPolicy="no-referrer"
+          src={user ? user.photoURL : anonIcon}
+          alt=""
+        />
       </span>
     </header>
   );

@@ -3,6 +3,7 @@ import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import {
   collection,
   doc,
+  getDoc,
   getDocs,
   onSnapshot,
   query,
@@ -48,6 +49,12 @@ async function getOwnedBoards(user) {
   return boards;
 }
 
+async function getUserThreads(user) {
+  const userRef = doc(database, 'users', user.uid);
+  const userSnap = await getDoc(userRef);
+  return userSnap.data().threads;
+}
+
 export default function App() {
   const [boards, setBoards] = useState([]);
   const [user, setUser] = useState(null);
@@ -66,6 +73,7 @@ export default function App() {
           boards: await getOwnedBoards(authUser),
           displayName: authUser.displayName,
           photoURL: authUser.photoURL,
+          threads: await getUserThreads(authUser),
           uid: authUser.uid,
         });
       } else {
