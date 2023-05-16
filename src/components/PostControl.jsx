@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import {
-  arrayRemove, deleteField, doc, updateDoc,
+  arrayRemove, deleteField, doc, getDoc, updateDoc,
 } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
 import database from '../util/firestore';
@@ -19,20 +19,44 @@ export default function PostControl({ board, number, thread }) {
   };
 
   const deletePost = async () => {
+    // just need to delete this one post
     const boardRef = doc(database, 'boards', board);
     await updateDoc(boardRef, {
       [`posts.${number}`]: deleteField(),
     });
   };
 
+  const getAllThreadPosts = async () => {
+    // figure out which posts belong to the thread being deleted
+    const boardRef = doc(database, 'boards', board);
+    const boardSnap = await getDoc(boardRef);
+
+    const { posts } = boardSnap.data();
+    const allThreadPosts = [];
+    Object.keys(posts).forEach((post) => {
+      if (posts[post].thread === thread) {
+        allThreadPosts.push(post);
+      }
+    });
+    return allThreadPosts;
+  };
+
   const deleteThread = async () => {
     const boardRef = doc(database, 'boards', board);
-    await updateDoc(boardRef, {
-      [`posts.${number}`]: deleteField(),
+
+    // delete all posts within a thread
+    const allPosts = await getAllThreadPosts();
+    allPosts.forEach(async (post) => {
+      await updateDoc(boardRef, {
+        [`posts.${post}`]: deleteField(),
+      });
     });
+
+    // then delete the thread itself
     await updateDoc(boardRef, {
       threads: arrayRemove(thread),
     });
+
     setConfirming(false);
     navigate(`/${board}`);
   };
