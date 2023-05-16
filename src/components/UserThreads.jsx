@@ -4,6 +4,7 @@ import { collection, getDocs } from 'firebase/firestore';
 import database from '../util/firestore';
 
 export default function UserThreads({ user }) {
+  console.log(user);
   const { threads } = user;
 
   const [threadSubjects, setThreadSubjects] = useState(null);

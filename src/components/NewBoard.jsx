@@ -36,7 +36,10 @@ export default function NewBoard({
   const updateUserBoards = () => {
     const userBoards = [...user.boards];
     userBoards.push({ id: boardID, name: boardName });
-    setUser({ boards: userBoards });
+    setUser({
+      ...user,
+      boards: userBoards,
+    });
   };
 
   const submitForm = async () => {
