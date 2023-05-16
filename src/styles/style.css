@@ -163,6 +163,17 @@ header .account img {
   flex-direction: column;
 }
 
+.post-control .delete-post.hidden,
+.post-control .confirm.hidden {
+  display: none;
+  visibility: hidden;
+}
+
+.post-control .delete-post.visible, 
+.post-control .confirm.visible {
+  visibility: visible;
+}
+
 .post-info {
   align-items: center;
   display: flex;
