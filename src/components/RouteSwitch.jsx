@@ -14,22 +14,26 @@ export default function RouteSwitch({ boards, setUser, user }) {
         path="/dash"
         element={<Dashboard boards={boards} user={user} setUser={setUser} />}
       />
-      <Route
-        path="/rules"
-        element={<Rules />}
-      />
+      <Route path="/rules" element={<Rules />} />
       {boards.map((board) => (
         <Route
           key={`route-${board.id}`}
           path={`${board.id}`}
-          element={<Board id={board.id} name={board.name} />}
+          element={<Board id={board.id} name={board.name} user={user} />}
         />
       ))}
       {boards.map((board) => board.threads.map((thread) => (
         <Route
           key={`route-${board.id}_thread-${thread}`}
           path={`${board.id}_t${thread}`}
-          element={<Thread board={board.id} name={board.name} op={thread} />}
+          element={(
+            <Thread
+              board={board.id}
+              name={board.name}
+              op={thread}
+              user={user}
+            />
+            )}
         />
       )))}
     </Routes>

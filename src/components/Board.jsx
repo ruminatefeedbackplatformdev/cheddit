@@ -58,7 +58,7 @@ function getPostCounts(posts) {
   return postCounts;
 }
 
-export default function Board({ id, name }) {
+export default function Board({ id, name, user }) {
   const [threads, setThreads] = useState([]);
   const [postCounts, setPostCounts] = useState({});
 
@@ -89,6 +89,7 @@ export default function Board({ id, name }) {
           <div key={`board${id}-post#${thread.number}`}>
             <Post
               author={thread.author}
+              board={id}
               content={thread.content}
               image={thread.image}
               number={thread.number}
@@ -96,6 +97,7 @@ export default function Board({ id, name }) {
               subject={thread.subject}
               thread={thread.number}
               time={thread.time}
+              user={user}
             />
             <span>
               {`${postCounts[thread.number]} ${

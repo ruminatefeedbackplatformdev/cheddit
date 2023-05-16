@@ -25,7 +25,9 @@ async function loadPosts(board, op) {
   return threadPosts;
 }
 
-export default function Thread({ board, name, op }) {
+export default function Thread({
+  board, name, op, user,
+}) {
   const [posts, setPosts] = useState([]);
 
   const readDatabase = async () => {
@@ -44,6 +46,7 @@ export default function Thread({ board, name, op }) {
         {posts.map((post) => (
           <Post
             author={post.author}
+            board={board}
             content={post.content}
             image={post.image}
             number={post.number}
@@ -52,6 +55,7 @@ export default function Thread({ board, name, op }) {
             subject={post.subject}
             thread={op}
             time={post.time}
+            user={user}
           />
         ))}
       </div>

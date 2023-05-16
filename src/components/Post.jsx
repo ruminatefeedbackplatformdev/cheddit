@@ -1,7 +1,11 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { doc, getDoc } from 'firebase/firestore';
+import database from '../util/firestore';
+import PostControl from './PostControl';
 
 export default function Post({
   author,
+  board,
   content,
   image,
   number,
@@ -9,6 +13,7 @@ export default function Post({
   subject,
   thread,
   time,
+  user,
 }) {
   const handleReplies = (string) => {
     // turn any proper ">>" reply into a link to the post
@@ -22,6 +27,17 @@ export default function Post({
     }
     return <span>{string}</span>;
   };
+
+  const [boardOwner, setBoardOwner] = useState(null);
+
+  useEffect(() => {
+    const setOwnerFromDatabase = async () => {
+      const boardRef = doc(database, 'boards', board);
+      const boardSnap = await getDoc(boardRef);
+      setBoardOwner(boardSnap.data().owner);
+    };
+    setOwnerFromDatabase();
+  }, []);
 
   return (
     <article className={number === thread ? 'post' : 'post reply'} id={number}>
@@ -38,6 +54,13 @@ export default function Post({
             </a>
           ))}
       </span>
+      {user ? (
+        <span>
+          {user.uid === boardOwner ? (
+            <PostControl board={board} number={number} />
+          ) : null}
+        </span>
+      ) : null}
       <span>
         {image ? <img alt="" src={image} /> : null}
         <span aria-label="post content">
