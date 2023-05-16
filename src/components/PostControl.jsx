@@ -1,8 +1,13 @@
 import React from 'react';
-import { deleteField, doc, updateDoc } from 'firebase/firestore';
+import {
+  arrayRemove, deleteField, doc, updateDoc,
+} from 'firebase/firestore';
+import { useNavigate } from 'react-router-dom';
 import database from '../util/firestore';
 
 export default function PostControl({ board, number, thread }) {
+  const navigate = useNavigate();
+
   const deletePost = async () => {
     const boardRef = doc(database, 'boards', board);
     await updateDoc(boardRef, {
@@ -10,8 +15,15 @@ export default function PostControl({ board, number, thread }) {
     });
   };
 
-  const deleteThread = () => {
-    console.log(`deleting thread ${board} #${thread}`);
+  const deleteThread = async () => {
+    const boardRef = doc(database, 'boards', board);
+    await updateDoc(boardRef, {
+      [`posts.${number}`]: deleteField(),
+    });
+    await updateDoc(boardRef, {
+      threads: arrayRemove(thread),
+    });
+    navigate(`/${board}`);
   };
 
   if (number === thread) {
