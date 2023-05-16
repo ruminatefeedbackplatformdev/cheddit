@@ -58,7 +58,9 @@ function getPostCounts(posts) {
   return postCounts;
 }
 
-export default function Board({ id, name, user }) {
+export default function Board({
+  boards, id, name, user,
+}) {
   const [threads, setThreads] = useState([]);
   const [postCounts, setPostCounts] = useState({});
 
@@ -66,7 +68,7 @@ export default function Board({ id, name, user }) {
     const threadPosts = await getPostsInfo(id);
     setPostCounts(getPostCounts(threadPosts));
 
-    const threadsFromDB = await (loadThreads(id));
+    const threadsFromDB = await loadThreads(id);
     threadsFromDB.sort((a, b) => {
       // will sort threads by their last post numbers (descending)
       const threadA = threadPosts[a.number];
@@ -78,7 +80,7 @@ export default function Board({ id, name, user }) {
 
   useEffect(() => {
     readDatabase();
-  }, []);
+  }, [boards]);
 
   if (threads.length > 0) {
     return (

@@ -91,6 +91,7 @@ export default function App() {
         thisBoard.id = docu.id;
         thisBoard.name = docu.data().name;
         thisBoard.owner = docu.data().owner;
+        thisBoard.posts = docu.data().posts;
         thisBoard.threads = docu.data().threads;
         allBoards.push(thisBoard);
       });

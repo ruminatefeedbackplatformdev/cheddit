@@ -26,7 +26,7 @@ async function loadPosts(board, op) {
 }
 
 export default function Thread({
-  board, name, op, user,
+  board, boards, name, op, user,
 }) {
   const [posts, setPosts] = useState([]);
 
@@ -36,7 +36,7 @@ export default function Thread({
 
   useEffect(() => {
     readDatabase();
-  }, []);
+  }, [boards]);
 
   if (posts.length > 0) {
     return (

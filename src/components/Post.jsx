@@ -57,7 +57,7 @@ export default function Post({
       {user ? (
         <span>
           {user.uid === boardOwner ? (
-            <PostControl board={board} number={number} />
+            <PostControl board={board} number={number} thread={thread} />
           ) : null}
         </span>
       ) : null}

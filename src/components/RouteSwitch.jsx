@@ -19,7 +19,14 @@ export default function RouteSwitch({ boards, setUser, user }) {
         <Route
           key={`route-${board.id}`}
           path={`${board.id}`}
-          element={<Board id={board.id} name={board.name} user={user} />}
+          element={(
+            <Board
+              boards={boards}
+              id={board.id}
+              name={board.name}
+              user={user}
+            />
+          )}
         />
       ))}
       {boards.map((board) => board.threads.map((thread) => (
@@ -29,6 +36,7 @@ export default function RouteSwitch({ boards, setUser, user }) {
           element={(
             <Thread
               board={board.id}
+              boards={boards}
               name={board.name}
               op={thread}
               user={user}
