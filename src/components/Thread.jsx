@@ -54,6 +54,7 @@ export default function Thread({
             replies={post.replies}
             subject={post.subject}
             thread={op}
+            thumb={post.thumb}
             time={post.time}
             user={user}
           />

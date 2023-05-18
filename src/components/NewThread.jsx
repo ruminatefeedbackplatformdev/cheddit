@@ -6,6 +6,7 @@ import {
 import {
   getDownloadURL, getStorage, ref, uploadBytes,
 } from 'firebase/storage';
+import Resizer from 'react-image-file-resizer';
 import database from '../util/firestore';
 
 async function loadBoard(id) {
@@ -71,6 +72,39 @@ export default function NewThread({ board, readDatabase }) {
     return downloadURL;
   };
 
+  const resizeFile = (bigFile) => new Promise((resolve) => {
+    Resizer.imageFileResizer(
+      bigFile,
+      200,
+      200,
+      'JPEG',
+      50,
+      0,
+      (uri) => {
+        resolve(uri);
+      },
+      'file',
+    );
+  });
+
+  const uploadThumbnail = async (newPostNumber) => {
+    const storage = getStorage();
+    const extension = '.JPEG';
+    // don't preserve the original file names - images are referred to
+    // by their respective post's number
+    const imageRef = ref(storage, `${board}/${newPostNumber}-thm${extension}`);
+    let downloadURL = null;
+    try {
+      const resized = await resizeFile(file);
+      const snapshot = await uploadBytes(imageRef, resized);
+      downloadURL = await getDownloadURL(snapshot.ref);
+    } catch (error) {
+      // TODO - need to handle this better
+      console.error(`Error uploading thumbnail: ${error}`);
+    }
+    return downloadURL;
+  };
+
   const submitThread = async () => {
     const newPost = {
       author: threadAuthor === '' ? null : threadAuthor,
@@ -79,6 +113,7 @@ export default function NewThread({ board, readDatabase }) {
       replies: [],
       subject: threadSubject,
       thread: null,
+      thumb: null,
       time: Date.now(),
     };
 
@@ -91,7 +126,9 @@ export default function NewThread({ board, readDatabase }) {
 
     if (file) {
       const URL = await uploadImage(newPostNumber);
+      const thumbURL = await uploadThumbnail(newPostNumber);
       update[updateKey].image = URL;
+      update[updateKey].thumb = thumbURL;
     }
 
     const boardRef = doc(database, 'boards', board);

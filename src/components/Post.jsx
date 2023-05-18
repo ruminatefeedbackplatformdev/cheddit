@@ -12,9 +12,14 @@ export default function Post({
   replies,
   subject,
   thread,
+  thumb,
   time,
   user,
 }) {
+  const expandImage = () => {
+    console.log(image);
+  };
+
   const formatText = (string) => {
     // turn any proper ">>" reply into a link to the post
     const reply = /^>>\d+$/;
@@ -66,7 +71,9 @@ export default function Post({
         </span>
       ) : null}
       <span>
-        {image ? <img alt="" src={image} /> : null}
+        {thumb ? (
+          <input alt="" onClick={expandImage} src={thumb} type="image" />
+        ) : null}
         <span aria-label="post content">
           {content
             ? content.split('\n').map((line, index) => (

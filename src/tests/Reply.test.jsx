@@ -12,7 +12,7 @@ describe('Reply component', () => {
       </BrowserRouter>,
     );
     expect(
-      screen.getByRole('button', { name: '[ Post a Reply ]' }),
+      screen.getByRole('button', { name: 'Post a Reply' }),
     ).toBeTruthy();
   });
 
@@ -23,7 +23,7 @@ describe('Reply component', () => {
       </BrowserRouter>,
     );
     act(() => {
-      userEvent.click(screen.getByRole('button', { name: '[ Post a Reply ]' }));
+      userEvent.click(screen.getByRole('button', { name: 'Post a Reply' }));
     });
     expect(screen.getByRole('form', { name: 'reply form' })).toBeTruthy();
   });
@@ -35,7 +35,7 @@ describe('Reply component', () => {
       </BrowserRouter>,
     );
     act(() => {
-      userEvent.click(screen.getByRole('button', { name: '[ Post a Reply ]' }));
+      userEvent.click(screen.getByRole('button', { name: 'Post a Reply' }));
     });
     expect(screen.getByLabelText('Name:')).toBeTruthy();
     expect(screen.getByLabelText('Comment:')).toBeTruthy();

@@ -25,6 +25,7 @@ async function loadThreads(id) {
       number: thread,
       replies: op.replies,
       subject: op.subject,
+      thumb: op.thumb,
       time: op.time,
     });
   });
@@ -98,6 +99,7 @@ export default function Board({
               replies={thread.replies}
               subject={thread.subject}
               thread={thread.number}
+              thumb={thread.thumb}
               time={thread.time}
               user={user}
             />
