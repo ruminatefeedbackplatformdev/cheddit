@@ -15,15 +15,19 @@ export default function Post({
   time,
   user,
 }) {
-  const handleReplies = (string) => {
+  const formatText = (string) => {
     // turn any proper ">>" reply into a link to the post
     const reply = /^>>\d+$/;
+    const greentext = /^>[^>\n]*$/;
     if (string.match(reply)) {
       return (
         <span>
           <a href={`#${string.slice(2)}`}>{string}</a>
         </span>
       );
+    }
+    if (string.match(greentext)) {
+      return <span className="greentext">{string}</span>;
     }
     return <span>{string}</span>;
   };
@@ -74,9 +78,7 @@ export default function Post({
               // we're also using the unique post number.
 
                 // eslint-disable-next-line
-                <p key={`#${number}-line${index}`}>
-                  {handleReplies(line, index)}
-                </p>
+                <p key={`#${number}-line${index}`}>{formatText(line, index)}</p>
             ))
             : null}
         </span>

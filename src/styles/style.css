@@ -142,6 +142,10 @@ header .account img {
   width: 100%;
 }
 
+.post .greentext {
+  color: #789922;
+}
+
 .post span:last-child {
   align-items: flex-start;
   display: flex;
