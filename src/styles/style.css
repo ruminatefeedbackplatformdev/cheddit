@@ -131,10 +131,9 @@ header .account img {
   max-width: 1200px;
 }
 
-.post img {
+.post input {
   height: auto;
-  max-width: 200px;
-  width: 100%;
+  max-width: 100%;
 }
 
 .post p {

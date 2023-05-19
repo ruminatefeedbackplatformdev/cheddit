@@ -53,16 +53,19 @@ describe('Post component', () => {
 
   it('displays image if provided', async () => {
     await act(async () => {
-      render(<Post replies={[]} image="path-to-image" />);
+      render(<Post replies={[]} thumb="path-to-image" />);
     });
-    expect(screen.getByRole('img')).toBeTruthy();
+    expect(screen.getByRole('button', { name: 'post-image' })).toBeTruthy();
   });
 
-  it('links to correct image source', async () => {
+  it('links to correct thumb source', async () => {
     await act(async () => {
-      render(<Post replies={[]} image="path-to-image" />);
+      render(<Post replies={[]} thumb="path-to-image" />);
     });
-    expect(screen.getByRole('img')).toHaveAttribute('src', 'path-to-image');
+    expect(screen.getByRole('button', { name: 'post-image' })).toHaveAttribute(
+      'src',
+      'path-to-image',
+    );
   });
 
   it('handles lack of subject', async () => {

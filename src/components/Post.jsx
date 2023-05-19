@@ -16,8 +16,11 @@ export default function Post({
   time,
   user,
 }) {
-  const expandImage = () => {
-    console.log(image);
+  const [boardOwner, setBoardOwner] = useState(null);
+  const [expanded, setExpanded] = useState(false);
+
+  const toggleExpandedImage = () => {
+    setExpanded(!expanded);
   };
 
   const formatText = (string) => {
@@ -36,8 +39,6 @@ export default function Post({
     }
     return <span>{string}</span>;
   };
-
-  const [boardOwner, setBoardOwner] = useState(null);
 
   useEffect(() => {
     const setOwnerFromDatabase = async () => {
@@ -72,7 +73,13 @@ export default function Post({
       ) : null}
       <span>
         {thumb ? (
-          <input alt="" onClick={expandImage} src={thumb} type="image" />
+          <input
+            alt=""
+            aria-label="post-image"
+            onClick={toggleExpandedImage}
+            src={expanded ? image : thumb}
+            type="image"
+          />
         ) : null}
         <span aria-label="post content">
           {content
