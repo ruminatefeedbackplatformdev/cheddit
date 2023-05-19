@@ -42,7 +42,12 @@ export default function Thread({
     return (
       <div aria-label="thread" className="thread">
         <h1>{`/${board}/ - ${name}`}</h1>
-        <Reply board={board} thread={op} readDatabase={readDatabase} />
+        <Reply
+          board={board}
+          thread={op}
+          readDatabase={readDatabase}
+          user={user}
+        />
         {posts.map((post) => (
           <Post
             author={post.author}

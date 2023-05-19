@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import {
@@ -21,11 +21,21 @@ async function getNewPostNumber(id) {
   return +lastPost[lastPost.length - 1] + 1;
 }
 
-export default function Reply({ board, readDatabase, thread }) {
+export default function Reply({
+  board, readDatabase, thread, user,
+}) {
   const [enabled, setEnabled] = useState(false);
   const [postAuthor, setPostAuthor] = useState('');
   const [postContent, setPostContent] = useState('');
   const [file, setFile] = useState(null);
+
+  useEffect(() => {
+    if (user) {
+      setPostAuthor(user.displayName);
+    } else {
+      setPostAuthor('');
+    }
+  }, [user]);
 
   const changeAuthor = (event) => {
     setPostAuthor(event.target.value);

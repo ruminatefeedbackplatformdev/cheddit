@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   arrayUnion, doc, getDoc, setDoc, updateDoc,
@@ -34,6 +34,14 @@ export default function NewThread({
   const [threadSubject, setThreadSubject] = useState('');
   const [threadContent, setThreadContent] = useState('');
   const [file, setFile] = useState(null);
+
+  useEffect(() => {
+    if (user) {
+      setThreadAuthor(user.displayName);
+    } else {
+      setThreadAuthor('');
+    }
+  }, [user]);
 
   const navigate = useNavigate();
 
