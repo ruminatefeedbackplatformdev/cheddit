@@ -1,4 +1,5 @@
 import React from 'react';
+import { BrowserRouter } from 'react-router-dom';
 import { act, render, screen } from '@testing-library/react';
 // eslint-disable-next-line
 import { toHaveAttribute } from "@testing-library/jest-dom";
@@ -39,28 +40,44 @@ jest.mock('firebase/firestore', () => ({
 describe('Post component', () => {
   it('exists', async () => {
     await act(async () => {
-      render(<Post replies={[]} />);
+      render(
+        <BrowserRouter>
+          <Post replies={[]} />
+        </BrowserRouter>,
+      );
     });
     expect(screen.getByRole('article')).toBeTruthy();
   });
 
   it('handles lack of image', async () => {
     await act(async () => {
-      render(<Post replies={[]} image={null} />);
+      render(
+        <BrowserRouter>
+          <Post replies={[]} image={null} />
+        </BrowserRouter>,
+      );
     });
     expect(screen.queryByRole('img')).toBeFalsy();
   });
 
   it('displays image if provided', async () => {
     await act(async () => {
-      render(<Post replies={[]} thumb="path-to-image" />);
+      render(
+        <BrowserRouter>
+          <Post replies={[]} thumb="path-to-image" />
+        </BrowserRouter>,
+      );
     });
     expect(screen.getByRole('button', { name: 'post-image' })).toBeTruthy();
   });
 
   it('links to correct thumb source', async () => {
     await act(async () => {
-      render(<Post replies={[]} thumb="path-to-image" />);
+      render(
+        <BrowserRouter>
+          <Post replies={[]} thumb="path-to-image" />
+        </BrowserRouter>,
+      );
     });
     expect(screen.getByRole('button', { name: 'post-image' })).toHaveAttribute(
       'src',
@@ -70,14 +87,22 @@ describe('Post component', () => {
 
   it('handles lack of subject', async () => {
     await act(async () => {
-      render(<Post replies={[]} subject={null} />);
+      render(
+        <BrowserRouter>
+          <Post replies={[]} subject={null} />
+        </BrowserRouter>,
+      );
     });
     expect(screen.queryByRole('generic', { name: 'subject' })).toBeFalsy();
   });
 
   it('displays subject if provided', async () => {
     await act(async () => {
-      render(<Post replies={[]} subject="first post in thread" />);
+      render(
+        <BrowserRouter>
+          <Post replies={[]} subject="first post in thread" />
+        </BrowserRouter>,
+      );
     });
     expect(screen.getByRole('generic', { name: 'subject' }).textContent).toBe(
       'first post in thread',
@@ -86,7 +111,11 @@ describe('Post component', () => {
 
   it('displays anonymous author if none provided', async () => {
     await act(async () => {
-      render(<Post replies={[]} />);
+      render(
+        <BrowserRouter>
+          <Post replies={[]} />
+        </BrowserRouter>,
+      );
     });
     expect(screen.getByRole('generic', { name: 'author' }).textContent).toBe(
       'Anonymous',
@@ -95,7 +124,11 @@ describe('Post component', () => {
 
   it('displays name of authenticated author', async () => {
     await act(async () => {
-      render(<Post replies={[]} author="Dude McGuy" />);
+      render(
+        <BrowserRouter>
+          <Post replies={[]} author="Dude McGuy" />
+        </BrowserRouter>,
+      );
     });
     expect(screen.getByRole('generic', { name: 'author' }).textContent).toBe(
       'Dude McGuy',
@@ -104,7 +137,11 @@ describe('Post component', () => {
 
   it('displays timestamp', async () => {
     await act(async () => {
-      render(<Post replies={[]} time={1683055751230} />);
+      render(
+        <BrowserRouter>
+          <Post replies={[]} time={1683055751230} />
+        </BrowserRouter>,
+      );
     });
     expect(screen.getByRole('generic', { name: 'timestamp' }).textContent).toBe(
       '5/2/2023, 12:29:11 PM',
@@ -113,7 +150,11 @@ describe('Post component', () => {
 
   it('displays post number', async () => {
     await act(async () => {
-      render(<Post replies={[]} number={254} />);
+      render(
+        <BrowserRouter>
+          <Post replies={[]} number={254} />
+        </BrowserRouter>,
+      );
     });
     expect(
       screen.getByRole('generic', { name: 'post number' }).textContent,
@@ -123,14 +164,22 @@ describe('Post component', () => {
   it('displays correct number of replies', async () => {
     const replies = [123, 234, 345];
     await act(async () => {
-      render(<Post replies={replies} />);
+      render(
+        <BrowserRouter>
+          <Post replies={replies} />
+        </BrowserRouter>,
+      );
     });
     expect(screen.getAllByRole('link').length).toBe(3);
   });
 
   it('displays post content', async () => {
     await act(async () => {
-      render(<Post replies={[]} content="Here is the post content" />);
+      render(
+        <BrowserRouter>
+          <Post replies={[]} content="Here is the post content" />
+        </BrowserRouter>,
+      );
     });
     expect(
       screen.getByRole('generic', { name: 'post content' }).textContent,

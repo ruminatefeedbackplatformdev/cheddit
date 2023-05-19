@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { doc, getDoc } from 'firebase/firestore';
 import database from '../util/firestore';
 import PostControl from './PostControl';
@@ -40,7 +41,6 @@ export default function Post({
   const formatText = (string) => {
     // turn any proper ">>" reply into a link to the post
     const reply = /^>>\d+$/;
-    const greentext = /^>[^>\n]*$/;
     if (string.match(reply)) {
       return (
         <span>
@@ -48,6 +48,8 @@ export default function Post({
         </span>
       );
     }
+    // handle quotes / greentext ">"
+    const greentext = /^>[^>\n]*$/;
     if (string.match(greentext)) {
       return <span className="greentext">{string}</span>;
     }
@@ -74,13 +76,20 @@ export default function Post({
         ) : (
           <span aria-label="post number">{`#${number}`}</span>
         )}
-        {replies.length === 0
-          ? null
-          : replies.map((reply) => (
-            <a key={`${number}-${reply}`} href={`#${reply}`}>
-              {reply}
-            </a>
-          ))}
+        {replies.length === 0 ? null : (
+          <span>
+            [
+            {replies.map((reply) => (
+              <Link
+                key={`${number}-${reply}`}
+                to={`/${board}_t${thread}#${reply}`}
+              >
+                {`>>${reply}`}
+              </Link>
+            ))}
+            ]
+          </span>
+        )}
       </span>
       {user ? (
         <span>

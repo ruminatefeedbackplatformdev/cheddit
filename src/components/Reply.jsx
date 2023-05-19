@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { doc, getDoc, updateDoc } from 'firebase/firestore';
+import {
+  arrayUnion, doc, getDoc, updateDoc,
+} from 'firebase/firestore';
 import {
   getDownloadURL, getStorage, ref, uploadBytes,
 } from 'firebase/storage';
@@ -119,6 +121,24 @@ export default function Reply({
     return downloadURL;
   };
 
+  const handlePostLinks = async (newPostNumber) => {
+    // parse the new post content for ">>" links
+    const lines = postContent.split('\n');
+    await lines.forEach(async (line) => {
+      const postLink = /^>>\d+$/;
+      if (line.match(postLink)) {
+        // update the linked post in the database
+        console.log('got a match!');
+        const linked = +line.slice(2);
+        const boardRef = doc(database, 'boards', board);
+        const repliesToUpdate = `posts.${linked}.replies`;
+        await updateDoc(boardRef, {
+          [repliesToUpdate]: arrayUnion(newPostNumber),
+        });
+      }
+    });
+  };
+
   const submitPost = async () => {
     const newPost = {
       author: postAuthor === '' ? null : postAuthor,
@@ -146,6 +166,9 @@ export default function Reply({
 
     const boardRef = doc(database, 'boards', board);
     await updateDoc(boardRef, update);
+
+    // update database to handle any links to other posts
+    await handlePostLinks(newPostNumber);
 
     // reset the form
     resetForm();
