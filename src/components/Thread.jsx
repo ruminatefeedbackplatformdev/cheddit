@@ -28,7 +28,9 @@ async function loadPosts(board, op) {
 export default function Thread({
   board, boards, name, op, setUser, user,
 }) {
+  const [postContent, setPostContent] = useState('');
   const [posts, setPosts] = useState([]);
+  const [replyEnabled, setReplyEnabled] = useState(false);
 
   const readDatabase = async () => {
     setPosts(await loadPosts(board, op));
@@ -44,8 +46,12 @@ export default function Thread({
         <h1>{`/${board}/ - ${name}`}</h1>
         <Reply
           board={board}
-          thread={op}
+          enabled={replyEnabled}
+          postContent={postContent}
           readDatabase={readDatabase}
+          setEnabled={setReplyEnabled}
+          setPostContent={setPostContent}
+          thread={op}
           user={user}
         />
         {posts.map((post) => (
@@ -54,9 +60,13 @@ export default function Thread({
             board={board}
             content={post.content}
             image={post.image}
-            number={post.number}
+            inThread
             key={post.number}
+            number={post.number}
+            postContent={postContent}
             replies={post.replies}
+            setPostContent={setPostContent}
+            setReplyEnabled={setReplyEnabled}
             setUser={setUser}
             subject={post.subject}
             thread={op}

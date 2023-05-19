@@ -22,11 +22,16 @@ async function getNewPostNumber(id) {
 }
 
 export default function Reply({
-  board, readDatabase, thread, user,
+  board,
+  enabled,
+  postContent,
+  readDatabase,
+  setEnabled,
+  setPostContent,
+  thread,
+  user,
 }) {
-  const [enabled, setEnabled] = useState(false);
   const [postAuthor, setPostAuthor] = useState('');
-  const [postContent, setPostContent] = useState('');
   const [file, setFile] = useState(null);
 
   useEffect(() => {

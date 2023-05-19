@@ -1,0 +1,67 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Reply component displays reply button 1`] = `
+<div>
+  <div
+    class="reply-container"
+  >
+    <form
+      aria-label="reply form"
+      class="reply-form"
+    >
+      <label
+        for="post-author"
+      >
+        Name:
+        <input
+          id="post-author"
+          name="post-author"
+          placeholder="Anonymous"
+          type="text"
+          value=""
+        />
+      </label>
+      <label
+        for="post-content"
+      >
+        Comment:
+        <textarea
+          id="post-content"
+          name="post-content"
+          rows="6"
+        />
+      </label>
+      <label
+        for="post-image"
+      >
+        Image:
+        <input
+          accept="image/jpeg, image/gif, image/png"
+          id="post-image"
+          name="post=image"
+          type="file"
+        />
+      </label>
+      <div
+        class="buttons"
+      >
+        <button
+          type="button"
+        >
+          CANCEL
+        </button>
+        <button
+          type="button"
+        >
+          POST
+        </button>
+      </div>
+    </form>
+    <a
+      href="/undefined"
+    >
+      Back to /undefined/
+    </a>
+  </div>
+</div>
+`;

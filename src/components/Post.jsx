@@ -8,8 +8,12 @@ export default function Post({
   board,
   content,
   image,
+  inThread,
   number,
+  postContent,
   replies,
+  setPostContent,
+  setReplyEnabled,
   setUser,
   subject,
   thread,
@@ -19,6 +23,15 @@ export default function Post({
 }) {
   const [boardOwner, setBoardOwner] = useState(null);
   const [expanded, setExpanded] = useState(false);
+
+  useEffect(() => {
+    const setOwnerFromDatabase = async () => {
+      const boardRef = doc(database, 'boards', board);
+      const boardSnap = await getDoc(boardRef);
+      setBoardOwner(boardSnap.data().owner);
+    };
+    setOwnerFromDatabase();
+  }, []);
 
   const toggleExpandedImage = () => {
     setExpanded(!expanded);
@@ -41,14 +54,14 @@ export default function Post({
     return <span>{string}</span>;
   };
 
-  useEffect(() => {
-    const setOwnerFromDatabase = async () => {
-      const boardRef = doc(database, 'boards', board);
-      const boardSnap = await getDoc(boardRef);
-      setBoardOwner(boardSnap.data().owner);
-    };
-    setOwnerFromDatabase();
-  }, []);
+  const replyToPost = () => {
+    // add >> link to post reply
+    setReplyEnabled(true);
+    const newContent = `${postContent}${
+      postContent === '' ? '' : '\n'
+    }>>${number}`;
+    setPostContent(newContent);
+  };
 
   return (
     <article className={number === thread ? 'post' : 'post reply'} id={number}>
@@ -56,7 +69,11 @@ export default function Post({
         {subject ? <span aria-label="subject">{subject}</span> : null}
         <span aria-label="author">{author || 'Anonymous'}</span>
         <span aria-label="timestamp">{new Date(time).toLocaleString()}</span>
-        <span aria-label="post number">{`#${number}`}</span>
+        {inThread ? (
+          <button onClick={replyToPost} type="button">{`#${number}`}</button>
+        ) : (
+          <span aria-label="post number">{`#${number}`}</span>
+        )}
         {replies.length === 0
           ? null
           : replies.map((reply) => (
