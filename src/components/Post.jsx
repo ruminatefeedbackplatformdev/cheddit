@@ -10,6 +10,7 @@ export default function Post({
   image,
   number,
   replies,
+  setUser,
   subject,
   thread,
   thumb,
@@ -67,7 +68,13 @@ export default function Post({
       {user ? (
         <span>
           {user.uid === boardOwner ? (
-            <PostControl board={board} number={number} thread={thread} />
+            <PostControl
+              board={board}
+              number={number}
+              setUser={setUser}
+              thread={thread}
+              user={user}
+            />
           ) : null}
         </span>
       ) : null}

@@ -24,6 +24,7 @@ export default function RouteSwitch({ boards, setUser, user }) {
               boards={boards}
               id={board.id}
               name={board.name}
+              setUser={setUser}
               user={user}
             />
           )}
@@ -39,6 +40,7 @@ export default function RouteSwitch({ boards, setUser, user }) {
               boards={boards}
               name={board.name}
               op={thread}
+              setUser={setUser}
               user={user}
             />
             )}

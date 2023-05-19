@@ -19,7 +19,6 @@ async function createNewUserDoc(user) {
   // give 'em some empty fields on their first login
   await setDoc(doc(database, 'users', user.uid), {
     threads: {},
-    posts: {},
   });
 }
 

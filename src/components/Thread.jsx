@@ -26,7 +26,7 @@ async function loadPosts(board, op) {
 }
 
 export default function Thread({
-  board, boards, name, op, user,
+  board, boards, name, op, setUser, user,
 }) {
   const [posts, setPosts] = useState([]);
 
@@ -52,6 +52,7 @@ export default function Thread({
             number={post.number}
             key={post.number}
             replies={post.replies}
+            setUser={setUser}
             subject={post.subject}
             thread={op}
             thumb={post.thumb}

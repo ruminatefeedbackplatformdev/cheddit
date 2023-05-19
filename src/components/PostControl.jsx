@@ -1,11 +1,18 @@
 import React, { useState } from 'react';
 import {
-  arrayRemove, deleteField, doc, getDoc, updateDoc,
+  arrayRemove,
+  deleteField,
+  doc,
+  getDoc,
+  setDoc,
+  updateDoc,
 } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
 import database from '../util/firestore';
 
-export default function PostControl({ board, number, thread }) {
+export default function PostControl({
+  board, number, setUser, thread, user,
+}) {
   const navigate = useNavigate();
 
   const [confirming, setConfirming] = useState(false);
@@ -41,6 +48,27 @@ export default function PostControl({ board, number, thread }) {
     return allThreadPosts;
   };
 
+  const updateUserThreads = async () => {
+    // remove the thread from user's local state
+    const prevThreads = {};
+    Object.keys(user.threads).forEach((threadBoard) => {
+      prevThreads[threadBoard] = [...user.threads[threadBoard]];
+    });
+    const index = prevThreads[board].indexOf(thread);
+    prevThreads[board].splice(index, 1);
+    if (prevThreads[board].length === 0) {
+      delete prevThreads[board];
+    }
+    setUser({
+      ...user,
+      threads: prevThreads,
+    });
+
+    // then remove from the database
+    const userRef = doc(database, 'users', user.uid);
+    setDoc(userRef, { threads: prevThreads }, { merge: true });
+  };
+
   const deleteThread = async () => {
     const boardRef = doc(database, 'boards', board);
 
@@ -57,6 +85,7 @@ export default function PostControl({ board, number, thread }) {
       threads: arrayRemove(thread),
     });
 
+    await updateUserThreads();
     setConfirming(false);
     navigate(`/${board}`);
   };

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-  arrayUnion, doc, getDoc, updateDoc,
+  arrayUnion, doc, getDoc, setDoc, updateDoc,
 } from 'firebase/firestore';
 import {
   getDownloadURL, getStorage, ref, uploadBytes,
@@ -26,7 +26,9 @@ async function getNewPostNumber(id) {
   return +boardPosts[boardPosts.length - 1] + 1;
 }
 
-export default function NewThread({ board, readDatabase }) {
+export default function NewThread({
+  board, readDatabase, setUser, user,
+}) {
   const [enabled, setEnabled] = useState(false);
   const [threadAuthor, setThreadAuthor] = useState('');
   const [threadSubject, setThreadSubject] = useState('');
@@ -105,6 +107,29 @@ export default function NewThread({ board, readDatabase }) {
     return downloadURL;
   };
 
+  const updateUserThreads = async (newPostNumber) => {
+    // add the new thread to the user's local state
+    const prevThreads = {};
+    Object.keys(user.threads).forEach((threadBoard) => {
+      prevThreads[threadBoard] = [...user.threads[threadBoard]];
+    });
+    if (Object.hasOwn(prevThreads, board)) {
+      prevThreads[board].push(newPostNumber);
+    } else {
+      prevThreads[board] = [newPostNumber];
+    }
+    setUser(
+      {
+        ...user,
+        threads: prevThreads,
+      },
+    );
+
+    // then update the database accordingly
+    const userRef = doc(database, 'users', user.uid);
+    setDoc(userRef, { threads: prevThreads }, { merge: true });
+  };
+
   const submitThread = async () => {
     const newPost = {
       author: threadAuthor === '' ? null : threadAuthor,
@@ -136,6 +161,11 @@ export default function NewThread({ board, readDatabase }) {
     await updateDoc(boardRef, {
       threads: arrayUnion(newPostNumber),
     });
+
+    // keep track of user's threads
+    if (user) {
+      updateUserThreads(newPostNumber);
+    }
 
     // reset the form
     setThreadAuthor('');
