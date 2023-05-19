@@ -65,6 +65,18 @@ export default function NewThread({
     setFile(event.target.files[0]);
   };
 
+  const resetForm = () => {
+    if (user) {
+      setThreadAuthor(user.displayName);
+    } else {
+      setThreadAuthor('');
+    }
+    setThreadSubject('');
+    setThreadContent('');
+    setFile(null);
+    enableForm();
+  };
+
   const uploadImage = async (newPostNumber) => {
     const storage = getStorage();
     const extension = file.name.match(/\.[a-zA-Z0-9]+$/).join();
@@ -176,11 +188,7 @@ export default function NewThread({
     }
 
     // reset the form
-    setThreadAuthor('');
-    setThreadSubject('');
-    setThreadContent('');
-    setFile(null);
-    enableForm();
+    resetForm();
 
     // this will update the threads for the parent board
     await readDatabase();
@@ -235,7 +243,7 @@ export default function NewThread({
             />
           </label>
           <div className="buttons">
-            <button onClick={enableForm} type="button">
+            <button onClick={resetForm} type="button">
               CANCEL
             </button>
             <button onClick={submitThread} type="button">

@@ -58,6 +58,17 @@ export default function Reply({
     setEnabled(!enabled);
   };
 
+  const resetForm = () => {
+    if (user) {
+      setPostAuthor(user.displayName);
+    } else {
+      setPostAuthor('');
+    }
+    setPostContent('');
+    setFile(null);
+    enableForm();
+  };
+
   const uploadImage = async (newPostNumber) => {
     const storage = getStorage();
     const extension = file.name.match(/\.[a-zA-Z0-9]+$/).join();
@@ -137,10 +148,7 @@ export default function Reply({
     await updateDoc(boardRef, update);
 
     // reset the form
-    setPostAuthor('');
-    setPostContent('');
-    setFile(null);
-    enableForm();
+    resetForm();
 
     // this will update the posts for the parent thread
     await readDatabase();
@@ -182,7 +190,7 @@ export default function Reply({
             />
           </label>
           <div className="buttons">
-            <button onClick={enableForm} type="button">
+            <button onClick={resetForm} type="button">
               CANCEL
             </button>
             <button onClick={submitPost} type="button">
