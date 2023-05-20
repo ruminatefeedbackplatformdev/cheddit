@@ -14,7 +14,7 @@ export default function RouteSwitch({ boards, setUser, user }) {
         path="/dash"
         element={<Dashboard boards={boards} user={user} setUser={setUser} />}
       />
-      <Route path="/rules" element={<Rules />} />
+      <Route path="/rules" element={<Rules boards={boards} />} />
       {boards.map((board) => (
         <Route
           key={`route-${board.id}`}

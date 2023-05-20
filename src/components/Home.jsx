@@ -25,8 +25,8 @@ export default function Home({ boards }) {
       <div className="site-info">
         <p>
           Cheddit is yet another imageboard site, where you can create and
-          moderate your very own discusson boards. Anyone can participate
-          anonymously, but only authenticed users can create boards. Check out
+          moderate your very own discussion boards. Anyone can participate
+          anonymously, but only authenticated users can create boards. Check out
           the communities below and join in!
         </p>
         <p>

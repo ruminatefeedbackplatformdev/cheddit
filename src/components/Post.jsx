@@ -77,15 +77,17 @@ export default function Post({
           <span aria-label="post number">{`#${number}`}</span>
         )}
         {replies.length === 0 ? null : (
-          <span>
+          <span className="linked-posts">
             [
             {replies.map((reply) => (
-              <Link
-                key={`${number}-${reply}`}
-                to={`/${board}_t${thread}#${reply}`}
-              >
-                {`>>${reply}`}
-              </Link>
+              <span>
+                <Link
+                  key={`${number}-${reply}`}
+                  to={`/${board}_t${thread}#${reply}`}
+                >
+                  {`>>${reply}`}
+                </Link>
+              </span>
             ))}
             ]
           </span>
@@ -104,7 +106,7 @@ export default function Post({
           ) : null}
         </span>
       ) : null}
-      <span>
+      <span className="post-content">
         {thumb ? (
           <input
             alt=""

@@ -145,14 +145,19 @@ header .account img {
   color: #789922;
 }
 
-.post span:last-child {
+.post .linked-posts {
+  display: flex;
+  gap: 8px;
+}
+
+.post-content {
   align-items: flex-start;
   display: flex;
   gap: 8px;
 }
 
 @media (max-width: 600px) {
-  .post span:last-child {
+  .post-content {
     flex-direction: column;
   }
 }
@@ -237,15 +242,22 @@ header .account img {
   gap: 4px;
 }
 
-.rules {
+.rules .global-rules,
+.rules .per-board-rules {
   display: flex;
   flex-direction: column;
-  gap: 32px;
+  gap: 16px;
 }
 
 .rules h1 {
-  align-self: center;
+  text-align: center;
   font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.rules h2 {
+  text-align: center;
+  font-size: 1.2rem;
   font-weight: bold;
 }
 
