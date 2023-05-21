@@ -27,9 +27,10 @@ export default function Disclaimer({
       understand and agree to the following:
       <ol>
         <li>
-          The content of this website is for mature audiences only and may not
-          be suitable for minors. If you are a minor or it is illegal for you to
-          access mature images and language, do not proceed.
+          Although boards on Cheddit are generally considered &quot;work
+          safe,&quot; the content of this website is for mature audiences only
+          and may not be suitable for minors. If you are a minor or it is
+          illegal for you to access mature images and language, do not proceed.
         </li>
         <li>
           This website is presented to you AS IS, with no warranty, express or
