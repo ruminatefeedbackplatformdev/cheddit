@@ -12,7 +12,20 @@ export default function NewBoard({
 }) {
   const [boardID, setBoardID] = useState('');
   const [boardName, setBoardName] = useState('');
+  const [boardRules, setBoardRules] = useState([]);
   const [errorMessage, setErrorMessage] = useState('');
+
+  const addRule = () => {
+    const newRules = [...boardRules];
+    newRules.push('');
+    setBoardRules(newRules);
+  };
+
+  const changeRule = (event) => {
+    const newRules = [...boardRules];
+    newRules[+event.target.dataset.index] = event.target.value;
+    setBoardRules(newRules);
+  };
 
   const navigate = useNavigate();
 
@@ -30,7 +43,14 @@ export default function NewBoard({
     setErrorMessage('');
     setBoardID('');
     setBoardName('');
+    setBoardRules([]);
     enableForm();
+  };
+
+  const deleteRule = (event) => {
+    const newRules = [...boardRules];
+    newRules.splice(+event.target.dataset.index, 1);
+    setBoardRules(newRules);
   };
 
   const updateUserBoards = () => {
@@ -67,6 +87,7 @@ export default function NewBoard({
           name: boardName,
           owner: user.uid,
           posts: {},
+          rules: boardRules,
           threads: [],
         });
         updateUserBoards();
@@ -74,6 +95,7 @@ export default function NewBoard({
         setErrorMessage('');
         setBoardID('');
         setBoardName('');
+        setBoardRules([]);
         enableForm();
       }
     } else {
@@ -111,6 +133,31 @@ export default function NewBoard({
         />
         <span>a title for your board</span>
       </label>
+      <h3>Board Rules:</h3>
+      {boardRules.map((rule) => (
+        <label
+          htmlFor={`new-board-rule#${boardRules.indexOf(rule)}`}
+          key={`new-board-rule#${boardRules.indexOf(rule)}`}
+        >
+          <textarea
+            data-index={boardRules.indexOf(rule)}
+            id={`new-board-rule#${boardRules.indexOf(rule)}`}
+            minLength={1}
+            onChange={changeRule}
+            value={boardRules[boardRules.indexOf(rule)]}
+          />
+          <button
+            data-index={boardRules.indexOf(rule)}
+            onClick={deleteRule}
+            type="button"
+          >
+            Delete Rule
+          </button>
+        </label>
+      ))}
+      <button onClick={addRule} type="button">
+        Add Rule
+      </button>
       <button onClick={submitForm} type="button">
         SUBMIT
       </button>
