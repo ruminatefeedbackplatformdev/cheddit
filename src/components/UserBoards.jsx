@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { deleteDoc, doc, setDoc } from 'firebase/firestore';
+import {
+  collection, deleteDoc, doc, getDoc, getDocs, setDoc,
+} from 'firebase/firestore';
 import {
   deleteObject, getStorage, listAll, ref,
 } from 'firebase/storage';
@@ -17,6 +19,23 @@ export default function UserBoards({ boards, setUser, user }) {
 
   const enableForm = () => {
     setEnabled(!enabled);
+  };
+
+  const deleteBoardThreadsForAllUsers = async (board) => {
+    // first get all user ids
+    const querySnapshot = await getDocs(collection(database, 'users'));
+    const allUsers = [];
+    querySnapshot.forEach((docu) => {
+      allUsers.push(docu.id);
+    });
+    // then delete all threads from deleted board for each user
+    allUsers.forEach(async (userID) => {
+      const userRef = doc(database, 'users', userID);
+      const userSnap = await getDoc(userRef);
+      const userThreads = { ...userSnap.data().threads };
+      delete userThreads[board];
+      setDoc(userRef, { threads: userThreads });
+    });
   };
 
   const deleteBoard = async (event) => {
@@ -42,9 +61,8 @@ export default function UserBoards({ boards, setUser, user }) {
       threads: prevThreads,
     });
 
-    // then remove from the database
-    const userRef = doc(database, 'users', user.uid);
-    setDoc(userRef, { threads: prevThreads });
+    // then remove all threads for this board for all users
+    await deleteBoardThreadsForAllUsers(board);
   };
 
   return (
