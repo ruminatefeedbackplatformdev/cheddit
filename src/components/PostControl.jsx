@@ -7,6 +7,8 @@ import {
   setDoc,
   updateDoc,
 } from 'firebase/firestore';
+// eslint-disable-next-line
+import { deleteObject, getStorage, ref } from 'firebase/storage';
 import { useNavigate } from 'react-router-dom';
 import database from '../util/firestore';
 
@@ -25,9 +27,28 @@ export default function PostControl({
     setConfirming(true);
   };
 
+  const deleteImage = async () => {
+    // find the post in the database
+    const boardRef = doc(database, 'boards', board);
+    const boardSnap = await getDoc(boardRef);
+    const { posts } = boardSnap.data();
+
+    // if the post has an image, storagePath won't be null
+    const imagePath = posts[number].storagePath;
+    if (imagePath) {
+      const storage = getStorage();
+      const imageRef = ref(storage, imagePath);
+      const thumbRef = ref(storage, `${board}/${number}-thm.JPEG`);
+      // delete the image and it's thumbnail
+      await deleteObject(imageRef);
+      await deleteObject(thumbRef);
+    }
+  };
+
   const deletePost = async () => {
     // just need to delete this one post
     const boardRef = doc(database, 'boards', board);
+    await deleteImage();
     await updateDoc(boardRef, {
       [`posts.${number}`]: deleteField(),
     });

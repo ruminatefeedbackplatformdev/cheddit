@@ -146,6 +146,7 @@ export default function Reply({
       image: null,
       replies: [],
       subject: null,
+      storagePath: null,
       thread,
       thumb: null,
       time: Date.now(),
@@ -162,6 +163,9 @@ export default function Reply({
       const thumbURL = await uploadThumbnail(newPostNumber);
       update[updateKey].image = URL;
       update[updateKey].thumb = thumbURL;
+
+      const extension = file.name.match(/\.[a-zA-Z0-9]+$/).join();
+      update[updateKey].storagePath = `${board}/${newPostNumber}${extension}`;
     }
 
     const boardRef = doc(database, 'boards', board);

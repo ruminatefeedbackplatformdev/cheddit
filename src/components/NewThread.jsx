@@ -156,6 +156,7 @@ export default function NewThread({
       content: threadContent,
       image: null,
       replies: [],
+      storagePath: null,
       subject: threadSubject,
       thread: null,
       thumb: null,
@@ -174,6 +175,9 @@ export default function NewThread({
       const thumbURL = await uploadThumbnail(newPostNumber);
       update[updateKey].image = URL;
       update[updateKey].thumb = thumbURL;
+
+      const extension = file.name.match(/\.[a-zA-Z0-9]+$/).join();
+      update[updateKey].storagePath = `${board}/${newPostNumber}${extension}`;
     }
 
     const boardRef = doc(database, 'boards', board);
