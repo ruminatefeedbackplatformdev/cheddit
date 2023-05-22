@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { deleteDoc, doc } from 'firebase/firestore';
+import {
+  deleteObject, getStorage, listAll, ref,
+} from 'firebase/storage';
 import database from '../util/firestore';
 import NewBoard from './NewBoard';
 
@@ -17,8 +20,17 @@ export default function UserBoards({ boards, setUser, user }) {
   };
 
   const deleteBoard = async (event) => {
+    // remove the board from firestore
     const { board } = event.target.dataset;
     await deleteDoc(doc(database, 'boards', board));
+
+    // then remove the files from storage
+    const storage = getStorage();
+    const boardRef = ref(storage, board);
+    const boardImages = await listAll(boardRef);
+    boardImages.items.forEach(async (image) => {
+      await deleteObject(image);
+    });
   };
 
   return (
