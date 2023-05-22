@@ -59,6 +59,7 @@ export default function App() {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
+    setUser('loading');
     // listen for auth changes & update state accordingly
     const auth = getAuth();
     onAuthStateChanged(auth, async (authUser) => {

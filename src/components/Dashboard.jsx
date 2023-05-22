@@ -4,6 +4,13 @@ import UserBoards from './UserBoards';
 import UserThreads from './UserThreads';
 
 export default function Dashboard({ boards, setUser, user }) {
+  if (user === 'loading') {
+    return (
+      <div>
+        Loading...
+      </div>
+    );
+  }
   if (user) {
     return (
       <div className="dashboard">

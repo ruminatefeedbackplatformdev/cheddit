@@ -17,14 +17,20 @@ export default function Header({ user }) {
       </nav>
       <span>Cheddit</span>
       <span className="account">
-        {user ? (
+        {user && user !== 'loading' ? (
           <span>
             <button onClick={logout} type="button">
               Sign Out
             </button>
           </span>
         ) : null}
-        <span>{user ? user.displayName : 'Anonymous'}</span>
+        <span>
+          {user ? (
+            <span>{user === 'loading' ? user : user.displayName}</span>
+          ) : (
+            'Anonymous'
+          )}
+        </span>
         <img
           referrerPolicy="no-referrer"
           src={user ? user.photoURL : anonIcon}
