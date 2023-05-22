@@ -128,7 +128,6 @@ export default function Reply({
       const postLink = /^>>\d+$/;
       if (line.match(postLink)) {
         // update the linked post in the database
-        console.log('got a match!');
         const linked = +line.slice(2);
         const boardRef = doc(database, 'boards', board);
         const repliesToUpdate = `posts.${linked}.replies`;

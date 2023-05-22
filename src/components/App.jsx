@@ -85,6 +85,7 @@ export default function App() {
     // get info on all the boards from the database
     const q = query(collection(database, 'boards'));
     onSnapshot(q, (querySnapshot) => {
+      console.log('boards changed...');
       const allBoards = [];
       querySnapshot.forEach((docu) => {
         const thisBoard = {};
