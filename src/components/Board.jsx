@@ -126,7 +126,12 @@ export default function Board({
   return (
     <main className="board">
       <h1>{`/${id}/ - ${name}`}</h1>
-      <NewThread board={id} readDatabase={readDatabase} />
+      <NewThread
+        board={id}
+        readDatabase={readDatabase}
+        setUser={setUser}
+        user={user}
+      />
       <span>Nothing to see here...</span>
     </main>
   );

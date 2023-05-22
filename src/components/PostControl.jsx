@@ -50,7 +50,7 @@ export default function PostControl({
 
   const updateUserThreads = async () => {
     // remove the thread from user's local state
-    const prevThreads = {};
+    const prevThreads = { ...user.threads };
     if (Object.keys(user.threads).length) {
       Object.keys(user.threads).forEach((threadBoard) => {
         prevThreads[threadBoard] = [...user.threads[threadBoard]];
