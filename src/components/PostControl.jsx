@@ -51,13 +51,15 @@ export default function PostControl({
   const updateUserThreads = async () => {
     // remove the thread from user's local state
     const prevThreads = {};
-    Object.keys(user.threads).forEach((threadBoard) => {
-      prevThreads[threadBoard] = [...user.threads[threadBoard]];
-    });
-    const index = prevThreads[board].indexOf(thread);
-    prevThreads[board].splice(index, 1);
-    if (prevThreads[board].length === 0) {
-      delete prevThreads[board];
+    if (Object.keys(user.threads).length) {
+      Object.keys(user.threads).forEach((threadBoard) => {
+        prevThreads[threadBoard] = [...user.threads[threadBoard]];
+      });
+      const index = prevThreads[board].indexOf(thread);
+      prevThreads[board].splice(index, 1);
+      if (prevThreads[board].length === 0) {
+        delete prevThreads[board];
+      }
     }
     setUser({
       ...user,

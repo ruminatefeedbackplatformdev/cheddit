@@ -80,7 +80,7 @@ export default function Post({
           <span className="linked-posts">
             [
             {replies.map((reply) => (
-              <span>
+              <span key={`/${board}_${number}-${reply}`}>
                 <Link
                   key={`${number}-${reply}`}
                   to={`/${board}_t${thread}#${reply}`}

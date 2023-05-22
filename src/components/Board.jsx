@@ -35,18 +35,21 @@ async function loadThreads(id) {
 async function getPostsInfo(id) {
   // get all the post numbers in each thread
   const { posts, threads } = await loadBoard(id);
-  const postKeys = Object.keys(posts);
-  const threadPosts = {};
-  threads.forEach((thread) => {
-    threadPosts[thread] = [];
-  });
+  if (threads.length) {
+    const threadPosts = {};
+    threads.forEach((thread) => {
+      threadPosts[thread] = [];
+    });
 
-  postKeys.forEach((key) => {
-    const thisPost = posts[key];
-    threadPosts[thisPost.thread].push(+key);
-  });
+    const postKeys = Object.keys(posts);
+    postKeys.forEach((key) => {
+      const thisPost = posts[key];
+      threadPosts[thisPost.thread].push(+key);
+    });
 
-  return threadPosts;
+    return threadPosts;
+  }
+  return {};
 }
 
 function getPostCounts(posts) {
