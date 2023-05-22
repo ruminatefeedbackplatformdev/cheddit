@@ -5,6 +5,7 @@ import Dashboard from './Dashboard';
 import Board from './Board';
 import Rules from './Rules';
 import Thread from './Thread';
+import None from './None';
 
 export default function RouteSwitch({ boards, setUser, user }) {
   return (
@@ -46,6 +47,7 @@ export default function RouteSwitch({ boards, setUser, user }) {
             )}
         />
       )))}
+      <Route path="/*" element={<None />} />
     </Routes>
   );
 }
