@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { deleteDoc, doc } from 'firebase/firestore';
+import { deleteDoc, doc, setDoc } from 'firebase/firestore';
 import {
   deleteObject, getStorage, listAll, ref,
 } from 'firebase/storage';
@@ -31,6 +31,20 @@ export default function UserBoards({ boards, setUser, user }) {
     boardImages.items.forEach(async (image) => {
       await deleteObject(image);
     });
+
+    // remove all the board's threads for that user (local)
+    const prevThreads = { ...user.threads };
+    if (Object.keys(user.threads).includes(board)) {
+      delete prevThreads[board];
+    }
+    setUser({
+      ...user,
+      threads: prevThreads,
+    });
+
+    // then remove from the database
+    const userRef = doc(database, 'users', user.uid);
+    setDoc(userRef, { threads: prevThreads });
   };
 
   return (
