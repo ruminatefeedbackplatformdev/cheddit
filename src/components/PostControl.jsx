@@ -27,18 +27,18 @@ export default function PostControl({
     setConfirming(true);
   };
 
-  const deleteImage = async () => {
+  const deleteImage = async (postNumber) => {
     // find the post in the database
     const boardRef = doc(database, 'boards', board);
     const boardSnap = await getDoc(boardRef);
     const { posts } = boardSnap.data();
 
     // if the post has an image, storagePath won't be null
-    const imagePath = posts[number].storagePath;
+    const imagePath = posts[postNumber].storagePath;
     if (imagePath) {
       const storage = getStorage();
       const imageRef = ref(storage, imagePath);
-      const thumbRef = ref(storage, `${board}/${number}-thm.JPEG`);
+      const thumbRef = ref(storage, `${board}/${postNumber}-thm.JPEG`);
       // delete the image and it's thumbnail
       await deleteObject(imageRef);
       await deleteObject(thumbRef);
@@ -48,7 +48,7 @@ export default function PostControl({
   const deletePost = async () => {
     // just need to delete this one post
     const boardRef = doc(database, 'boards', board);
-    await deleteImage();
+    await deleteImage(number);
     await updateDoc(boardRef, {
       [`posts.${number}`]: deleteField(),
     });
@@ -98,6 +98,7 @@ export default function PostControl({
     // delete all posts within a thread
     const allPosts = await getAllThreadPosts();
     allPosts.forEach(async (post) => {
+      await deleteImage(post);
       await updateDoc(boardRef, {
         [`posts.${post}`]: deleteField(),
       });
