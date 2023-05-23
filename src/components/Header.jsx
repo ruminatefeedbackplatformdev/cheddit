@@ -2,6 +2,7 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { getAuth, signOut } from 'firebase/auth';
 import anonIcon from '../images/account.svg';
+import hourglass from '../images/loading.gif';
 
 export default function Header({ user }) {
   const logout = () => {
@@ -24,12 +25,13 @@ export default function Header({ user }) {
             </button>
           </span>
         ) : null}
-        <span>
+        <span className="header-loading">
           {user ? (
             <span>{user === 'loading' ? user : user.displayName}</span>
           ) : (
             'Anonymous'
           )}
+          {user === 'loading' ? <img src={hourglass} alt="" /> : null }
         </span>
         <img
           referrerPolicy="no-referrer"

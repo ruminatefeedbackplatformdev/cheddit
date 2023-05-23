@@ -4,6 +4,7 @@ import database from '../util/firestore';
 import Login from './Login';
 import UserBoards from './UserBoards';
 import UserThreads from './UserThreads';
+import hourglass from '../images/loading.gif';
 
 export default function Dashboard({ boards, setUser, user }) {
   const [displayName, setDisplayName] = useState('');
@@ -31,7 +32,12 @@ export default function Dashboard({ boards, setUser, user }) {
   };
 
   if (user === 'loading') {
-    return <div>Loading...</div>;
+    return (
+      <div className="dashboard-loading">
+        <span>Loading...</span>
+        <img src={hourglass} alt="" />
+      </div>
+    );
   }
   if (user) {
     return (
