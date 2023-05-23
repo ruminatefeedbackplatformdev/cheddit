@@ -62,6 +62,7 @@ export default function Thread({
             content={post.content}
             image={post.image}
             inThread
+            isSticky={post.isSticky}
             key={post.number}
             number={post.number}
             postContent={postContent}

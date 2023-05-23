@@ -57,7 +57,7 @@ describe('Post component', () => {
         </BrowserRouter>,
       );
     });
-    expect(screen.queryByRole('img')).toBeFalsy();
+    expect(screen.queryByRole('button', { name: 'post-image' })).toBeFalsy();
   });
 
   it('displays image if provided', async () => {

@@ -17,7 +17,12 @@ import { useNavigate } from 'react-router-dom';
 import database from '../util/firestore';
 
 export default function PostControl({
-  board, number, setUser, thread, user,
+  board,
+  isSticky,
+  number,
+  setUser,
+  thread,
+  user,
 }) {
   const navigate = useNavigate();
 
@@ -135,9 +140,34 @@ export default function PostControl({
     navigate(`/${board}`);
   };
 
+  const makeSticky = async () => {
+    // will keep the thread at the top of the board
+    const boardRef = doc(database, 'boards', board);
+    await updateDoc(boardRef, {
+      [`posts.${number}.isSticky`]: true,
+    });
+  };
+
+  const unStick = async () => {
+    // go back to normal thread sorting
+    const boardRef = doc(database, 'boards', board);
+    await updateDoc(boardRef, {
+      [`posts.${number}.isSticky`]: false,
+    });
+  };
+
   if (number === thread) {
     return (
       <span className="post-control">
+        {isSticky ? (
+          <button onClick={unStick} type="button">
+            Unstick
+          </button>
+        ) : (
+          <button onClick={makeSticky} type="button">
+            Make Sticky
+          </button>
+        )}
         <button
           className={confirming ? 'delete-post hidden' : 'delete-post visible'}
           onClick={promptConfirm}

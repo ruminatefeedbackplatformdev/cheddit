@@ -172,6 +172,19 @@ header .account img {
   gap: 8px;
 }
 
+.post .sticky-info {
+  align-items: center;
+  color: #ffe;
+  background: #da2834;
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
+.post .sticky-info img {
+  filter: invert(1);
+}
+
 .post-content {
   align-items: flex-start;
   display: flex;
@@ -186,6 +199,10 @@ header .account img {
 
 .post.reply {
   background: #d6daf0;
+}
+
+.post.sticky {
+  background: #d5c5f2;
 }
 
 .post [aria-label="post content"] {

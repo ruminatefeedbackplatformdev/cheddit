@@ -33,9 +33,11 @@ export default function Dashboard({ boards, setUser, user }) {
 
   if (user === 'loading') {
     return (
-      <div className="dashboard-loading">
-        <span>Loading...</span>
-        <img src={hourglass} alt="" />
+      <div className="dashboard">
+        <span className="dashboard-loading">
+          Loading...
+          <img src={hourglass} alt="" />
+        </span>
       </div>
     );
   }

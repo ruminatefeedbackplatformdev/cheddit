@@ -275,7 +275,7 @@ export default function NewThread({
   }
 
   return (
-    <div>
+    <div className="new-thread-container">
       <button onClick={enableForm} type="button">
         Start a Thread
       </button>

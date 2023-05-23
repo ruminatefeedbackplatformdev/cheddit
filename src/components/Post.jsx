@@ -4,6 +4,7 @@ import { doc, getDoc } from 'firebase/firestore';
 import database from '../util/firestore';
 import PostControl from './PostControl';
 import modBadge from '../images/mod.png';
+import stickyIcon from '../images/sticky.png';
 
 export default function Post({
   author,
@@ -12,6 +13,7 @@ export default function Post({
   content,
   image,
   inThread,
+  isSticky,
   number,
   postContent,
   replies,
@@ -67,8 +69,18 @@ export default function Post({
     setPostContent(newContent);
   };
 
+  const stylePost = () => {
+    if (number !== thread) {
+      return 'post reply';
+    }
+    if (number === thread && isSticky) {
+      return 'post sticky';
+    }
+    return 'post';
+  };
+
   return (
-    <article className={number === thread ? 'post' : 'post reply'} id={number}>
+    <article className={stylePost()} id={number}>
       <span className="post-info">
         {subject ? <span aria-label="subject">{subject}</span> : null}
         <span aria-label="author">{author || 'Anonymous'}</span>
@@ -103,6 +115,7 @@ export default function Post({
           {user.uid === boardOwner ? (
             <PostControl
               board={board}
+              isSticky={isSticky}
               number={number}
               setUser={setUser}
               thread={thread}
@@ -137,6 +150,12 @@ export default function Post({
             : null}
         </span>
       </span>
+      {isSticky ? (
+        <span className="sticky-info">
+          <img src={stickyIcon} alt="" />
+          Sticky
+        </span>
+      ) : null}
     </article>
   );
 }

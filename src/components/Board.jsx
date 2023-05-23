@@ -23,6 +23,7 @@ async function loadThreads(id) {
       authorID: op.authorID,
       content: op.content,
       image: op.image,
+      isSticky: op.isSticky,
       number: thread,
       replies: op.replies,
       subject: op.subject,
@@ -69,6 +70,21 @@ export default function Board({
   const [threads, setThreads] = useState([]);
   const [postCounts, setPostCounts] = useState({});
 
+  const sortSticky = (threadsToSort) => {
+    // put the sticky threads first
+    const sticky = [];
+    const normal = [];
+    threadsToSort.forEach((thread) => {
+      if (thread.isSticky) {
+        sticky.push(thread);
+      } else {
+        normal.push(thread);
+      }
+    });
+    const sorted = sticky.concat(normal);
+    return sorted;
+  };
+
   const readDatabase = async () => {
     const threadPosts = await getPostsInfo(id);
     setPostCounts(getPostCounts(threadPosts));
@@ -80,7 +96,8 @@ export default function Board({
       const threadB = threadPosts[b.number];
       return threadB[threadB.length - 1] - threadA[threadA.length - 1];
     });
-    setThreads(threadsFromDB);
+    // gotta put the sticky threads first
+    setThreads(sortSticky(threadsFromDB));
   };
 
   useEffect(() => {
@@ -105,6 +122,7 @@ export default function Board({
               board={id}
               content={thread.content}
               image={thread.image}
+              isSticky={thread.isSticky}
               number={thread.number}
               replies={thread.replies}
               setUser={setUser}
