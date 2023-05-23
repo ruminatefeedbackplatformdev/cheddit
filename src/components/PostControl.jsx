@@ -1,14 +1,18 @@
 import React, { useState } from 'react';
 import {
   arrayRemove,
+  collection,
   deleteField,
   doc,
   getDoc,
+  getDocs,
+  query,
   setDoc,
   updateDoc,
+  where,
 } from 'firebase/firestore';
 // eslint-disable-next-line
-import { deleteObject, getStorage, ref } from 'firebase/storage';
+import { deleteObject, getStorage, ref } from "firebase/storage";
 import { useNavigate } from 'react-router-dom';
 import database from '../util/firestore';
 
@@ -88,8 +92,25 @@ export default function PostControl({
     });
 
     // then remove from the database
-    const userRef = doc(database, 'users', user.uid);
-    setDoc(userRef, { threads: prevThreads }, { merge: true });
+    const queryUsers = query(
+      collection(database, 'users'),
+      where(`threads.${board}`, '>', []),
+    );
+
+    const querySnapshot = await getDocs(queryUsers);
+
+    querySnapshot.forEach((docu) => {
+      const userThreads = docu.data().threads;
+      // find the user with the thread in question
+      if (userThreads[board].includes(number)) {
+        const tempThreads = [...userThreads[board]];
+        // remove the thread and update the database
+        tempThreads.splice(tempThreads.indexOf(number), 1);
+        userThreads[board] = tempThreads;
+        const userRef = doc(database, 'users', docu.id);
+        setDoc(userRef, { threads: userThreads });
+      }
+    });
   };
 
   const deleteThread = async () => {
