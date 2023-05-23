@@ -194,14 +194,18 @@ export default function Reply({
         <form aria-label="reply form" className="reply-form">
           <label htmlFor="post-author">
             Name:
-            <input
-              id="post-author"
-              name="post-author"
-              onChange={changeAuthor}
-              type="text"
-              placeholder="Anonymous"
-              value={postAuthor}
-            />
+            {user ? (
+              <span>{postAuthor}</span>
+            ) : (
+              <input
+                id="post-author"
+                name="post-author"
+                onChange={changeAuthor}
+                type="text"
+                placeholder="Anonymous"
+                value={postAuthor}
+              />
+            )}
           </label>
           <label htmlFor="post-content">
             Comment:

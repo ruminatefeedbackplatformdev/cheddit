@@ -140,12 +140,10 @@ export default function NewThread({
     } else {
       prevThreads[board] = [newPostNumber];
     }
-    setUser(
-      {
-        ...user,
-        threads: prevThreads,
-      },
-    );
+    setUser({
+      ...user,
+      threads: prevThreads,
+    });
 
     // then update the database accordingly
     const userRef = doc(database, 'users', user.uid);
@@ -215,14 +213,18 @@ export default function NewThread({
         <form aria-label="thread form" className="thread-form">
           <label htmlFor="thread-author">
             Name:
-            <input
-              id="thread-author"
-              name="thread-author"
-              onChange={changeAuthor}
-              type="text"
-              placeholder="Anonymous"
-              value={threadAuthor}
-            />
+            {user ? (
+              <span>{threadAuthor}</span>
+            ) : (
+              <input
+                id="thread-author"
+                name="thread-author"
+                onChange={changeAuthor}
+                type="text"
+                placeholder="Anonymous"
+                value={threadAuthor}
+              />
+            )}
           </label>
           <label htmlFor="thread-subject">
             Subject:
