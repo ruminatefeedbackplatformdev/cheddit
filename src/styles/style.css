@@ -221,6 +221,30 @@ header .account img {
   gap: 8px;
 }
 
+.reply-form .buttons.hidden,
+.thread-form .buttons.hidden {
+  display: none;
+  visibility: hidden;
+}
+
+.reply-form .loading.hidden,
+.thread-form .loading.hidden {
+  display: none;
+  visibility: hidden;
+}
+
+.reply-form .loading,
+.thread-form .loading {
+  align-items: center;
+  display: flex;
+  gap: 8px;
+}
+
+.reply-form .loading img,
+.thread-form .loading img {
+  height: 32px;
+}
+
 .reply-form > *,
 .thread-form > * {
   max-width: 400px;

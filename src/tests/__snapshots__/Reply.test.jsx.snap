@@ -43,7 +43,7 @@ exports[`Reply component displays reply button 1`] = `
         />
       </label>
       <div
-        class="buttons"
+        class="buttons visible"
       >
         <button
           type="button"
@@ -55,6 +55,17 @@ exports[`Reply component displays reply button 1`] = `
         >
           POST
         </button>
+      </div>
+      <div
+        class="loading hidden"
+      >
+        <span>
+          Uploading...
+        </span>
+        <img
+          alt=""
+          src="loading.gif"
+        />
       </div>
     </form>
     <a

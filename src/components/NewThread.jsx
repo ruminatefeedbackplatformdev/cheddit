@@ -8,6 +8,7 @@ import {
 } from 'firebase/storage';
 import Resizer from 'react-image-file-resizer';
 import database from '../util/firestore';
+import hourglass from '../images/loading.gif';
 
 async function loadBoard(id) {
   // get the board info
@@ -34,6 +35,7 @@ export default function NewThread({
   const [threadSubject, setThreadSubject] = useState('');
   const [threadContent, setThreadContent] = useState('');
   const [file, setFile] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (user) {
@@ -151,6 +153,9 @@ export default function NewThread({
   };
 
   const submitThread = async () => {
+    // display the "uploading" message
+    setLoading(true);
+
     const newPost = {
       author: threadAuthor === '' ? null : threadAuthor,
       content: threadContent,
@@ -190,6 +195,9 @@ export default function NewThread({
     if (user) {
       updateUserThreads(newPostNumber);
     }
+
+    // hide "uploading" message
+    setLoading(false);
 
     // reset the form
     resetForm();
@@ -246,13 +254,17 @@ export default function NewThread({
               type="file"
             />
           </label>
-          <div className="buttons">
+          <div className={loading ? 'buttons hidden' : 'buttons visible'}>
             <button onClick={resetForm} type="button">
               CANCEL
             </button>
             <button onClick={submitThread} type="button">
               POST
             </button>
+          </div>
+          <div className={loading ? 'loading visible' : 'loading hidden'}>
+            <span>Uploading...</span>
+            <img src={hourglass} alt="" />
           </div>
         </form>
       </div>
