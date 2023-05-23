@@ -72,6 +72,17 @@ header .account img {
   min-height: 100vh;
 }
 
+.dashboard .change-displayname {
+  display: flex;
+  flex-direction: column;
+  width: 200px;
+}
+
+.dashboard .change-displayname label {
+  display: flex;
+  flex-direction: column;
+}
+
 .disclaimer {
   align-items: flex-start;
   background: #c5ccf2;

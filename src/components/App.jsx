@@ -18,6 +18,7 @@ import Footer from './Footer';
 async function createNewUserDoc(user) {
   // give 'em some empty fields on their first login
   await setDoc(doc(database, 'users', user.uid), {
+    displayName: user.displayName,
     threads: {},
   });
 }
@@ -54,6 +55,12 @@ async function getUserThreads(user) {
   return userSnap.data().threads;
 }
 
+async function getDisplayName(user) {
+  const userRef = doc(database, 'users', user.uid);
+  const userSnap = await getDoc(userRef);
+  return userSnap.data().displayName;
+}
+
 export default function App() {
   const [boards, setBoards] = useState([]);
   const [user, setUser] = useState(null);
@@ -71,7 +78,7 @@ export default function App() {
         // just load up the info we need from firebase
         setUser({
           boards: await getOwnedBoards(authUser),
-          displayName: authUser.displayName,
+          displayName: await getDisplayName(authUser),
           photoURL: authUser.photoURL,
           threads: await getUserThreads(authUser),
           uid: authUser.uid,
