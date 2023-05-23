@@ -57,6 +57,7 @@ export default function Thread({
         {posts.map((post) => (
           <Post
             author={post.author}
+            authorID={post.authorID}
             board={board}
             content={post.content}
             image={post.image}

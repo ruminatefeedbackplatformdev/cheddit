@@ -20,6 +20,7 @@ async function loadThreads(id) {
     const op = posts[thread];
     firstPosts.push({
       author: op.author,
+      authorID: op.authorID,
       content: op.content,
       image: op.image,
       number: thread,
@@ -100,6 +101,7 @@ export default function Board({
           <div key={`board${id}-post#${thread.number}`}>
             <Post
               author={thread.author}
+              authorID={thread.authorID}
               board={id}
               content={thread.content}
               image={thread.image}

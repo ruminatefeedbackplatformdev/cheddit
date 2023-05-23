@@ -156,6 +156,7 @@ export default function NewThread({
 
     const newPost = {
       author: threadAuthor === '' ? null : threadAuthor,
+      authorID: user ? user.uid : null,
       content: threadContent,
       image: null,
       replies: [],

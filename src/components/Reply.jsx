@@ -146,6 +146,7 @@ export default function Reply({
 
     const newPost = {
       author: postAuthor === '' ? null : postAuthor,
+      authorID: user ? user.uid : null,
       content: postContent,
       image: null,
       replies: [],

@@ -149,6 +149,10 @@ header .account img {
   max-width: 1200px;
 }
 
+.post .mod-badge {
+  height: 20px;
+}
+
 .post input {
   height: auto;
   max-width: 100%;
