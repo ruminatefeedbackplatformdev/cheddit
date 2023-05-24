@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import { doc, getDoc } from 'firebase/firestore';
 import database from '../util/firestore';
 import PostControl from './PostControl';
-import modBadge from '../images/mod.png';
 import stickyIcon from '../images/sticky.png';
 
 export default function Post({
@@ -85,7 +84,10 @@ export default function Post({
         {subject ? <span aria-label="subject">{subject}</span> : null}
         <span aria-label="author">{author || 'Anonymous'}</span>
         {authorID === boardOwner ? (
-          <img alt="mod badge" className="mod-badge" src={modBadge} />
+          <span className="mod-info">
+            <span className="mod-badge">✪</span>
+            MOD
+          </span>
         ) : null}
         <span aria-label="timestamp">{new Date(time).toLocaleString()}</span>
         {inThread ? (

@@ -150,7 +150,15 @@ header .account img {
 }
 
 .post .mod-badge {
-  height: 20px;
+  font-size: 1.4rem;
+}
+
+.post .mod-info {
+  align-items: center;
+  color: #da2834;
+  display: flex;
+  font-weight: bold;
+  gap: 4px;
 }
 
 .post input {
