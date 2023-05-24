@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { doc, getDoc } from 'firebase/firestore';
 import database from '../util/firestore';
 import PostControl from './PostControl';
@@ -28,6 +28,8 @@ export default function Post({
   const [boardOwner, setBoardOwner] = useState(null);
   const [expanded, setExpanded] = useState(false);
 
+  const location = useLocation();
+
   useEffect(() => {
     const setOwnerFromDatabase = async () => {
       const boardRef = doc(database, 'boards', board);
@@ -35,6 +37,21 @@ export default function Post({
       setBoardOwner(boardSnap.data().owner);
     };
     setOwnerFromDatabase();
+
+    // if we've followed a link with hash to this post, wait a moment
+    // for thread images to load then jump to the post
+    const { hash } = location;
+    const postToJumpTo = document.getElementById(hash.slice(1));
+    if (postToJumpTo) {
+      setTimeout(() => {
+        postToJumpTo.scrollIntoView({
+          block: 'end',
+          inline: 'end',
+          behavior: 'instant',
+          alignToTop: false,
+        });
+      }, 500);
+    }
   }, []);
 
   const toggleExpandedImage = () => {
@@ -100,12 +117,12 @@ export default function Post({
             [
             {replies.map((reply) => (
               <span key={`/${board}_${number}-${reply}`}>
-                <Link
+                <a
                   key={`${number}-${reply}`}
-                  to={`/${board}_t${thread}#${reply}`}
+                  href={`#${reply}`}
                 >
                   {`>>${reply}`}
-                </Link>
+                </a>
               </span>
             ))}
             ]
