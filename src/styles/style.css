@@ -56,6 +56,16 @@ header .account img {
   position: relative;
 }
 
+.board .thread-replies {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.board .thread-replies > article {
+  margin-left: 32px;
+}
+
 .boards {
   display: flex;
   flex-wrap: wrap;

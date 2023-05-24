@@ -69,6 +69,7 @@ export default function Board({
 }) {
   const [threads, setThreads] = useState([]);
   const [postCounts, setPostCounts] = useState({});
+  const [threadReplies, setThreadReplies] = useState({});
 
   const sortSticky = (threadsToSort) => {
     // put the sticky threads first
@@ -100,8 +101,39 @@ export default function Board({
     setThreads(sortSticky(threadsFromDB));
   };
 
+  const loadReplies = async (threadPosts) => {
+    const { posts } = await loadBoard(id);
+    const lastFewReplies = {};
+    Object.keys(threadPosts).forEach((thread) => {
+      lastFewReplies[thread] = {};
+      threadPosts[thread].forEach((post) => {
+        lastFewReplies[thread][post] = { ...posts[post] };
+      });
+    });
+    return lastFewReplies;
+  };
+
+  const readThreadReplies = async () => {
+    const threadPosts = await getPostsInfo(id);
+    Object.keys(threadPosts).forEach((thread) => {
+      // just need the last few post numbers
+      if (threadPosts[thread].length > 3) {
+        threadPosts[thread] = threadPosts[thread].slice(-3);
+      }
+      // but we don't want to repeat the OP
+      if (threadPosts[thread].includes(+thread)) {
+        const index = threadPosts[thread].indexOf(+thread);
+        threadPosts[thread].splice(index, 1);
+      }
+    });
+
+    const lastFewReplies = await loadReplies(threadPosts);
+    setThreadReplies(lastFewReplies);
+  };
+
   useEffect(() => {
     readDatabase();
+    readThreadReplies();
   }, [boards]);
 
   if (threads.length > 0) {
@@ -138,6 +170,31 @@ export default function Board({
               } - `}
               <Link to={`/${id}_t${thread.number}`}>View thread</Link>
             </span>
+            <div className="thread-replies">
+              {Object.keys(threadReplies[+thread.number]).map((postNumber) => {
+                const post = threadReplies[+thread.number][postNumber];
+                return (
+                  <Post
+                    author={post.author}
+                    authorID={post.authorID}
+                    board={id}
+                    content={post.content}
+                    image={post.image}
+                    isSticky={post.isSticky}
+                    key={`${id}/${post.thread}/${postNumber}`}
+                    number={+postNumber}
+                    replies={post.replies}
+                    setUser={setUser}
+                    subject={post.subject}
+                    thread={post.thread}
+                    thumb={post.thumb}
+                    time={post.time}
+                    user={user}
+                  />
+                );
+              })}
+            </div>
+            <hr />
           </div>
         ))}
       </main>
