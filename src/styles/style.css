@@ -185,7 +185,7 @@ header .account img {
   color: #ffe;
   background: #da2834;
   display: flex;
-  gap: 8px;
+  gap: 16px;
   justify-content: center;
 }
 
@@ -361,7 +361,8 @@ ol > li::marker {
 }
 
 .user-boards,
-.user-threads {
+.user-threads,
+.user-posts {
   align-items: flex-start;
   display: flex;
   flex-direction: column;

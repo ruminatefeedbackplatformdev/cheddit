@@ -4,6 +4,7 @@ import database from '../util/firestore';
 import Login from './Login';
 import UserBoards from './UserBoards';
 import UserThreads from './UserThreads';
+import UserPosts from './UserPosts';
 import hourglass from '../images/loading.gif';
 
 export default function Dashboard({ boards, setUser, user }) {
@@ -61,6 +62,7 @@ export default function Dashboard({ boards, setUser, user }) {
         </form>
         <UserBoards boards={boards} user={user} setUser={setUser} />
         <UserThreads user={user} />
+        <UserPosts boards={boards} user={user} />
       </div>
     );
   }
