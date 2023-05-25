@@ -11,10 +11,10 @@ import NewBoard from './NewBoard';
 
 export default function UserBoards({ boards, setUser, user }) {
   const [enabled, setEnabled] = useState(false);
-  const [userBoards, setUserBoards] = useState(boards);
+  const [userBoards, setUserBoards] = useState([]);
 
   useEffect(() => {
-    setUserBoards(boards);
+    setUserBoards(user.boards);
   }, [boards]);
 
   const enableForm = () => {

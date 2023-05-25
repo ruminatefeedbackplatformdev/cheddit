@@ -4,9 +4,10 @@ import { getAuth, signOut } from 'firebase/auth';
 import anonIcon from '../images/account.svg';
 import hourglass from '../images/loading.gif';
 
-export default function Header({ user }) {
+export default function Header({ setUser, user }) {
   const logout = () => {
     const auth = getAuth();
+    setUser(null);
     signOut(auth);
   };
 
