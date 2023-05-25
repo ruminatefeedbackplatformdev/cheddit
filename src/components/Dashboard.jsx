@@ -9,6 +9,8 @@ import hourglass from '../images/loading.gif';
 
 export default function Dashboard({ boards, setUser, user }) {
   const [displayName, setDisplayName] = useState('');
+  const [error, setError] = useState('');
+  const [validName, setValidName] = useState(true);
 
   useEffect(() => {
     if (user) {
@@ -17,7 +19,15 @@ export default function Dashboard({ boards, setUser, user }) {
   }, [user]);
 
   const changeName = (event) => {
+    const { maxLength, minLength } = event.target;
     setDisplayName(event.target.value);
+    if (event.target.validity.valid) {
+      setValidName(true);
+      setError(null);
+    } else {
+      setValidName(false);
+      setError(`Name must be between ${minLength}-${maxLength} characters`);
+    }
   };
 
   const submitNameChange = () => {
@@ -51,14 +61,22 @@ export default function Dashboard({ boards, setUser, user }) {
             Posting as:
             <input
               id="displayname"
+              minLength={1}
+              maxLength={20}
               onChange={changeName}
+              required
               type="text"
               value={displayName || ''}
             />
           </label>
-          <button onClick={submitNameChange} type="button">
+          <button
+            disabled={!validName}
+            onClick={submitNameChange}
+            type="button"
+          >
             Change Name
           </button>
+          <span className={error ? 'error' : 'error hidden'}>{error}</span>
         </form>
         <UserBoards boards={boards} user={user} setUser={setUser} />
         <UserThreads user={user} />

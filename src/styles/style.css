@@ -14,6 +14,10 @@ body {
   line-height: 1.2;
 }
 
+button:disabled {
+  background: #ffc6c9;
+}
+
 footer {
   align-items: center;
   background: #9988ee;
@@ -52,6 +56,24 @@ header .account img {
   height: 32px;
 }
 
+input,
+button {
+  border: 2px solid #ccc;
+  font-size: 1rem;
+  outline: none;
+}
+
+input:focus,
+button:focus,
+button:hover {
+  border: 2px solid #98e;
+}
+
+input:invalid,
+button:disabled {
+  border: 2px solid #ffc6c9;
+}
+
 .board {
   position: relative;
 }
@@ -85,7 +107,7 @@ header .account img {
 .dashboard .change-displayname {
   display: flex;
   flex-direction: column;
-  width: 200px;
+  width: 300px;
 }
 
 .dashboard .change-displayname label {
@@ -121,6 +143,15 @@ header .account img {
 
 .disclaimer.hidden {
   display: none;
+  visibility: hidden;
+}
+
+.error {
+  background: #ffc6c9;
+  height: 1.2rem;
+}
+
+.error.hidden {
   visibility: hidden;
 }
 
