@@ -5,6 +5,16 @@ import anonIcon from '../images/account.svg';
 import hourglass from '../images/loading.gif';
 
 export default function Header({ setUser, user }) {
+  const determineUserImage = () => {
+    if (user === 'loading') {
+      return null;
+    }
+    if (user && user.photoURL) {
+      return user.photoURL;
+    }
+    return anonIcon;
+  };
+
   const logout = () => {
     const auth = getAuth();
     setUser(null);
@@ -36,7 +46,7 @@ export default function Header({ setUser, user }) {
         </span>
         <img
           referrerPolicy="no-referrer"
-          src={user ? user.photoURL : anonIcon}
+          src={determineUserImage()}
           alt=""
         />
       </span>

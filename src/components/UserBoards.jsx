@@ -61,6 +61,16 @@ export default function UserBoards({ boards, setUser, user }) {
       threads: prevThreads,
     });
 
+    // gotta remove it from state too
+    const userBoardsCopy = [...userBoards];
+    userBoardsCopy.forEach((userBoard) => {
+      if (userBoard.id === board) {
+        const index = userBoardsCopy.indexOf(board);
+        userBoardsCopy.splice(index, 1);
+      }
+    });
+    setUserBoards(userBoardsCopy);
+
     // then remove all threads for this board for all users
     await deleteBoardThreadsForAllUsers(board);
   };
