@@ -133,6 +133,7 @@ export default function NewBoard({
         />
         <span>a title for your board</span>
       </label>
+      <span>{errorMessage}</span>
       <h3>Board Rules:</h3>
       {boardRules.map((rule) => (
         <label
@@ -164,7 +165,6 @@ export default function NewBoard({
       <button onClick={cancel} type="button">
         CANCEL
       </button>
-      <span>{errorMessage}</span>
     </form>
   );
 }

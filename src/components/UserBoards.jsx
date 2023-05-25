@@ -34,7 +34,7 @@ export default function UserBoards({ boards, setUser, user }) {
       const userSnap = await getDoc(userRef);
       const userThreads = { ...userSnap.data().threads };
       delete userThreads[board];
-      setDoc(userRef, { threads: userThreads });
+      setDoc(userRef, { threads: userThreads }, { merge: true });
     });
   };
 
