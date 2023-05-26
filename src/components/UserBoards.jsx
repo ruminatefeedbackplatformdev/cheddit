@@ -1,12 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 import {
-  collection, deleteDoc, doc, getDoc, getDocs, setDoc,
+  collection,
+  deleteDoc,
+  doc,
+  getDoc,
+  getDocs,
+  setDoc,
 } from 'firebase/firestore';
 import {
   deleteObject, getStorage, listAll, ref,
 } from 'firebase/storage';
 import database from '../util/firestore';
+import UserBoard from './UserBoard';
 import NewBoard from './NewBoard';
 
 export default function UserBoards({ boards, setUser, user }) {
@@ -79,12 +84,11 @@ export default function UserBoards({ boards, setUser, user }) {
     <div className="user-boards">
       <h2>Your Boards</h2>
       {userBoards.map((board) => (
-        <span key={`ub-${board.id}`}>
-          <Link to={`/${board.id}`}>{`/${board.id}/ - ${board.name}`}</Link>
-          <button data-board={board.id} onClick={deleteBoard} type="button">
-            Delete Board
-          </button>
-        </span>
+        <UserBoard
+          board={board}
+          deleteBoard={deleteBoard}
+          key={`ub-${board.id}`}
+        />
       ))}
       <button
         className={enabled ? 'button hidden' : 'button visible'}
