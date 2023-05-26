@@ -49,8 +49,8 @@ export default function Rules({ boards }) {
             {board.rules.length ? (
               <ol>
                 {board.rules.map((rule) => (
-                  <li key={`${board.id}-rule#${board.rules.indexOf(rule)}`}>
-                    {rule}
+                  <li key={`${board.id}-rule#${rule.id}`}>
+                    {rule.rule}
                   </li>
                 ))}
               </ol>

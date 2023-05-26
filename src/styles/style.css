@@ -169,7 +169,7 @@ button:disabled {
 } 
 
 .new-board-form {
-  gap: 16px;
+  gap: 4px;
 }
 
 .new-board-form.hidden {

@@ -16,14 +16,33 @@ export default function NewBoard({
   const [errorMessage, setErrorMessage] = useState('');
 
   const addRule = () => {
+    // need unquie ID for each rule (for mapping)
     const newRules = [...boardRules];
-    newRules.push('');
+    const ruleIDs = [];
+    newRules.forEach((rule) => {
+      ruleIDs.push(+rule.id);
+    });
+
+    // start at 1 and keep incrementing until we find an unused ID
+    let tryID = 1;
+    while (ruleIDs.includes(tryID)) {
+      tryID += 1;
+    }
+
+    // good to go, start with a blank rule
+    newRules.push({
+      id: tryID,
+      rule: '',
+    });
     setBoardRules(newRules);
   };
 
   const changeRule = (event) => {
+    // find the right element & change it's rule
     const newRules = [...boardRules];
-    newRules[+event.target.dataset.index] = event.target.value;
+    const { id } = event.target.dataset;
+    const ruleIndex = newRules.findIndex((element) => element.id === +id);
+    newRules[ruleIndex].rule = event.target.value;
     setBoardRules(newRules);
   };
 
@@ -48,8 +67,11 @@ export default function NewBoard({
   };
 
   const deleteRule = (event) => {
+    // find the right element and remove it
     const newRules = [...boardRules];
-    newRules.splice(+event.target.dataset.index, 1);
+    const { id } = event.target.dataset;
+    const ruleIndex = newRules.findIndex((element) => element.id === id);
+    newRules.splice(ruleIndex, 1);
     setBoardRules(newRules);
   };
 
@@ -135,27 +157,25 @@ export default function NewBoard({
       </label>
       <span>{errorMessage}</span>
       <h3>Board Rules:</h3>
+
       {boardRules.map((rule) => (
         <label
-          htmlFor={`new-board-rule#${boardRules.indexOf(rule)}`}
-          key={`new-board-rule#${boardRules.indexOf(rule)}`}
+          htmlFor={`new-board-rule#${rule.id}`}
+          key={`new-board-rule#${rule.id}`}
         >
           <textarea
-            data-index={boardRules.indexOf(rule)}
-            id={`new-board-rule#${boardRules.indexOf(rule)}`}
+            data-id={rule.id}
+            id={`new-board-rule#${rule.id}`}
             minLength={1}
             onChange={changeRule}
-            value={boardRules[boardRules.indexOf(rule)]}
+            value={rule.rule}
           />
-          <button
-            data-index={boardRules.indexOf(rule)}
-            onClick={deleteRule}
-            type="button"
-          >
+          <button data-index={rule.id} onClick={deleteRule} type="button">
             Delete Rule
           </button>
         </label>
       ))}
+
       <button onClick={addRule} type="button">
         Add Rule
       </button>
