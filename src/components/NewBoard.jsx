@@ -16,6 +16,7 @@ export default function NewBoard({
   const [error, setError] = useState(null);
   const [validID, setValidID] = useState(false);
   const [validName, setValidName] = useState(false);
+  const [validRules, setValidRules] = useState(true);
 
   useEffect(() => {
     if (boardID === '' && boardName === '') {
@@ -31,9 +32,13 @@ export default function NewBoard({
       setError('invalid ID (1-5 lowercase letters only)');
     }
     if (validID && validName) {
-      setError(null);
+      if (validRules) {
+        setError(null);
+      } else {
+        setError('no blank rules');
+      }
     }
-  }, [validID, validName]);
+  }, [validID, validName, validRules]);
 
   const addRule = () => {
     // need unquie ID for each rule (for mapping)
@@ -55,18 +60,18 @@ export default function NewBoard({
       rule: '',
     });
     setBoardRules(newRules);
+    setValidRules(false);
   };
 
-  const changeRule = (event) => {
-    // find the right element & change it's rule
-    const newRules = [...boardRules];
-    const { id } = event.target.dataset;
-    const ruleIndex = newRules.findIndex((element) => element.id === +id);
-    newRules[ruleIndex].rule = event.target.value;
-    setBoardRules(newRules);
+  const cancel = () => {
+    setError('board ID and name required');
+    setBoardID('');
+    setBoardName('');
+    setBoardRules([]);
+    setValidID(false);
+    setValidName(false);
+    enableForm();
   };
-
-  const navigate = useNavigate();
 
   const changeID = (event) => {
     const { validity } = event.target;
@@ -80,14 +85,14 @@ export default function NewBoard({
     setBoardName(event.target.value);
   };
 
-  const cancel = () => {
-    setError('board ID and name required');
-    setBoardID('');
-    setBoardName('');
-    setBoardRules([]);
-    setValidID(false);
-    setValidName(false);
-    enableForm();
+  const changeRule = (event) => {
+    // find the right element & change it's rule
+    setValidRules(event.target.validity.valid);
+    const newRules = [...boardRules];
+    const { id } = event.target.dataset;
+    const ruleIndex = newRules.findIndex((element) => element.id === +id);
+    newRules[ruleIndex].rule = event.target.value;
+    setBoardRules(newRules);
   };
 
   const deleteRule = (event) => {
@@ -96,8 +101,22 @@ export default function NewBoard({
     const { id } = event.target.dataset;
     const ruleIndex = newRules.findIndex((element) => element.id === id);
     newRules.splice(ruleIndex, 1);
+    // gotta check for any blank rules left over
+    if (!newRules.length) {
+      setValidRules(true);
+    } else {
+      newRules.forEach((rule) => {
+        if (rule.rule === '') {
+          setValidRules(false);
+        } else {
+          setValidRules(true);
+        }
+      });
+    }
     setBoardRules(newRules);
   };
+
+  const navigate = useNavigate();
 
   const updateUserBoards = () => {
     const userBoards = [...user.boards];
@@ -204,6 +223,7 @@ export default function NewBoard({
             id={`new-board-rule#${rule.id}`}
             minLength={1}
             onChange={changeRule}
+            required
             value={rule.rule}
           />
           <button data-index={rule.id} onClick={deleteRule} type="button">
@@ -216,7 +236,7 @@ export default function NewBoard({
         Add Rule
       </button>
       <button
-        disabled={error || !validID || !validName}
+        disabled={error || !validID || !validName || !validRules}
         onClick={submitForm}
         type="button"
       >
