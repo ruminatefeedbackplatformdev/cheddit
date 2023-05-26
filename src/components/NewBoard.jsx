@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { doc, setDoc } from 'firebase/firestore';
 import database from '../util/firestore';
@@ -13,7 +13,27 @@ export default function NewBoard({
   const [boardID, setBoardID] = useState('');
   const [boardName, setBoardName] = useState('');
   const [boardRules, setBoardRules] = useState([]);
-  const [errorMessage, setErrorMessage] = useState('');
+  const [error, setError] = useState(null);
+  const [validID, setValidID] = useState(false);
+  const [validName, setValidName] = useState(false);
+
+  useEffect(() => {
+    if (boardID === '' && boardName === '') {
+      setError('board ID and name required');
+    }
+    if (validID && boardName === '') {
+      setError('board name required');
+    }
+    if (validName && boardID === '') {
+      setError('board ID reuqired');
+    }
+    if (!validID && boardID !== '') {
+      setError('invalid ID (1-5 lowercase letters only)');
+    }
+    if (validID && validName) {
+      setError(null);
+    }
+  }, [validID, validName]);
 
   const addRule = () => {
     // need unquie ID for each rule (for mapping)
@@ -49,20 +69,24 @@ export default function NewBoard({
   const navigate = useNavigate();
 
   const changeID = (event) => {
+    const { validity } = event.target;
+    setValidID(validity.valid);
     setBoardID(event.target.value);
-    setErrorMessage('');
   };
 
   const changeName = (event) => {
+    const { validity } = event.target;
+    setValidName(validity.valid);
     setBoardName(event.target.value);
-    setErrorMessage('');
   };
 
   const cancel = () => {
-    setErrorMessage('');
+    setError('board ID and name required');
     setBoardID('');
     setBoardName('');
     setBoardRules([]);
+    setValidID(false);
+    setValidName(false);
     enableForm();
   };
 
@@ -85,6 +109,11 @@ export default function NewBoard({
   };
 
   const submitForm = async () => {
+    const restrictedIDs = [
+      'dash',
+      'rules',
+    ];
+
     if (
       boardID.length >= 1
       && boardID.length <= 5
@@ -93,7 +122,7 @@ export default function NewBoard({
       && boardID.match(/^[a-z]{1,5}$/)
     ) {
       // matches our form requirements
-      setErrorMessage('');
+      setError(null);
 
       const boardKeys = [];
       boards.forEach((board) => {
@@ -102,7 +131,9 @@ export default function NewBoard({
 
       if (boardKeys.includes(boardID)) {
         // already a board with this id
-        setErrorMessage('Board ID already used. Try another.');
+        setError('Board ID already used. Try another.');
+      } else if (restrictedIDs.includes(boardID)) {
+        setError('Restricted ID. Try another.');
       } else {
         // good to go!
         await setDoc(doc(database, 'boards', boardID), {
@@ -114,14 +145,16 @@ export default function NewBoard({
         });
         updateUserBoards();
         navigate(`/${boardID}`);
-        setErrorMessage('');
+        setError(null);
+        setValidID(false);
+        setValidName(false);
         setBoardID('');
         setBoardName('');
         setBoardRules([]);
         enableForm();
       }
     } else {
-      setErrorMessage('Invalid ID or name. Try again.');
+      setError('Invalid ID or name. Try again.');
     }
   };
 
@@ -138,6 +171,7 @@ export default function NewBoard({
           maxLength={5}
           onChange={changeID}
           pattern="^[a-z]{1,5}$"
+          required
           type="text"
           value={boardID}
         />
@@ -151,18 +185,20 @@ export default function NewBoard({
           minLength={1}
           maxLength={20}
           onChange={changeName}
+          required
           value={boardName}
         />
         <span>a title for your board</span>
       </label>
-      <span>{errorMessage}</span>
+      <span className={error ? 'error' : 'error hidden'}>{error}</span>
       <h3>Board Rules:</h3>
-
+      <span>(optional - global rules always apply)</span>
       {boardRules.map((rule) => (
         <label
           htmlFor={`new-board-rule#${rule.id}`}
           key={`new-board-rule#${rule.id}`}
         >
+          {`Rule #${rule.id}`}
           <textarea
             data-id={rule.id}
             id={`new-board-rule#${rule.id}`}
@@ -179,11 +215,15 @@ export default function NewBoard({
       <button onClick={addRule} type="button">
         Add Rule
       </button>
-      <button onClick={submitForm} type="button">
-        SUBMIT
+      <button
+        disabled={error || !validID || !validName}
+        onClick={submitForm}
+        type="button"
+      >
+        Submit
       </button>
       <button onClick={cancel} type="button">
-        CANCEL
+        Cancel
       </button>
     </form>
   );
