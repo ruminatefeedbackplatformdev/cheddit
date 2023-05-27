@@ -26,7 +26,7 @@ export default function NewBoard({
       setError('board name required');
     }
     if (validName && boardID === '') {
-      setError('board ID reuqired');
+      setError('board ID required');
     }
     if (!validID && boardID !== '') {
       setError('invalid ID (1-5 lowercase letters only)');
@@ -38,7 +38,7 @@ export default function NewBoard({
         setError('no blank rules');
       }
     }
-  }, [validID, validName, validRules]);
+  }, [boardID, boardName, boardRules]);
 
   const addRule = () => {
     // need unquie ID for each rule (for mapping)
@@ -99,7 +99,7 @@ export default function NewBoard({
     // find the right element and remove it
     const newRules = [...boardRules];
     const { id } = event.target.dataset;
-    const ruleIndex = newRules.findIndex((element) => element.id === id);
+    const ruleIndex = newRules.findIndex((element) => element.id === +id);
     newRules.splice(ruleIndex, 1);
     // gotta check for any blank rules left over
     if (!newRules.length) {
@@ -217,7 +217,7 @@ export default function NewBoard({
           htmlFor={`new-board-rule#${rule.id}`}
           key={`new-board-rule#${rule.id}`}
         >
-          {`Rule #${rule.id}`}
+          {`Rule #${boardRules.indexOf(rule) + 1}`}
           <textarea
             data-id={rule.id}
             id={`new-board-rule#${rule.id}`}
@@ -226,7 +226,7 @@ export default function NewBoard({
             required
             value={rule.rule}
           />
-          <button data-index={rule.id} onClick={deleteRule} type="button">
+          <button data-id={rule.id} onClick={deleteRule} type="button">
             Delete Rule
           </button>
         </label>
