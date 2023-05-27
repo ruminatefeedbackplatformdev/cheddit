@@ -57,7 +57,8 @@ header .account img {
 }
 
 input,
-button {
+button,
+textarea {
   border: 2px solid #ccc;
   font-size: 1rem;
   outline: none;
@@ -65,12 +66,14 @@ button {
 
 input:focus,
 button:focus,
-button:hover {
+button:hover,
+textarea:focus {
   border: 2px solid #98e;
 }
 
 input:invalid,
-button:disabled {
+button:disabled,
+textarea:invalid {
   border: 2px solid #ffc6c9;
 }
 
@@ -350,7 +353,8 @@ button:disabled {
 .reply-form input,
 .thread-form input,
 .reply-form textarea,
-.thread-form textarea {
+.thread-form textarea,
+.dashboard textarea {
   font-family: "Noto Sans", sans-serif;
   font-size: 1rem;
 }

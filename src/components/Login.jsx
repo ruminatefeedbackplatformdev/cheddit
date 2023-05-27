@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   createUserWithEmailAndPassword,
   getAuth,
@@ -17,6 +17,23 @@ export default function Login() {
   const [newEmail, setNewEmail] = useState('');
   const [newName, setNewName] = useState('');
   const [newPassword, setNewPassword] = useState('');
+  const [validEmail, setValidEmail] = useState(false);
+  const [validPassword, setValidPassword] = useState(false);
+
+  useEffect(() => {
+    if (loginEmail === '') {
+      setError('enter email');
+    }
+    if (loginEmail !== '' && !validEmail) {
+      setError('invalid email');
+    }
+    if (validEmail && loginPassword === '') {
+      setError('enter password');
+    }
+    if (validEmail && validPassword) {
+      setError(null);
+    }
+  }, [loginEmail, loginPassword]);
 
   const changeConfirmed = (event) => {
     setConfirmedPassword(event.target.value);
@@ -24,14 +41,17 @@ export default function Login() {
 
   const changeEmail = (event) => {
     setNewEmail(event.target.value);
+    setValidEmail(event.target.validity.valid);
   };
 
   const changeLoginEmail = (event) => {
     setLoginEmail(event.target.value);
+    setValidEmail(event.target.validity.valid);
   };
 
   const changeLoginPassword = (event) => {
     setLoginPassword(event.target.value);
+    setValidPassword(event.target.value);
   };
 
   const changeName = (event) => {
@@ -40,16 +60,13 @@ export default function Login() {
 
   const changePassword = (event) => {
     setNewPassword(event.target.value);
+    setValidPassword(event.target.value);
   };
 
   const createAccount = async () => {
     const auth = getAuth();
     try {
-      await createUserWithEmailAndPassword(
-        auth,
-        newEmail,
-        newPassword,
-      );
+      await createUserWithEmailAndPassword(auth, newEmail, newPassword);
       updateProfile(auth.currentUser, {
         displayName: newName,
       });
@@ -61,13 +78,26 @@ export default function Login() {
   const emailLogin = async () => {
     const auth = getAuth();
     try {
-      await signInWithEmailAndPassword(
-        auth,
-        loginEmail,
-        loginPassword,
-      );
+      await signInWithEmailAndPassword(auth, loginEmail, loginPassword);
     } catch (err) {
-      setError(err);
+      const { code } = { ...err };
+      switch (code) {
+        case 'auth/invalid-email':
+          setError('invalid email');
+          break;
+        case 'auth/missing-password':
+          setError('missing password');
+          break;
+        case 'auth/user-not-found':
+          setError('no such user');
+          break;
+        case 'auth/wrong-password':
+          setError('wrong password');
+          break;
+        default:
+          setError(`server error: ${code}`);
+          break;
+      }
     }
   };
 
@@ -170,6 +200,7 @@ export default function Login() {
             <input
               id="email-login"
               onChange={changeLoginEmail}
+              required
               type="email"
               value={loginEmail || ''}
             />
@@ -179,18 +210,17 @@ export default function Login() {
             <input
               id="password-login"
               onChange={changeLoginPassword}
+              required
               type="password"
               value={loginPassword || ''}
             />
           </label>
-          <button type="button" onClick={emailLogin}>
+          <button disabled={error} type="button" onClick={emailLogin}>
             Sign in
           </button>
         </form>
-        {error ? (
-          <div>
-            <span>{error.message}</span>
-          </div>
+        {error || !validEmail || !validPassword ? (
+          <span className="error">{error}</span>
         ) : null}
       </div>
       <div>
