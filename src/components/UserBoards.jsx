@@ -37,9 +37,11 @@ export default function UserBoards({ boards, setUser, user }) {
     allUsers.forEach(async (userID) => {
       const userRef = doc(database, 'users', userID);
       const userSnap = await getDoc(userRef);
-      const userThreads = { ...userSnap.data().threads };
-      delete userThreads[board];
-      setDoc(userRef, { threads: userThreads }, { merge: true });
+      const tempUser = { ...userSnap.data() };
+      const tempThreads = { ...tempUser.threads };
+      delete tempThreads[board];
+      tempUser.threads = tempThreads;
+      setDoc(userRef, tempUser);
     });
   };
 

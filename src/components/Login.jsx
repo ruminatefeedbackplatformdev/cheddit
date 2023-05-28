@@ -21,7 +21,7 @@ export default function Login() {
   const [validPassword, setValidPassword] = useState(false);
 
   useEffect(() => {
-    if (loginEmail === '') {
+    if (loginEmail === '' || newEmail === '') {
       setError('enter email');
     }
     if (loginEmail !== '' && !validEmail) {
@@ -33,7 +33,7 @@ export default function Login() {
     if (validEmail && validPassword) {
       setError(null);
     }
-  }, [loginEmail, loginPassword]);
+  }, [loginEmail, loginPassword, newEmail]);
 
   const changeConfirmed = (event) => {
     setConfirmedPassword(event.target.value);
@@ -131,6 +131,7 @@ export default function Login() {
               <input
                 id="email-create"
                 onChange={changeEmail}
+                required
                 type="email"
                 value={newEmail || ''}
               />
@@ -162,9 +163,14 @@ export default function Login() {
                 value={confirmedPassword || ''}
               />
             </label>
-            <button type="button" onClick={createAccount}>
+            <button
+              disabled={error || !validEmail}
+              type="button"
+              onClick={createAccount}
+            >
               Register
             </button>
+            {error ? <span className="error">{error}</span> : null}
           </form>
         </div>
         <div>
@@ -180,11 +186,6 @@ export default function Login() {
               Cancel
             </button>
           </span>
-          {error ? (
-            <div>
-              <span>{error.message}</span>
-            </div>
-          ) : null}
         </div>
       </div>
     );
