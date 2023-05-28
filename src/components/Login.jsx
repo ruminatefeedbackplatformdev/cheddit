@@ -1,27 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import {
-  createUserWithEmailAndPassword,
   getAuth,
   GoogleAuthProvider,
   signInWithEmailAndPassword,
   signInWithRedirect,
-  updateProfile,
 } from 'firebase/auth';
+import SignUp from './SignUp';
 
 export default function Login() {
   const [creatingAccount, setCreatingAccount] = useState(false);
-  const [confirmedPassword, setConfirmedPassword] = useState('');
   const [error, setError] = useState(null);
   const [loginEmail, setLoginEmail] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
-  const [newEmail, setNewEmail] = useState('');
-  const [newName, setNewName] = useState('');
-  const [newPassword, setNewPassword] = useState('');
   const [validEmail, setValidEmail] = useState(false);
   const [validPassword, setValidPassword] = useState(false);
 
   useEffect(() => {
-    if (loginEmail === '' || newEmail === '') {
+    if (loginEmail === '') {
       setError('enter email');
     }
     if (loginEmail !== '' && !validEmail) {
@@ -33,16 +28,7 @@ export default function Login() {
     if (validEmail && validPassword) {
       setError(null);
     }
-  }, [loginEmail, loginPassword, newEmail]);
-
-  const changeConfirmed = (event) => {
-    setConfirmedPassword(event.target.value);
-  };
-
-  const changeEmail = (event) => {
-    setNewEmail(event.target.value);
-    setValidEmail(event.target.validity.valid);
-  };
+  }, [loginEmail, loginPassword]);
 
   const changeLoginEmail = (event) => {
     setLoginEmail(event.target.value);
@@ -52,27 +38,6 @@ export default function Login() {
   const changeLoginPassword = (event) => {
     setLoginPassword(event.target.value);
     setValidPassword(event.target.value);
-  };
-
-  const changeName = (event) => {
-    setNewName(event.target.value);
-  };
-
-  const changePassword = (event) => {
-    setNewPassword(event.target.value);
-    setValidPassword(event.target.value);
-  };
-
-  const createAccount = async () => {
-    const auth = getAuth();
-    try {
-      await createUserWithEmailAndPassword(auth, newEmail, newPassword);
-      updateProfile(auth.currentUser, {
-        displayName: newName,
-      });
-    } catch (err) {
-      setError(err);
-    }
   };
 
   const emailLogin = async () => {
@@ -109,85 +74,18 @@ export default function Login() {
 
   const toggleCreate = () => {
     setCreatingAccount(!creatingAccount);
-
-    setError(null);
-
-    setConfirmedPassword('');
-    setNewEmail('');
     setLoginEmail('');
     setLoginPassword('');
-    setNewName('');
-    setNewPassword('');
+    setValidEmail(false);
+    setValidPassword(false);
   };
 
   if (creatingAccount) {
     return (
-      <div className="login">
-        <div>
-          <form>
-            <h2>Create Account</h2>
-            <label htmlFor="email-create">
-              email:
-              <input
-                id="email-create"
-                onChange={changeEmail}
-                required
-                type="email"
-                value={newEmail || ''}
-              />
-            </label>
-            <label htmlFor="name-create">
-              name:
-              <input
-                id="name-create"
-                onChange={changeName}
-                type="text"
-                value={newName || ''}
-              />
-            </label>
-            <label htmlFor="password-create">
-              password:
-              <input
-                id="password-create"
-                onChange={changePassword}
-                type="password"
-                value={newPassword || ''}
-              />
-            </label>
-            <label htmlFor="password-confirm">
-              confirm password:
-              <input
-                id="password-confirm"
-                onChange={changeConfirmed}
-                type="password"
-                value={confirmedPassword || ''}
-              />
-            </label>
-            <button
-              disabled={error || !validEmail}
-              type="button"
-              onClick={createAccount}
-            >
-              Register
-            </button>
-            {error ? <span className="error">{error}</span> : null}
-          </form>
-        </div>
-        <div>
-          <h2>Or:</h2>
-          <button type="button" onClick={googleLogin}>
-            Continue with Google
-          </button>
-        </div>
-        <div>
-          <span>
-            {' '}
-            <button onClick={toggleCreate} type="button">
-              Cancel
-            </button>
-          </span>
-        </div>
-      </div>
+      <SignUp
+        creatingAccount={creatingAccount}
+        setCreatingAccount={setCreatingAccount}
+      />
     );
   }
 
