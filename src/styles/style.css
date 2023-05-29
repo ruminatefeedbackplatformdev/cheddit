@@ -420,3 +420,7 @@ ol > li::marker {
   flex-direction: column;
   gap: 8px;
 }
+
+.valid {
+  background: #c9ffc6;
+}

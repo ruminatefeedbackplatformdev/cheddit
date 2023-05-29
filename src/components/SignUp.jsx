@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   createUserWithEmailAndPassword,
   getAuth,
@@ -13,21 +13,90 @@ export default function SignUp({ creatingAccount, setCreatingAccount }) {
   const [newEmail, setNewEmail] = useState('');
   const [newName, setNewName] = useState('');
   const [newPassword, setNewPassword] = useState('');
+  const [validConfirm, setValidConfirm] = useState(false);
+  const [validEmail, setValidEmail] = useState(false);
+  const [validName, setValidName] = useState(false);
+  const [validPassword, setValidPassword] = useState(false);
+
+  useEffect(() => {
+    if (newEmail === '') {
+      setError('enter email');
+    }
+    if (newEmail !== '' && !validEmail) {
+      setError('invalid email');
+    }
+    if (validEmail && newName === '') {
+      setError('enter name');
+    }
+    if (validEmail && newName !== '' && !validName) {
+      setError('invalid name (1-20 characters)');
+    }
+    if (validEmail && validName && newPassword === '') {
+      setError('enter password');
+    }
+    if (validEmail && validName && newPassword !== '' && !validPassword) {
+      setError('check password requirements');
+    }
+    if (
+      validEmail
+      && validName
+      && validPassword
+      && (!validConfirm || newPassword !== confirmedPassword)
+    ) {
+      setError('passwords do not match');
+    }
+    if (
+      validEmail
+      && validName
+      && validPassword
+      && validConfirm
+      && newPassword === confirmedPassword
+    ) {
+      setError(null);
+    }
+  }, [confirmedPassword, newEmail, newName, newPassword]);
 
   const changeConfirmed = (event) => {
     setConfirmedPassword(event.target.value);
+    setValidConfirm(event.target.validity.valid);
   };
 
   const changeEmail = (event) => {
     setNewEmail(event.target.value);
+    setValidEmail(event.target.validity.valid);
   };
 
   const changeName = (event) => {
     setNewName(event.target.value);
+    setValidName(event.target.validity.valid);
   };
 
   const changePassword = (event) => {
     setNewPassword(event.target.value);
+    setValidPassword(event.target.validity.valid);
+  };
+
+  const convertToRegex = (string) => {
+    // for validating password confirmation input field
+    const newString = [];
+    const letters = 'abcdefghijklmnopqrstuvwyz';
+    const numbers = '1234567890';
+    const symbols = '^$.*+?()[]{}|/\\';
+    for (let i = 0; i < string.length; i += 1) {
+      const char = string[i];
+      if (
+        !letters.includes(char)
+        && !letters.includes(char.toLowerCase())
+        && !numbers.includes(char)
+        && symbols.includes(char)
+      ) {
+        // need to escape the correct symbols for regex
+        newString.push(`\\${char}`);
+      } else {
+        newString.push(char);
+      }
+    }
+    return newString.join('');
   };
 
   const createAccount = async () => {
@@ -38,7 +107,21 @@ export default function SignUp({ creatingAccount, setCreatingAccount }) {
         displayName: newName,
       });
     } catch (err) {
-      setError(err);
+      const { code } = { ...err };
+      switch (code) {
+        case 'auth/email-already-in-use':
+          setError('email already in use');
+          break;
+        case 'auth/invalid-email':
+          setError('invalid email');
+          break;
+        case 'auth/weak-password':
+          setError('weak password');
+          break;
+        default:
+          setError(`server error: ${code}`);
+          break;
+      }
     }
   };
 
@@ -47,6 +130,8 @@ export default function SignUp({ creatingAccount, setCreatingAccount }) {
     const auth = getAuth();
     signInWithRedirect(auth, provider);
   };
+
+  const passwordRegex = '^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[^a-zA-Z0-9]).{8,}$';
 
   const toggleCreate = () => {
     setConfirmedPassword('');
@@ -75,16 +160,46 @@ export default function SignUp({ creatingAccount, setCreatingAccount }) {
             name:
             <input
               id="name-create"
+              maxLength={20}
+              minLength={1}
               onChange={changeName}
+              required
               type="text"
               value={newName || ''}
             />
           </label>
           <label htmlFor="password-create">
             password:
+            <span className={validPassword ? 'valid' : 'error'}>
+              requirements
+            </span>
+            <ul aria-label="password requirements">
+              <li className={newPassword.length >= 8 ? 'valid' : 'error'}>
+                8 characters minimum length
+              </li>
+              <li className={newPassword.match(/[A-Z]/) ? 'valid' : 'error'}>
+                1 uppercase letter
+              </li>
+              <li className={newPassword.match(/[a-z]/) ? 'valid' : 'error'}>
+                1 lowercase letter
+              </li>
+              <li className={newPassword.match(/[0-9]/) ? 'valid' : 'error'}>
+                1 number
+              </li>
+              <li
+                className={
+                  newPassword.match(/[^a-zA-Z0-9]/) ? 'valid' : 'error'
+                }
+              >
+                1 symbol (~!@#$%^&* etc)
+              </li>
+            </ul>
             <input
               id="password-create"
+              minLength={8}
               onChange={changePassword}
+              pattern={passwordRegex}
+              required
               type="password"
               value={newPassword || ''}
             />
@@ -94,11 +209,23 @@ export default function SignUp({ creatingAccount, setCreatingAccount }) {
             <input
               id="password-confirm"
               onChange={changeConfirmed}
+              pattern={convertToRegex(newPassword)}
+              required
               type="password"
               value={confirmedPassword || ''}
             />
           </label>
-          <button disabled={error} type="button" onClick={createAccount}>
+          <button
+            disabled={
+              error
+              || !validConfirm
+              || !validEmail
+              || !validPassword
+              || !validName
+            }
+            type="button"
+            onClick={createAccount}
+          >
             Register
           </button>
           {error ? <span className="error">{error}</span> : null}
@@ -106,7 +233,7 @@ export default function SignUp({ creatingAccount, setCreatingAccount }) {
       </div>
       <div>
         <h2>Or:</h2>
-        <button type="button" onClick={googleLogin}>
+        <button onClick={googleLogin} type="button">
           Continue with Google
         </button>
       </div>
