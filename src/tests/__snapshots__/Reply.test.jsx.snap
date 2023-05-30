@@ -27,7 +27,9 @@ exports[`Reply component displays reply button 1`] = `
         Comment:
         <textarea
           id="post-content"
+          minlength="1"
           name="post-content"
+          required=""
           rows="6"
         />
       </label>
@@ -51,6 +53,7 @@ exports[`Reply component displays reply button 1`] = `
           CANCEL
         </button>
         <button
+          disabled=""
           type="button"
         >
           POST

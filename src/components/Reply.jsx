@@ -34,9 +34,12 @@ export default function Reply({
   thread,
   user,
 }) {
-  const [postAuthor, setPostAuthor] = useState('');
+  const [error, setError] = useState(null);
   const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [postAuthor, setPostAuthor] = useState('');
+  const [validComment, setValidComment] = useState(false);
+  const [validFile, setValidFile] = useState(false);
 
   useEffect(() => {
     if (user) {
@@ -45,6 +48,24 @@ export default function Reply({
       setPostAuthor('');
     }
   }, [user]);
+
+  useEffect(() => {
+    if (postContent === '' && !file) {
+      setError('no blank post - need image or text');
+      setValidFile(false);
+      setValidComment(false);
+    }
+    if (postContent !== '' && !file) {
+      setError(null);
+      setValidComment(true);
+      setValidFile(true);
+    }
+    if (postContent === '' && file) {
+      setError(null);
+      setValidComment(true);
+      setValidFile(true);
+    }
+  }, [file, postContent]);
 
   const changeAuthor = (event) => {
     setPostAuthor(event.target.value);
@@ -70,6 +91,9 @@ export default function Reply({
     }
     setPostContent('');
     setFile(null);
+    setValidComment(false);
+    setValidFile(false);
+    setError(null);
     enableForm();
   };
 
@@ -83,9 +107,10 @@ export default function Reply({
     try {
       const snapshot = await uploadBytes(imageRef, file);
       downloadURL = await getDownloadURL(snapshot.ref);
-    } catch (error) {
-      // TODO - need to handle this better
-      console.error(`Error uploading file: ${error}`);
+    } catch (err) {
+      console.error(`Error uploading file: ${err}`);
+      const { code } = { ...err };
+      setError(code);
     }
     return downloadURL;
   };
@@ -116,9 +141,10 @@ export default function Reply({
       const resized = await resizeFile(file);
       const snapshot = await uploadBytes(imageRef, resized);
       downloadURL = await getDownloadURL(snapshot.ref);
-    } catch (error) {
-      // TODO - need to handle this better
-      console.error(`Error uploading thumbnail: ${error}`);
+    } catch (err) {
+      console.error(`Error uploading thumbnail: ${err}`);
+      const { code } = { ...err };
+      setError(code);
     }
     return downloadURL;
   };
@@ -141,52 +167,58 @@ export default function Reply({
   };
 
   const submitPost = async () => {
-    // display the "uploading" message
-    setLoading(true);
+    try {
+      // display the "uploading" message
+      setLoading(true);
 
-    const newPost = {
-      author: postAuthor === '' ? null : postAuthor,
-      authorID: user ? user.uid : null,
-      content: postContent,
-      image: null,
-      replies: [],
-      subject: null,
-      storagePath: null,
-      thread,
-      thumb: null,
-      time: Date.now(),
-    };
+      const newPost = {
+        author: postAuthor === '' ? null : postAuthor,
+        authorID: user ? user.uid : null,
+        content: postContent,
+        image: null,
+        replies: [],
+        subject: null,
+        storagePath: null,
+        thread,
+        thumb: null,
+        time: Date.now(),
+      };
 
-    // we're updating nested fields in firestore
-    const newPostNumber = await getNewPostNumber(board);
-    const update = {};
-    const updateKey = `posts.${newPostNumber}`;
-    update[updateKey] = newPost;
+      // we're updating nested fields in firestore
+      const newPostNumber = await getNewPostNumber(board);
+      const update = {};
+      const updateKey = `posts.${newPostNumber}`;
+      update[updateKey] = newPost;
 
-    if (file) {
-      const URL = await uploadImage(newPostNumber);
-      const thumbURL = await uploadThumbnail(newPostNumber);
-      update[updateKey].image = URL;
-      update[updateKey].thumb = thumbURL;
+      if (file) {
+        const URL = await uploadImage(newPostNumber);
+        const thumbURL = await uploadThumbnail(newPostNumber);
+        update[updateKey].image = URL;
+        update[updateKey].thumb = thumbURL;
 
-      const extension = file.name.match(/\.[a-zA-Z0-9]+$/).join();
-      update[updateKey].storagePath = `${board}/${newPostNumber}${extension}`;
+        const extension = file.name.match(/\.[a-zA-Z0-9]+$/).join();
+        update[updateKey].storagePath = `${board}/${newPostNumber}${extension}`;
+      }
+
+      const boardRef = doc(database, 'boards', board);
+      await updateDoc(boardRef, update);
+
+      // update database to handle any links to other posts
+      await handlePostLinks(newPostNumber);
+
+      // hide "uploading" message
+      setLoading(false);
+
+      // reset the form
+      resetForm();
+
+      // this will update the posts for the parent thread
+      await readDatabase();
+    } catch (err) {
+      console.error(`Error submitting post: ${err}`);
+      const { code } = { ...err };
+      setError(code);
     }
-
-    const boardRef = doc(database, 'boards', board);
-    await updateDoc(boardRef, update);
-
-    // update database to handle any links to other posts
-    await handlePostLinks(newPostNumber);
-
-    // hide "uploading" message
-    setLoading(false);
-
-    // reset the form
-    resetForm();
-
-    // this will update the posts for the parent thread
-    await readDatabase();
   };
 
   if (enabled) {
@@ -228,11 +260,18 @@ export default function Reply({
               type="file"
             />
           </label>
+          <span className="error" hidden={!error}>
+            {error}
+          </span>
           <div className={loading ? 'buttons hidden' : 'buttons visible'}>
             <button onClick={resetForm} type="button">
               CANCEL
             </button>
-            <button onClick={submitPost} type="button">
+            <button
+              disabled={error || !validComment || !validFile}
+              onClick={submitPost}
+              type="button"
+            >
               POST
             </button>
           </div>
