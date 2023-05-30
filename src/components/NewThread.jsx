@@ -31,11 +31,14 @@ export default function NewThread({
   board, readDatabase, setUser, user,
 }) {
   const [enabled, setEnabled] = useState(false);
+  const [error, setError] = useState(null);
+  const [file, setFile] = useState(null);
+  const [loading, setLoading] = useState(false);
   const [threadAuthor, setThreadAuthor] = useState('');
   const [threadSubject, setThreadSubject] = useState('');
   const [threadContent, setThreadContent] = useState('');
-  const [file, setFile] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [validContent, setValidContent] = useState(false);
+  const [validFile, setValidFile] = useState(false);
 
   useEffect(() => {
     if (user) {
@@ -44,6 +47,29 @@ export default function NewThread({
       setThreadAuthor('');
     }
   }, [user]);
+
+  useEffect(() => {
+    if (threadContent === '' && !file) {
+      setError('no blank thread - need image and text');
+      setValidFile(false);
+      setValidContent(false);
+    }
+    if (threadContent !== '' && !file) {
+      setError('no thread without image');
+      setValidContent(true);
+      setValidFile(false);
+    }
+    if (threadContent === '' && file) {
+      setError('no thread without text');
+      setValidContent(false);
+      setValidFile(true);
+    }
+    if (threadContent !== '' && file) {
+      setError(null);
+      setValidContent(true);
+      setValidFile(true);
+    }
+  }, [threadContent, file]);
 
   const navigate = useNavigate();
 
@@ -75,6 +101,9 @@ export default function NewThread({
     }
     setThreadSubject('');
     setThreadContent('');
+    setValidContent(false);
+    setValidFile(false);
+    setError(null);
     setFile(null);
     enableForm();
   };
@@ -89,9 +118,10 @@ export default function NewThread({
     try {
       const snapshot = await uploadBytes(imageRef, file);
       downloadURL = await getDownloadURL(snapshot.ref);
-    } catch (error) {
-      // TODO - need to handle this better
-      console.error(`Error uploading file: ${error}`);
+    } catch (err) {
+      console.error(`Error uploading file: ${err}`);
+      const { code } = { ...err };
+      setError(code);
     }
     return downloadURL;
   };
@@ -122,9 +152,10 @@ export default function NewThread({
       const resized = await resizeFile(file);
       const snapshot = await uploadBytes(imageRef, resized);
       downloadURL = await getDownloadURL(snapshot.ref);
-    } catch (error) {
-      // TODO - need to handle this better
-      console.error(`Error uploading thumbnail: ${error}`);
+    } catch (err) {
+      console.error(`Error uploading thumbnail: ${err}`);
+      const { code } = { ...err };
+      setError(code);
     }
     return downloadURL;
   };
@@ -152,60 +183,66 @@ export default function NewThread({
 
   const submitThread = async () => {
     // display the "uploading" message
-    setLoading(true);
+    try {
+      setLoading(true);
 
-    const newPost = {
-      author: threadAuthor === '' ? null : threadAuthor,
-      authorID: user ? user.uid : null,
-      content: threadContent,
-      image: null,
-      replies: [],
-      storagePath: null,
-      subject: threadSubject,
-      thread: null,
-      thumb: null,
-      time: Date.now(),
-    };
+      const newPost = {
+        author: threadAuthor === '' ? null : threadAuthor,
+        authorID: user ? user.uid : null,
+        content: threadContent,
+        image: null,
+        replies: [],
+        storagePath: null,
+        subject: threadSubject,
+        thread: null,
+        thumb: null,
+        time: Date.now(),
+      };
 
-    // we're updating nested fields in firestore
-    const newPostNumber = await getNewPostNumber(board);
-    const update = {};
-    const updateKey = `posts.${newPostNumber}`;
-    update[updateKey] = newPost;
-    update[updateKey].thread = newPostNumber;
+      // we're updating nested fields in firestore
+      const newPostNumber = await getNewPostNumber(board);
+      const update = {};
+      const updateKey = `posts.${newPostNumber}`;
+      update[updateKey] = newPost;
+      update[updateKey].thread = newPostNumber;
 
-    if (file) {
-      const URL = await uploadImage(newPostNumber);
-      const thumbURL = await uploadThumbnail(newPostNumber);
-      update[updateKey].image = URL;
-      update[updateKey].thumb = thumbURL;
+      if (file) {
+        const URL = await uploadImage(newPostNumber);
+        const thumbURL = await uploadThumbnail(newPostNumber);
+        update[updateKey].image = URL;
+        update[updateKey].thumb = thumbURL;
 
-      const extension = file.name.match(/\.[a-zA-Z0-9]+$/).join();
-      update[updateKey].storagePath = `${board}/${newPostNumber}${extension}`;
+        const extension = file.name.match(/\.[a-zA-Z0-9]+$/).join();
+        update[updateKey].storagePath = `${board}/${newPostNumber}${extension}`;
+      }
+
+      const boardRef = doc(database, 'boards', board);
+      await updateDoc(boardRef, update);
+      await updateDoc(boardRef, {
+        threads: arrayUnion(newPostNumber),
+      });
+
+      // keep track of user's threads
+      if (user) {
+        updateUserThreads(newPostNumber);
+      }
+
+      // hide "uploading" message
+      setLoading(false);
+
+      // reset the form
+      resetForm();
+
+      // this will update the threads for the parent board
+      await readDatabase();
+
+      // take the user to the thread they just created
+      navigate(`/${board}_t${newPostNumber}`);
+    } catch (err) {
+      console.error(`Error submitting thread: ${err}`);
+      const { code } = { ...err };
+      setError(code);
     }
-
-    const boardRef = doc(database, 'boards', board);
-    await updateDoc(boardRef, update);
-    await updateDoc(boardRef, {
-      threads: arrayUnion(newPostNumber),
-    });
-
-    // keep track of user's threads
-    if (user) {
-      updateUserThreads(newPostNumber);
-    }
-
-    // hide "uploading" message
-    setLoading(false);
-
-    // reset the form
-    resetForm();
-
-    // this will update the threads for the parent board
-    await readDatabase();
-
-    // take the user to the thread they just created
-    navigate(`/${board}_t${newPostNumber}`);
   };
 
   if (enabled) {
@@ -257,11 +294,18 @@ export default function NewThread({
               type="file"
             />
           </label>
+          <span className="error" hidden={!error}>
+            {error}
+          </span>
           <div className={loading ? 'buttons hidden' : 'buttons visible'}>
             <button onClick={resetForm} type="button">
               CANCEL
             </button>
-            <button onClick={submitThread} type="button">
+            <button
+              disabled={error || !validContent || !validFile}
+              onClick={submitThread}
+              type="button"
+            >
               POST
             </button>
           </div>
