@@ -50,6 +50,12 @@ export default function Reply({
   }, [user]);
 
   useEffect(() => {
+    const permittedTypes = [
+      'image/gif',
+      'image/jpeg',
+      'image/png',
+    ];
+
     if (postContent === '' && !file) {
       setError('no blank post - need image or text');
       setValidFile(false);
@@ -64,6 +70,16 @@ export default function Reply({
       setError(null);
       setValidComment(true);
       setValidFile(true);
+    }
+    if (file && file.size > 4000000) {
+      setError('image too large (4MB limit)');
+      setValidComment(true);
+      setValidFile(false);
+    }
+    if (file && !permittedTypes.includes(file.type)) {
+      setError('unsupported file type (only jpg, gif or png)');
+      setValidComment(true);
+      setValidFile(false);
     }
   }, [file, postContent]);
 

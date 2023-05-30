@@ -49,6 +49,12 @@ export default function NewThread({
   }, [user]);
 
   useEffect(() => {
+    const permittedTypes = [
+      'image/gif',
+      'image/jpeg',
+      'image/png',
+    ];
+
     if (threadContent === '' && !file) {
       setError('no blank thread - need image and text');
       setValidFile(false);
@@ -68,6 +74,16 @@ export default function NewThread({
       setError(null);
       setValidContent(true);
       setValidFile(true);
+    }
+    if (file && file.size > 4000000) {
+      setError('image too large (4MB limit)');
+      setValidContent(true);
+      setValidFile(false);
+    }
+    if (file && !permittedTypes.includes(file.type)) {
+      setError('unsupported file type (only jpg, gif or png)');
+      setValidContent(true);
+      setValidFile(false);
     }
   }, [threadContent, file]);
 
