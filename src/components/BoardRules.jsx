@@ -3,12 +3,34 @@ import { doc, setDoc } from 'firebase/firestore';
 import database from '../util/firestore';
 
 export default function BoardRules({ board, user }) {
-  const [rules, setRules] = useState([]);
   const [editing, setEditing] = useState(false);
+  const [error, setError] = useState(null);
+  const [rules, setRules] = useState([]);
+  const [validRules, setValidRules] = useState(true);
 
   useEffect(() => {
     setRules(board.rules);
   }, []);
+
+  useEffect(() => {
+    const anyBlankRules = () => {
+      let blank = false;
+      rules.forEach((rule) => {
+        if (rule.rule === '') {
+          blank = true;
+        }
+      });
+      return blank;
+    };
+
+    if (anyBlankRules()) {
+      setValidRules(false);
+      setError('no blank rules');
+    } else {
+      setValidRules(true);
+      setError(null);
+    }
+  }, [rules]);
 
   const addRule = () => {
     // need unquie ID for each rule (for mapping)
@@ -36,6 +58,8 @@ export default function BoardRules({ board, user }) {
   const cancelEdit = () => {
     setRules(board.rules);
     setEditing(!editing);
+    setError(null);
+    setValidRules(true);
   };
 
   const deleteRule = (event) => {
@@ -57,9 +81,15 @@ export default function BoardRules({ board, user }) {
   };
 
   const submitEdit = () => {
-    setEditing(!editing);
-    const boardRef = doc(database, 'boards', board.id);
-    setDoc(boardRef, { rules }, { merge: true });
+    try {
+      const boardRef = doc(database, 'boards', board.id);
+      setDoc(boardRef, { rules }, { merge: true });
+      setEditing(!editing);
+    } catch (err) {
+      const { code } = { ...err };
+      console.error(err);
+      setError(`server error: ${code}`);
+    }
   };
 
   const toggleEdit = () => {
@@ -101,10 +131,17 @@ export default function BoardRules({ board, user }) {
                 Add Rule
               </button>
               <div>
+                <div className="error" hidden={!error}>
+                  <span>{error}</span>
+                </div>
                 <button onClick={cancelEdit} type="button">
                   Cancel
                 </button>
-                <button onClick={submitEdit} type="button">
+                <button
+                  disabled={error || !validRules}
+                  onClick={submitEdit}
+                  type="button"
+                >
                   Submit
                 </button>
               </div>
@@ -119,10 +156,17 @@ export default function BoardRules({ board, user }) {
                 Add Rule
               </button>
               <div>
+                <div className="error" hidden={!error}>
+                  <span>{error}</span>
+                </div>
                 <button onClick={cancelEdit} type="button">
                   Cancel
                 </button>
-                <button onClick={submitEdit} type="button">
+                <button
+                  disabled={error || !validRules}
+                  onClick={submitEdit}
+                  type="button"
+                >
                   Submit
                 </button>
               </div>
