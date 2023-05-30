@@ -1,6 +1,7 @@
 import React from 'react';
+import BoardRules from './BoardRules';
 
-export default function Rules({ boards }) {
+export default function Rules({ boards, user }) {
   return (
     <div className="rules">
       <div className="global-rules">
@@ -44,22 +45,7 @@ export default function Rules({ boards }) {
       <div className="per-board-rules">
         <h1>Per-Board Rules</h1>
         {boards.map((board) => (
-          <div key={`${board.id}-rules`}>
-            <h2>{`/${board.id}/ - ${board.name}`}</h2>
-            {board.rules.length ? (
-              <ol>
-                {board.rules.map((rule) => (
-                  <li key={`${board.id}-rule#${rule.id}`}>
-                    {rule.rule}
-                  </li>
-                ))}
-              </ol>
-            ) : (
-              <ol>
-                <li>No additional rules - global rules still apply.</li>
-              </ol>
-            )}
-          </div>
+          <BoardRules board={board} key={`${board.id}-rules`} user={user} />
         ))}
       </div>
     </div>
