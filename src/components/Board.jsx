@@ -172,28 +172,32 @@ export default function Board({
               <Link to={`/${id}_t${thread.number}`}>View thread</Link>
             </span>
             <div className="thread-replies">
-              {Object.keys(threadReplies[+thread.number]).map((postNumber) => {
-                const post = threadReplies[+thread.number][postNumber];
-                return (
-                  <Post
-                    author={post.author}
-                    authorID={post.authorID}
-                    board={id}
-                    content={post.content}
-                    image={post.image}
-                    isSticky={post.isSticky}
-                    key={`${id}/${post.thread}/${postNumber}`}
-                    number={+postNumber}
-                    replies={post.replies}
-                    setUser={setUser}
-                    subject={post.subject}
-                    thread={post.thread}
-                    thumb={post.thumb}
-                    time={post.time}
-                    user={user}
-                  />
-                );
-              })}
+              {threadReplies.length
+                ? Object.keys(threadReplies[+thread.number]).map(
+                  (postNumber) => {
+                    const post = threadReplies[+thread.number][postNumber];
+                    return (
+                      <Post
+                        author={post.author}
+                        authorID={post.authorID}
+                        board={id}
+                        content={post.content}
+                        image={post.image}
+                        isSticky={post.isSticky}
+                        key={`${id}/${post.thread}/${postNumber}`}
+                        number={+postNumber}
+                        replies={post.replies}
+                        setUser={setUser}
+                        subject={post.subject}
+                        thread={post.thread}
+                        thumb={post.thumb}
+                        time={post.time}
+                        user={user}
+                      />
+                    );
+                  },
+                )
+                : null}
             </div>
             <hr />
           </div>
