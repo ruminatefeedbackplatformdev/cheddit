@@ -31,15 +31,21 @@ export default function Dashboard({ boards, setUser, user }) {
   };
 
   const submitNameChange = () => {
-    // change local user state
-    setUser({
-      ...user,
-      displayName,
-    });
+    try {
+      // change local user state
+      setUser({
+        ...user,
+        displayName,
+      });
 
-    // and then update the database accordingly
-    const userRef = doc(database, 'users', user.uid);
-    setDoc(userRef, { displayName }, { merge: true });
+      // and then update the database accordingly
+      const userRef = doc(database, 'users', user.uid);
+      setDoc(userRef, { displayName }, { merge: true });
+    } catch (err) {
+      console.error(err);
+      const { code } = { ...err };
+      setError(code);
+    }
   };
 
   if (user === 'loading') {

@@ -128,52 +128,58 @@ export default function NewBoard({
   };
 
   const submitForm = async () => {
-    const restrictedIDs = [
-      'dash',
-      'rules',
-    ];
+    try {
+      const restrictedIDs = [
+        'dash',
+        'rules',
+      ];
 
-    if (
-      boardID.length >= 1
-      && boardID.length <= 5
-      && boardName.length >= 1
-      && boardName.length <= 20
-      && boardID.match(/^[a-z]{1,5}$/)
-    ) {
-      // matches our form requirements
-      setError(null);
-
-      const boardKeys = [];
-      boards.forEach((board) => {
-        boardKeys.push(board.id);
-      });
-
-      if (boardKeys.includes(boardID)) {
-        // already a board with this id
-        setError('Board ID already used. Try another.');
-      } else if (restrictedIDs.includes(boardID)) {
-        setError('Restricted ID. Try another.');
-      } else {
-        // good to go!
-        await setDoc(doc(database, 'boards', boardID), {
-          name: boardName,
-          owner: user.uid,
-          posts: {},
-          rules: boardRules,
-          threads: [],
-        });
-        updateUserBoards();
-        navigate(`/${boardID}`);
+      if (
+        boardID.length >= 1
+        && boardID.length <= 5
+        && boardName.length >= 1
+        && boardName.length <= 20
+        && boardID.match(/^[a-z]{1,5}$/)
+      ) {
+        // matches our form requirements
         setError(null);
-        setValidID(false);
-        setValidName(false);
-        setBoardID('');
-        setBoardName('');
-        setBoardRules([]);
-        enableForm();
+
+        const boardKeys = [];
+        boards.forEach((board) => {
+          boardKeys.push(board.id);
+        });
+
+        if (boardKeys.includes(boardID)) {
+          // already a board with this id
+          setError('Board ID already used. Try another.');
+        } else if (restrictedIDs.includes(boardID)) {
+          setError('Restricted ID. Try another.');
+        } else {
+          // good to go!
+          await setDoc(doc(database, 'boards', boardID), {
+            name: boardName,
+            owner: user.uid,
+            posts: {},
+            rules: boardRules,
+            threads: [],
+          });
+          updateUserBoards();
+          navigate(`/${boardID}`);
+          setError(null);
+          setValidID(false);
+          setValidName(false);
+          setBoardID('');
+          setBoardName('');
+          setBoardRules([]);
+          enableForm();
+        }
+      } else {
+        setError('Invalid ID or name. Try again.');
       }
-    } else {
-      setError('Invalid ID or name. Try again.');
+    } catch (err) {
+      console.error(err);
+      const { code } = { ...err };
+      setError(code);
     }
   };
 
