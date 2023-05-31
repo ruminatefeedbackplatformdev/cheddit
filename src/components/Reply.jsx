@@ -234,6 +234,7 @@ export default function Reply({
       console.error(`Error submitting post: ${err}`);
       const { code } = { ...err };
       setError(code);
+      setLoading(false);
     }
   };
 

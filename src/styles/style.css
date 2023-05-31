@@ -277,6 +277,9 @@ textarea:invalid {
 
 .post-control .delete-post.visible, 
 .post-control .confirm.visible {
+  align-items: flex-start;
+  display: flex;
+  flex-direction: column;
   visibility: visible;
 }
 

@@ -27,9 +27,11 @@ export default function PostControl({
   const navigate = useNavigate();
 
   const [confirming, setConfirming] = useState(false);
+  const [error, setError] = useState(null);
 
   const cancelDelete = () => {
     setConfirming(false);
+    setError(null);
   };
 
   const promptConfirm = async () => {
@@ -55,12 +57,19 @@ export default function PostControl({
   };
 
   const deletePost = async () => {
-    // just need to delete this one post
-    const boardRef = doc(database, 'boards', board);
-    await deleteImage(number);
-    await updateDoc(boardRef, {
-      [`posts.${number}`]: deleteField(),
-    });
+    try {
+      // just need to delete this one post
+      const boardRef = doc(database, 'boards', board);
+      await deleteImage(number);
+      await updateDoc(boardRef, {
+        [`posts.${number}`]: deleteField(),
+      });
+      setError(null);
+    } catch (err) {
+      console.error(err);
+      const { code } = { ...err };
+      setError(code);
+    }
   };
 
   const getAllThreadPosts = async () => {
@@ -119,25 +128,32 @@ export default function PostControl({
   };
 
   const deleteThread = async () => {
-    const boardRef = doc(database, 'boards', board);
+    try {
+      const boardRef = doc(database, 'boards', board);
 
-    // delete all posts within a thread
-    const allPosts = await getAllThreadPosts();
-    allPosts.forEach(async (post) => {
-      await deleteImage(post);
-      await updateDoc(boardRef, {
-        [`posts.${post}`]: deleteField(),
+      // delete all posts within a thread
+      const allPosts = await getAllThreadPosts();
+      allPosts.forEach(async (post) => {
+        await deleteImage(post);
+        await updateDoc(boardRef, {
+          [`posts.${post}`]: deleteField(),
+        });
       });
-    });
 
-    // then delete the thread itself
-    await updateDoc(boardRef, {
-      threads: arrayRemove(thread),
-    });
+      // then delete the thread itself
+      await updateDoc(boardRef, {
+        threads: arrayRemove(thread),
+      });
 
-    await updateUserThreads();
-    setConfirming(false);
-    navigate(`/${board}`);
+      await updateUserThreads();
+      setConfirming(false);
+      setError(null);
+      navigate(`/${board}`);
+    } catch (err) {
+      console.error(err);
+      const { code } = { ...err };
+      setError(code);
+    }
   };
 
   const makeSticky = async () => {
@@ -175,7 +191,8 @@ export default function PostControl({
         >
           DELETE THREAD
         </button>
-        <span className={confirming ? 'confirm visible' : 'confirm hidden'}>
+        <div className={confirming ? 'confirm visible' : 'confirm hidden'}>
+          <span className="error" hidden={!error}>{error}</span>
           <button
             className="delete-confirm"
             onClick={deleteThread}
@@ -194,7 +211,7 @@ export default function PostControl({
             Are you sure? Threads and their posts cannot be recovered once
             deleted!
           </span>
-        </span>
+        </div>
       </span>
     );
   }
@@ -207,7 +224,8 @@ export default function PostControl({
       >
         DELETE POST
       </button>
-      <span className={confirming ? 'confirm visible' : 'confirm hidden'}>
+      <div className={confirming ? 'confirm visible' : 'confirm hidden'}>
+        <span className="error" hidden={!error}>{error}</span>
         <button className="delete-confirm" onClick={deletePost} type="button">
           CONFIRM DELETE
         </button>
@@ -215,7 +233,7 @@ export default function PostControl({
           CANCEL
         </button>
         <span>Are you sure? Posts cannot be recovered once deleted!</span>
-      </span>
+      </div>
     </span>
   );
 }

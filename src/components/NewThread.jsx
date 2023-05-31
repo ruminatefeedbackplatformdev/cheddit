@@ -257,6 +257,7 @@ export default function NewThread({
     } catch (err) {
       console.error(`Error submitting thread: ${err}`);
       const { code } = { ...err };
+      setLoading(false);
       setError(code);
     }
   };
