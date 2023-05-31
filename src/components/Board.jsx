@@ -46,9 +46,10 @@ async function getPostsInfo(id) {
     const postKeys = Object.keys(posts);
     postKeys.forEach((key) => {
       const thisPost = posts[key];
-      threadPosts[thisPost.thread].push(+key);
+      if (threadPosts[thisPost.thread]) {
+        threadPosts[thisPost.thread].push(+key);
+      }
     });
-
     return threadPosts;
   }
   return {};
