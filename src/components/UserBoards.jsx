@@ -12,53 +12,67 @@ import NewBoard from './NewBoard';
 
 export default function UserBoards({ boards, setUser, user }) {
   const [enabled, setEnabled] = useState(false);
+  const [error, setError] = useState(null);
   const [userBoards, setUserBoards] = useState([]);
 
   useEffect(() => {
     setUserBoards(user.boards);
-  }, [boards]);
+  }, [user.boards]);
 
   const enableForm = () => {
     setEnabled(!enabled);
   };
 
   const deleteBoard = async (event) => {
-    // remove the board from firestore
-    const { board } = event.target.dataset;
-    await deleteDoc(doc(database, 'boards', board));
+    try {
+      const { board } = event.target.dataset;
 
-    // then remove the files from storage
-    const storage = getStorage();
-    const boardRef = ref(storage, board);
-    const boardImages = await listAll(boardRef);
-    boardImages.items.forEach(async (image) => {
-      await deleteObject(image);
-    });
+      // remove the files from storage
+      const storage = getStorage();
+      const boardRef = ref(storage, board);
+      const boardImages = await listAll(boardRef);
+      const deleteImagePromises = boardImages.items.map(async (image) => {
+        const imageRef = ref(storage, image);
+        await deleteObject(imageRef);
+      });
 
-    // remove board from local state
-    const userBoardsCopy = [...userBoards];
-    userBoardsCopy.forEach((userBoard) => {
-      if (userBoard.id === board) {
-        const index = userBoardsCopy.indexOf(board);
-        userBoardsCopy.splice(index, 1);
-      }
-    });
-    setUserBoards(userBoardsCopy);
-    setUser({
-      ...user,
-      boards: userBoardsCopy,
-    });
+      // Wait for all images to delete before removing board
+      await Promise.all(deleteImagePromises);
+
+      // remove the board from firestore
+      await deleteDoc(doc(database, 'boards', board));
+
+      // remove board from local state
+      const userBoardsCopy = [...userBoards];
+      userBoardsCopy.forEach((userBoard) => {
+        if (userBoard.id === board) {
+          const index = userBoardsCopy.indexOf(board);
+          userBoardsCopy.splice(index, 1);
+        }
+      });
+      setUserBoards(userBoardsCopy);
+      setUser({
+        ...user,
+        boards: userBoardsCopy,
+      });
+      setError(null);
+    } catch (err) {
+      console.error(err);
+      setError({ ...err }.code);
+    }
   };
 
   return (
     <div className="user-boards">
       <h2>Your Boards</h2>
       {userBoards.map((board) => (
-        <UserBoard
-          board={board}
-          deleteBoard={deleteBoard}
-          key={`ub-${board.id}`}
-        />
+        <div key={`ub-${board.id}`}>
+          <UserBoard
+            board={board}
+            deleteBoard={deleteBoard}
+          />
+          <span className="error" hidden={!error}>Error</span>
+        </div>
       ))}
       <button
         className={enabled ? 'button hidden' : 'button visible'}
