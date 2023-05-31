@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-  arrayUnion, doc, getDoc, setDoc, updateDoc,
+  arrayUnion, doc, getDoc, updateDoc,
 } from 'firebase/firestore';
 import {
   getDownloadURL, getStorage, ref, uploadBytes,
@@ -28,7 +28,7 @@ async function getNewPostNumber(id) {
 }
 
 export default function NewThread({
-  board, readDatabase, setUser, user,
+  board, readDatabase, user,
 }) {
   const [enabled, setEnabled] = useState(false);
   const [error, setError] = useState(null);
@@ -176,27 +176,6 @@ export default function NewThread({
     return downloadURL;
   };
 
-  const updateUserThreads = async (newPostNumber) => {
-    // add the new thread to the user's local state
-    const prevThreads = {};
-    Object.keys(user.threads).forEach((threadBoard) => {
-      prevThreads[threadBoard] = [...user.threads[threadBoard]];
-    });
-    if (Object.hasOwn(prevThreads, board)) {
-      prevThreads[board].push(newPostNumber);
-    } else {
-      prevThreads[board] = [newPostNumber];
-    }
-    setUser({
-      ...user,
-      threads: prevThreads,
-    });
-
-    // then update the database accordingly
-    const userRef = doc(database, 'users', user.uid);
-    setDoc(userRef, { threads: prevThreads }, { merge: true });
-  };
-
   const submitThread = async () => {
     // display the "uploading" message
     try {
@@ -237,11 +216,6 @@ export default function NewThread({
       await updateDoc(boardRef, {
         threads: arrayUnion(newPostNumber),
       });
-
-      // keep track of user's threads
-      if (user) {
-        updateUserThreads(newPostNumber);
-      }
 
       // hide "uploading" message
       setLoading(false);

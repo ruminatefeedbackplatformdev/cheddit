@@ -4,17 +4,16 @@ import { collection, getDocs } from 'firebase/firestore';
 import database from '../util/firestore';
 
 export default function UserThreads({ user }) {
-  const { threads } = user;
-
+  const [threads, setThreads] = useState({});
   const [threadSubjects, setThreadSubjects] = useState(null);
 
-  const getThreadSubjects = async () => {
+  const getThreadSubjects = async (userThreads) => {
     // first we need an object to track of our subjects for each board
     const subjects = {};
-    const boards = Object.keys(threads);
+    const boards = Object.keys(userThreads);
     boards.forEach((board) => {
       subjects[board] = {};
-      threads[board].forEach((thread) => {
+      userThreads[board].forEach((thread) => {
         subjects[board][thread] = '';
       });
     });
@@ -27,7 +26,7 @@ export default function UserThreads({ user }) {
       const postKeys = Object.keys(posts);
       postKeys.forEach((post) => {
         // find our threads and store their subjects accordingly
-        if (boards.includes(board) && threads[board].includes(+post)) {
+        if (boards.includes(board) && userThreads[board].includes(+post)) {
           subjects[board][post] = posts[post].subject;
         }
       });
@@ -35,9 +34,30 @@ export default function UserThreads({ user }) {
     return subjects;
   };
 
+  const getUsersThreads = async () => {
+    const boardsQuery = await getDocs(collection(database, 'boards'));
+    const usersThreads = {};
+    boardsQuery.forEach((query) => {
+      const board = query.id;
+      const { posts } = query.data();
+      const boardThreads = query.data().threads;
+      boardThreads.forEach((thread) => {
+        if (posts[thread].authorID === user.uid) {
+          if (!Object.keys(usersThreads).includes(board)) {
+            usersThreads[board] = [];
+          }
+          usersThreads[board].push(thread);
+        }
+      });
+    });
+    return usersThreads;
+  };
+
   useEffect(() => {
     const loadFromDatabase = async () => {
-      const subjects = await getThreadSubjects();
+      const usersThreads = await getUsersThreads();
+      setThreads(usersThreads);
+      const subjects = await getThreadSubjects(usersThreads);
       setThreadSubjects(subjects);
     };
     loadFromDatabase();

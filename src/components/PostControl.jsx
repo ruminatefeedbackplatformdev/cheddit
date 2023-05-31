@@ -1,15 +1,10 @@
 import React, { useState } from 'react';
 import {
   arrayRemove,
-  collection,
   deleteField,
   doc,
   getDoc,
-  getDocs,
-  query,
-  setDoc,
   updateDoc,
-  where,
 } from 'firebase/firestore';
 // eslint-disable-next-line
 import { deleteObject, getStorage, ref } from "firebase/storage";
@@ -20,9 +15,7 @@ export default function PostControl({
   board,
   isSticky,
   number,
-  setUser,
   thread,
-  user,
 }) {
   const navigate = useNavigate();
 
@@ -87,46 +80,6 @@ export default function PostControl({
     return allThreadPosts;
   };
 
-  const updateUserThreads = async () => {
-    // remove the thread from user's local state
-    const prevThreads = { ...user.threads };
-    if (Object.keys(user.threads).length) {
-      Object.keys(user.threads).forEach((threadBoard) => {
-        prevThreads[threadBoard] = [...user.threads[threadBoard]];
-      });
-      const index = prevThreads[board].indexOf(thread);
-      prevThreads[board].splice(index, 1);
-      if (prevThreads[board].length === 0) {
-        delete prevThreads[board];
-      }
-    }
-    setUser({
-      ...user,
-      threads: prevThreads,
-    });
-
-    // then remove from the database
-    const queryUsers = query(
-      collection(database, 'users'),
-      where(`threads.${board}`, '>', []),
-    );
-
-    const querySnapshot = await getDocs(queryUsers);
-
-    querySnapshot.forEach((docu) => {
-      const userThreads = docu.data().threads;
-      // find the user with the thread in question
-      if (userThreads[board].includes(number)) {
-        const tempThreads = [...userThreads[board]];
-        // remove the thread and update the database
-        tempThreads.splice(tempThreads.indexOf(number), 1);
-        userThreads[board] = tempThreads;
-        const userRef = doc(database, 'users', docu.id);
-        setDoc(userRef, { threads: userThreads });
-      }
-    });
-  };
-
   const deleteThread = async () => {
     try {
       const boardRef = doc(database, 'boards', board);
@@ -145,7 +98,6 @@ export default function PostControl({
         threads: arrayRemove(thread),
       });
 
-      await updateUserThreads();
       setConfirming(false);
       setError(null);
       navigate(`/${board}`);

@@ -49,12 +49,6 @@ async function getOwnedBoards(user) {
   return boards;
 }
 
-async function getUserThreads(user) {
-  const userRef = doc(database, 'users', user.uid);
-  const userSnap = await getDoc(userRef);
-  return userSnap.data().threads;
-}
-
 async function getDisplayName(user) {
   const userRef = doc(database, 'users', user.uid);
   const userSnap = await getDoc(userRef);
@@ -80,7 +74,6 @@ export default function App() {
           boards: await getOwnedBoards(authUser),
           displayName: await getDisplayName(authUser),
           photoURL: authUser.photoURL,
-          threads: await getUserThreads(authUser),
           uid: authUser.uid,
         });
       } else {
