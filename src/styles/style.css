@@ -335,7 +335,8 @@ textarea:invalid {
 }
 
 .reply-form .loading,
-.thread-form .loading {
+.thread-form .loading,
+.invalid-route .loading {
   align-items: center;
   display: flex;
   gap: 8px;
@@ -343,7 +344,8 @@ textarea:invalid {
 
 .reply-form .loading img,
 .thread-form .loading img,
-.dashboard-loading img {
+.dashboard-loading img,
+.invalid-route .loading img {
   height: 32px;
 }
 
