@@ -13,6 +13,7 @@ import NewBoard from './NewBoard';
 export default function UserBoards({ boards, setUser, user }) {
   const [enabled, setEnabled] = useState(false);
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
   const [userBoards, setUserBoards] = useState([]);
 
   useEffect(() => {
@@ -25,6 +26,7 @@ export default function UserBoards({ boards, setUser, user }) {
 
   const deleteBoard = async (event) => {
     try {
+      setLoading(true);
       const { board } = event.target.dataset;
 
       // remove the files from storage
@@ -52,6 +54,7 @@ export default function UserBoards({ boards, setUser, user }) {
         boards: userBoardsCopy,
       });
       setError(null);
+      setLoading(false);
     } catch (err) {
       console.error(err);
       setError({ ...err }.code);
@@ -66,6 +69,7 @@ export default function UserBoards({ boards, setUser, user }) {
           <UserBoard
             board={board}
             deleteBoard={deleteBoard}
+            loading={loading}
           />
           <span className="error" hidden={!error}>Error</span>
         </div>
