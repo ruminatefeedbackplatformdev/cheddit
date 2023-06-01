@@ -172,7 +172,7 @@ export default function Board({
               <Link to={`/${id}_t${thread.number}`}>View thread</Link>
             </span>
             <div className="thread-replies">
-              {threadReplies.length
+              {Object.keys(threadReplies[+thread.number]).length
                 ? Object.keys(threadReplies[+thread.number]).map(
                   (postNumber) => {
                     const post = threadReplies[+thread.number][postNumber];
