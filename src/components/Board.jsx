@@ -96,6 +96,9 @@ export default function Board({
       // will sort threads by their last post numbers (descending)
       const threadA = threadPosts[a.number];
       const threadB = threadPosts[b.number];
+      if (!threadA.length || !threadB.length) {
+        return 0;
+      }
       return threadB[threadB.length - 1] - threadA[threadA.length - 1];
     });
     // gotta put the sticky threads first
