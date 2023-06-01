@@ -83,10 +83,6 @@ export default function Reply({
     }
   }, [file, postContent]);
 
-  const changeAuthor = (event) => {
-    setPostAuthor(event.target.value);
-  };
-
   const changeContent = (event) => {
     setPostContent(event.target.value);
   };
@@ -245,16 +241,9 @@ export default function Reply({
           <label htmlFor="post-author">
             Name:
             {user ? (
-              <span>{postAuthor}</span>
+              <span id="post-author">{postAuthor}</span>
             ) : (
-              <input
-                id="post-author"
-                name="post-author"
-                onChange={changeAuthor}
-                type="text"
-                placeholder="Anonymous"
-                value={postAuthor}
-              />
+              <span id="post-author">Anonymous</span>
             )}
           </label>
           <label htmlFor="post-content">

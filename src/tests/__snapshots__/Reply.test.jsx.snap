@@ -13,13 +13,11 @@ exports[`Reply component displays reply button 1`] = `
         for="post-author"
       >
         Name:
-        <input
+        <span
           id="post-author"
-          name="post-author"
-          placeholder="Anonymous"
-          type="text"
-          value=""
-        />
+        >
+          Anonymous
+        </span>
       </label>
       <label
         for="post-content"

@@ -35,7 +35,6 @@ describe('NewThread component', () => {
     act(() => {
       userEvent.click(screen.getByRole('button', { name: 'Start a Thread' }));
     });
-    expect(screen.getByLabelText('Name:')).toBeTruthy();
     expect(screen.getByLabelText('Subject:')).toBeTruthy();
     expect(screen.getByLabelText('Comment:')).toBeTruthy();
     expect(screen.getByLabelText('Image:')).toBeTruthy();

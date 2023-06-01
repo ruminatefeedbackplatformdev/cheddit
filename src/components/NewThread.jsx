@@ -93,10 +93,6 @@ export default function NewThread({
     setEnabled(!enabled);
   };
 
-  const changeAuthor = (event) => {
-    setThreadAuthor(event.target.value);
-  };
-
   const changeSubject = (event) => {
     setThreadSubject(event.target.value);
   };
@@ -243,16 +239,9 @@ export default function NewThread({
           <label htmlFor="thread-author">
             Name:
             {user ? (
-              <span>{threadAuthor}</span>
+              <span id="thread-author">{threadAuthor}</span>
             ) : (
-              <input
-                id="thread-author"
-                name="thread-author"
-                onChange={changeAuthor}
-                type="text"
-                placeholder="Anonymous"
-                value={threadAuthor}
-              />
+              <span id="thread-author">Anonymous</span>
             )}
           </label>
           <label htmlFor="thread-subject">

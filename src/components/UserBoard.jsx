@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import hourglass from '../images/loading.gif';
 
 export default function UserBoard({ board, deleteBoard, loading }) {
   const [confirming, setConfirming] = useState(false);
@@ -12,9 +11,11 @@ export default function UserBoard({ board, deleteBoard, loading }) {
   return (
     <span className="user-board">
       <Link to={`/${board.id}`}>{`/${board.id}/ - ${board.name}`}</Link>
-      <button hidden={confirming} onClick={toggleConfirm} type="button">
-        Delete Board
-      </button>
+      {!loading ? (
+        <button hidden={confirming} onClick={toggleConfirm} type="button">
+          Delete Board
+        </button>
+      ) : null}
       {!loading ? (
         <div>
           <div className="error" hidden={!confirming}>
@@ -32,12 +33,7 @@ export default function UserBoard({ board, deleteBoard, loading }) {
             Cancel
           </button>
         </div>
-      ) : (
-        <div className="loading">
-          Loading...
-          <img alt="" src={hourglass} />
-        </div>
-      )}
+      ) : null}
     </span>
   );
 }

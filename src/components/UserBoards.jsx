@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import {
-  deleteDoc,
-  doc,
-} from 'firebase/firestore';
+import { deleteDoc, doc } from 'firebase/firestore';
 import {
   deleteObject, getStorage, listAll, ref,
 } from 'firebase/storage';
 import database from '../util/firestore';
 import UserBoard from './UserBoard';
 import NewBoard from './NewBoard';
+import hourglass from '../images/loading.gif';
 
 export default function UserBoards({ boards, setUser, user }) {
   const [enabled, setEnabled] = useState(false);
@@ -71,9 +69,17 @@ export default function UserBoards({ boards, setUser, user }) {
             deleteBoard={deleteBoard}
             loading={loading}
           />
-          <span className="error" hidden={!error}>Error</span>
+          <span className="error" hidden={!error}>
+            Error
+          </span>
         </div>
       ))}
+      {loading ? (
+        <span className="loading">
+          Loading...
+          <img alt="" src={hourglass} />
+        </span>
+      ) : null}
       <button
         className={enabled ? 'button hidden' : 'button visible'}
         onClick={enableForm}
