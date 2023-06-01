@@ -6,12 +6,14 @@ import {
   signInWithRedirect,
 } from 'firebase/auth';
 import SignUp from './SignUp';
+import PasswordReset from './PasswordReset';
 
 export default function Login() {
   const [creatingAccount, setCreatingAccount] = useState(false);
   const [error, setError] = useState(null);
   const [loginEmail, setLoginEmail] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
+  const [resettingPassword, setResettingPassword] = useState(false);
   const [validEmail, setValidEmail] = useState(false);
   const [validPassword, setValidPassword] = useState(false);
 
@@ -80,6 +82,18 @@ export default function Login() {
     setValidPassword(false);
   };
 
+  const togglePasswordReset = () => {
+    setResettingPassword(!resettingPassword);
+  };
+
+  if (resettingPassword) {
+    return (
+      <PasswordReset
+        togglePasswordReset={togglePasswordReset}
+      />
+    );
+  }
+
   if (creatingAccount) {
     return (
       <SignUp
@@ -117,10 +131,13 @@ export default function Login() {
           <button disabled={error} type="button" onClick={emailLogin}>
             Sign in
           </button>
+          {error || !validEmail || !validPassword ? (
+            <span className="error">{error}</span>
+          ) : null}
+          <button onClick={togglePasswordReset} type="button">
+            Forgot Password
+          </button>
         </form>
-        {error || !validEmail || !validPassword ? (
-          <span className="error">{error}</span>
-        ) : null}
       </div>
       <div>
         <h2>Or:</h2>
