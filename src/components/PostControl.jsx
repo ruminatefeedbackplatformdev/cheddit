@@ -31,6 +31,24 @@ export default function PostControl({
     setConfirming(true);
   };
 
+  const deletePostLinks = async (postNumber) => {
+    // need to remove this post number from any posts linking to it
+    const boardRef = doc(database, 'boards', board);
+    const boardSnap = await getDoc(boardRef);
+    const { posts } = boardSnap.data();
+    const allPostNumbers = Object.keys(posts);
+    allPostNumbers.forEach(async (post) => {
+      const thisPost = posts[post];
+      if (thisPost.replies.includes(postNumber)) {
+        // delete it from the posts replies
+        const postToUpdate = `posts.${post}.replies`;
+        await updateDoc(boardRef, {
+          [postToUpdate]: arrayRemove(postNumber),
+        });
+      }
+    });
+  };
+
   const deleteImage = async (postNumber) => {
     // find the post in the database
     const boardRef = doc(database, 'boards', board);
@@ -57,6 +75,7 @@ export default function PostControl({
       await updateDoc(boardRef, {
         [`posts.${number}`]: deleteField(),
       });
+      await deletePostLinks(number);
       setError(null);
     } catch (err) {
       console.error(err);
@@ -91,6 +110,7 @@ export default function PostControl({
         await updateDoc(boardRef, {
           [`posts.${post}`]: deleteField(),
         });
+        await deletePostLinks(post);
       });
 
       // then delete the thread itself
