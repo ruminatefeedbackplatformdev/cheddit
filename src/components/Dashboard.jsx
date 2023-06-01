@@ -18,16 +18,26 @@ export default function Dashboard({ boards, setUser, user }) {
     }
   }, [user]);
 
-  const changeName = (event) => {
-    const { maxLength, minLength } = event.target;
-    setDisplayName(event.target.value);
-    if (event.target.validity.valid) {
-      setValidName(true);
-      setError(null);
-    } else {
-      setValidName(false);
-      setError(`Name must be between ${minLength}-${maxLength} characters`);
+  useEffect(() => {
+    if (user) {
+      if (displayName === user.displayName && validName) {
+        setValidName(false);
+        setError('new name must be different than current');
+      }
+      if (displayName !== user.displayName && !validName) {
+        setValidName(false);
+        setError('Name must be between 1-20 characters');
+      }
+      if (displayName !== user.displayName && validName) {
+        setValidName(true);
+        setError(null);
+      }
     }
+  }, [displayName, user]);
+
+  const changeName = (event) => {
+    setDisplayName(event.target.value);
+    setValidName(event.target.validity.valid);
   };
 
   const submitNameChange = () => {
@@ -62,6 +72,20 @@ export default function Dashboard({ boards, setUser, user }) {
     return (
       <div className="dashboard">
         <h1>{`Welcome ${user.displayName}`}</h1>
+        <div>
+          <div>
+            Logged in with
+            {' '}
+            {user.email}
+          </div>
+          <div>
+            using
+            {' '}
+            {user.authProvider === 'google.com'
+              ? 'Google authentication'
+              : 'your email and password'}
+          </div>
+        </div>
         <form className="change-displayname">
           <label htmlFor="displayname">
             Posting as:

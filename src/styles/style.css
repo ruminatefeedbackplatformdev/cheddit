@@ -108,9 +108,9 @@ textarea:invalid {
 }
 
 .dashboard .change-displayname {
+  align-items: flex-start;
   display: flex;
   flex-direction: column;
-  width: 300px;
 }
 
 .dashboard .change-displayname label {

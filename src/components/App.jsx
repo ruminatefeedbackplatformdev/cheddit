@@ -65,16 +65,20 @@ export default function App() {
           });
           // then set the local state accordingly
           setUser({
+            authProvider: authUser.providerData[0].providerId,
             boards: [],
             displayName: authUser.displayName,
+            email: authUser.email,
             photoURL: authUser.photoURL,
             uid: authUser.uid,
           });
         } else {
           // otherwise just load up the info we need from firebase
           setUser({
+            authProvider: authUser.providerData[0].providerId,
             boards: await getOwnedBoards(authUser),
             displayName: await getDisplayName(authUser),
+            email: authUser.email,
             photoURL: authUser.photoURL,
             uid: authUser.uid,
           });
