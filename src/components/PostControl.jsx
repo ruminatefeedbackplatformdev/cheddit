@@ -129,19 +129,31 @@ export default function PostControl({
   };
 
   const makeSticky = async () => {
-    // will keep the thread at the top of the board
-    const boardRef = doc(database, 'boards', board);
-    await updateDoc(boardRef, {
-      [`posts.${number}.isSticky`]: true,
-    });
+    try {
+      // will keep the thread at the top of the board
+      const boardRef = doc(database, 'boards', board);
+      await updateDoc(boardRef, {
+        [`posts.${number}.isSticky`]: true,
+      });
+    } catch (err) {
+      console.error(err);
+      const { code } = { ...err };
+      setError(code);
+    }
   };
 
   const unStick = async () => {
-    // go back to normal thread sorting
-    const boardRef = doc(database, 'boards', board);
-    await updateDoc(boardRef, {
-      [`posts.${number}.isSticky`]: false,
-    });
+    try {
+      // go back to normal thread sorting
+      const boardRef = doc(database, 'boards', board);
+      await updateDoc(boardRef, {
+        [`posts.${number}.isSticky`]: false,
+      });
+    } catch (err) {
+      console.error(err);
+      const { code } = { ...err };
+      setError(code);
+    }
   };
 
   if (number === thread) {
