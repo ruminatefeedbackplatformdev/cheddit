@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { doc, setDoc } from 'firebase/firestore';
-import database from '../util/firestore';
+import { getAuth, updateProfile } from 'firebase/auth';
 import Login from './Login';
 import UserBoards from './UserBoards';
 import UserThreads from './UserThreads';
@@ -48,9 +47,11 @@ export default function Dashboard({ boards, setUser, user }) {
         displayName,
       });
 
-      // and then update the database accordingly
-      const userRef = doc(database, 'users', user.uid);
-      setDoc(userRef, { displayName }, { merge: true });
+      // then update the auth info
+      const auth = getAuth();
+      updateProfile(auth.currentUser, {
+        displayName,
+      });
     } catch (err) {
       console.error(err);
       const { code } = { ...err };
@@ -75,7 +76,6 @@ export default function Dashboard({ boards, setUser, user }) {
         <div>
           <div>
             Logged in with
-            {' '}
             {user.email}
           </div>
           <div>

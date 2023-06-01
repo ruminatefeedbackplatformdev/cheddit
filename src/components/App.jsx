@@ -3,7 +3,6 @@ import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import {
   collection,
   doc,
-  getDoc,
   getDocs,
   onSnapshot,
   query,
@@ -41,12 +40,6 @@ async function getOwnedBoards(user) {
   return boards;
 }
 
-async function getDisplayName(user) {
-  const userRef = doc(database, 'users', user.uid);
-  const userSnap = await getDoc(userRef);
-  return userSnap.data().displayName;
-}
-
 export default function App() {
   const [boards, setBoards] = useState([]);
   const [user, setUser] = useState(null);
@@ -61,7 +54,8 @@ export default function App() {
         if (await checkIfNewUser(authUser)) {
           // create their document in firestore if so
           await setDoc(doc(database, 'users', authUser.uid), {
-            displayName: authUser.displayName,
+            authProvider: authUser.providerData[0].providerId,
+            email: authUser.email,
           });
           // then set the local state accordingly
           setUser({
@@ -77,7 +71,7 @@ export default function App() {
           setUser({
             authProvider: authUser.providerData[0].providerId,
             boards: await getOwnedBoards(authUser),
-            displayName: await getDisplayName(authUser),
+            displayName: authUser.displayName,
             email: authUser.email,
             photoURL: authUser.photoURL,
             uid: authUser.uid,
