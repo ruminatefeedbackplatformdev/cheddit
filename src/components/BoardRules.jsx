@@ -100,7 +100,7 @@ export default function BoardRules({ board, user }) {
     <div>
       <h2>
         {`/${board.id}/ - ${board.name}`}
-        {board.owner === user.uid ? (
+        {user && user.uid === board.owner ? (
           <button hidden={editing} onClick={toggleEdit} type="button">
             Edit Rules
           </button>
