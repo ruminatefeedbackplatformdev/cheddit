@@ -15,14 +15,6 @@ import Header from './Header';
 import RouteSwitch from './RouteSwitch';
 import Footer from './Footer';
 
-async function createNewUserDoc(user) {
-  // give 'em some empty fields on their first login
-  await setDoc(doc(database, 'users', user.uid), {
-    displayName: user.displayName,
-    threads: {},
-  });
-}
-
 async function checkIfNewUser(user) {
   // create user document in firestore if this is their first login
   const querySnapshot = await getDocs(collection(database, 'users'));
@@ -67,15 +59,26 @@ export default function App() {
       if (authUser) {
         // new user?
         if (await checkIfNewUser(authUser)) {
-          await createNewUserDoc(authUser);
+          // create their document in firestore if so
+          await setDoc(doc(database, 'users', authUser.uid), {
+            displayName: authUser.displayName,
+          });
+          // then set the local state accordingly
+          setUser({
+            boards: [],
+            displayName: authUser.displayName,
+            photoURL: authUser.photoURL,
+            uid: authUser.uid,
+          });
+        } else {
+          // otherwise just load up the info we need from firebase
+          setUser({
+            boards: await getOwnedBoards(authUser),
+            displayName: await getDisplayName(authUser),
+            photoURL: authUser.photoURL,
+            uid: authUser.uid,
+          });
         }
-        // just load up the info we need from firebase
-        setUser({
-          boards: await getOwnedBoards(authUser),
-          displayName: await getDisplayName(authUser),
-          photoURL: authUser.photoURL,
-          uid: authUser.uid,
-        });
       } else {
         // nobody is logged in
         setUser(null);
