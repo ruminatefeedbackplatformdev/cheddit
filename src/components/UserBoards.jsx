@@ -44,12 +44,8 @@ export default function UserBoards({ boards, setUser, user }) {
 
       // remove board from local state
       const userBoardsCopy = [...userBoards];
-      userBoardsCopy.forEach((userBoard) => {
-        if (userBoard.id === board) {
-          const index = userBoardsCopy.indexOf(board);
-          userBoardsCopy.splice(index, 1);
-        }
-      });
+      const index = userBoardsCopy.findIndex((element) => element.id === board);
+      userBoardsCopy.splice(index, 1);
       setUserBoards(userBoardsCopy);
       setUser({
         ...user,
