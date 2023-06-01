@@ -19,16 +19,13 @@ export default function Dashboard({ boards, setUser, user }) {
 
   useEffect(() => {
     if (user) {
-      if (displayName === user.displayName && validName) {
-        setValidName(false);
-        setError('new name must be different than current');
-      }
-      if (displayName !== user.displayName && !validName) {
-        setValidName(false);
+      if (!validName) {
         setError('Name must be between 1-20 characters');
       }
+      if (displayName === user.displayName && validName) {
+        setError('new name must be different than current');
+      }
       if (displayName !== user.displayName && validName) {
-        setValidName(true);
         setError(null);
       }
     }
@@ -100,7 +97,7 @@ export default function Dashboard({ boards, setUser, user }) {
             />
           </label>
           <button
-            disabled={!validName}
+            disabled={error || !validName}
             onClick={submitNameChange}
             type="button"
           >
