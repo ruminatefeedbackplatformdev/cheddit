@@ -61,7 +61,7 @@ export default function UserThreads({ user }) {
       setThreadSubjects(subjects);
     };
     loadFromDatabase();
-  }, []);
+  }, [user]);
 
   return (
     <div className="user-threads">
