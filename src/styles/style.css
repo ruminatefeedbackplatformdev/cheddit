@@ -108,8 +108,16 @@ header .account:hover {
   outline: 1px solid #001;
 }
 
+header .arrow {
+  transition: transform 300ms;
+}
+
+header .arrow.rotate {
+  transform: rotate(0.5turn);
+}
+
 header .current-location {
-  font-size: 1.1rem;
+  font-size: 1.05rem;
 }
 
 header .menu {

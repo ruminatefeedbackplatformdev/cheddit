@@ -100,9 +100,7 @@ export default function Header({ boards, setUser, user }) {
         <span className="header-loading">
           {user ? (
             <span>
-              {user === 'loading' ? (
-                null
-              ) : (
+              {user === 'loading' ? null : (
                 <Link onClick={blur} to="/dash/">
                   {user.displayName}
                 </Link>
@@ -118,7 +116,9 @@ export default function Header({ boards, setUser, user }) {
         {user && user !== 'loading' ? (
           <img referrerPolicy="no-referrer" src={determineUserImage()} alt="" />
         ) : null}
-        {user && user !== 'loading' ? '▼' : null}
+        {user && user !== 'loading' ? (
+          <span className={menuVisible ? 'arrow rotate' : 'arrow'}>▼</span>
+        ) : null}
         <div
           className={
             menuVisible && user && user !== 'loading' ? 'menu' : 'menu hidden'
