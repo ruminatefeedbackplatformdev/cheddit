@@ -15,6 +15,10 @@ body {
   line-height: 1.2;
 }
 
+button {
+  cursor: pointer;
+}
+
 button:disabled {
   background: #ffc6c9;
 }
@@ -37,6 +41,12 @@ header {
   position: sticky;
   top: 0;
   z-index: 9;
+}
+
+@media (max-width: 358px) {
+  header {
+    flex-direction: column;
+  }
 }
 
 header a,
@@ -96,6 +106,10 @@ header .account:focus,
 header .account:hover {
   cursor: pointer;
   outline: 1px solid #001;
+}
+
+header .current-location {
+  font-size: 1.1rem;
 }
 
 header .menu {

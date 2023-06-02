@@ -103,7 +103,7 @@ export default function App() {
 
   return (
     <div className="container">
-      <Header setUser={setUser} user={user} />
+      <Header boards={boards} setUser={setUser} user={user} />
       <RouteSwitch
         boards={boards}
         setBoards={setBoards}
