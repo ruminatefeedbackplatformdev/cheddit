@@ -11,6 +11,7 @@ a {
 body {
   background: #e6eafa;
   font-family: "Noto Sans", sans-serif;
+  font-size: 0.95rem;
   line-height: 1.2;
 }
 
@@ -30,7 +31,9 @@ header {
   background: #9988ee;
   display: flex;
   flex-wrap: wrap;
+  gap: 4px;
   justify-content: space-between;
+  padding: 4px;
   position: sticky;
   top: 0;
   z-index: 9;
@@ -38,7 +41,13 @@ header {
 
 header a,
 footer a {
-  color: #ffa;
+  color: #001;
+  text-decoration: none;
+}
+
+header a:hover,
+header a:focus {
+  font-weight: bold;
 }
 
 header nav {
@@ -47,13 +56,82 @@ header nav {
   gap: 8px;
 }
 
+header nav img {
+  height: 32px;
+}
+
+header nav > * {
+  align-items: center;
+  background: #d5c5f2;
+  display: flex;
+  gap: 8px;
+  padding: 0 12px 0 12px;
+}
+
+header nav > *:hover,
+header nav > *:focus {
+  outline: 1px solid #001;
+}
+
 header .account {
   align-items: center;
+  background: #d5c5f2;
   display: flex;
+  gap: 8px;
+  padding: 0px 8px 0px 8px;
+  position: relative;
+  text-decoration: none;
+}
+
+header .login {
+  padding: 6px 12px 6px 12px;
 }
 
 header .account img {
-  height: 32px;
+  height: 30px;
+  margin: 2px;
+}
+
+header .account:focus,
+header .account:hover {
+  cursor: pointer;
+  outline: 1px solid #001;
+}
+
+header .menu {
+  background: #d5c5f2;
+  gap: 16px;
+  left: 0;
+  outline: 1px solid #001;
+  padding: 4px 8px 4px 8px;
+  position: absolute;
+  top: 35px;
+  width: 100%;
+}
+
+header .menu button {
+  background: none;
+  border: none;
+  font-size: 0.95rem;
+  outline: none;
+  padding: 0;
+}
+
+header .menu button:hover,
+header .menu button:focus {
+  cursor: pointer;
+  font-weight: bold;
+}
+
+header .menu.hidden {
+  display: none;
+}
+
+header .menu ul {
+  align-items: flex-start;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 input,
