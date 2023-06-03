@@ -117,7 +117,7 @@ export default function Header({ boards, setUser, user }) {
           <img referrerPolicy="no-referrer" src={determineUserImage()} alt="" />
         ) : null}
         {user && user !== 'loading' ? (
-          <span className={menuVisible ? 'arrow rotate' : 'arrow'}>▼</span>
+          <span className={!menuVisible ? 'arrow rotate' : 'arrow'}>▼</span>
         ) : null}
         <div
           className={

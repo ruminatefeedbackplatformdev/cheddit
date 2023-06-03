@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Disclaimer from './Disclaimer';
+import hourglass from '../images/loading.gif';
 
 export default function Home({ boards }) {
   const [agreed, setAgreed] = useState(localStorage.getItem('disclaimer'));
@@ -22,6 +23,7 @@ export default function Home({ boards }) {
         setAgreed={setAgreed}
         setVisible={setVisible}
       />
+      <h1>What is Cheddit?</h1>
       <div className="site-info">
         <p>
           Cheddit is yet another imageboard site, where you can create and
@@ -37,6 +39,7 @@ export default function Home({ boards }) {
           before posting.
         </p>
       </div>
+      <h1>Boards</h1>
       <div className="boards">
         {boards.length ? (
           boards.map((board) => (
@@ -50,7 +53,10 @@ export default function Home({ boards }) {
             </Link>
           ))
         ) : (
-          <span>Loading boards...</span>
+          <span className="home-loading">
+            Loading boards...
+            <img alt="" src={hourglass} />
+          </span>
         )}
       </div>
     </div>

@@ -9,7 +9,7 @@ a {
 }
 
 body {
-  background: #e6eafa;
+  background: #ccc;
   font-family: "Noto Sans", sans-serif;
   font-size: 0.95rem;
   line-height: 1.2;
@@ -113,7 +113,7 @@ header .arrow {
 }
 
 header .arrow.rotate {
-  transform: rotate(0.5turn);
+  transform: rotate(-0.25turn);
 }
 
 header .current-location {
@@ -122,6 +122,7 @@ header .current-location {
 
 header .menu {
   background: #d5c5f2;
+  box-shadow: 0 4px 4px #aaa;
   gap: 16px;
   left: 0;
   outline: 1px solid #001;
@@ -191,10 +192,16 @@ textarea:invalid {
   margin-left: 32px;
 }
 
-.boards {
+.boards,
+.site-info {
   display: flex;
   flex-wrap: wrap;
+  flex-direction: column;
   gap: 16px;
+  padding: 4px;
+}
+
+.boards {
 }
 
 .button.hidden {
@@ -202,8 +209,12 @@ textarea:invalid {
 }
 
 .container {
+  background: #e6eafa;
+  box-shadow: 0 4px 4px 4px #aaa;
   display: grid;
   grid-template-rows: auto 1fr 32px;
+  margin: auto;
+  max-width: 900px;
   min-height: 100vh;
 }
 
@@ -219,7 +230,8 @@ textarea:invalid {
 }
 
 .dashboard-loading,
-.header-loading {
+.header-loading,
+.home-loading {
   align-items: center;
   display: flex;
   gap: 8px;
@@ -261,7 +273,15 @@ textarea:invalid {
 .home {
   display: flex;
   flex-direction: column;
-  gap: 32px;
+  gap: 8px;
+}
+
+.home h1 {
+  background: #c5ccf2;
+  font-size: 1.05rem;
+  padding: 4px;
+  text-align: center;
+  width: 100%;
 }
 
 .login form,
@@ -447,7 +467,8 @@ textarea:invalid {
 .thread-form .loading img,
 .dashboard-loading img,
 .invalid-route .loading img,
-.user-boards .loading img {
+.user-boards .loading img,
+.home .home-loading img{
   height: 32px;
 }
 
@@ -503,12 +524,6 @@ ol {
 
 ol > li::marker {
   font-weight: bold;
-}
-
-.site-info {
-  display: flex;
-  flex-direction: column;
-  gap: 32px;
 }
 
 .thread,
