@@ -149,7 +149,7 @@ header .current-location {
 
 header .menu {
   background: var(--light-purple);
-  box-shadow: 0 4px 4px #aaa;
+  box-shadow: 0 2px 4px #ccc;
   gap: 16px;
   left: 0;
   outline: 1px solid #001;
@@ -281,7 +281,7 @@ textarea:invalid {
 .disclaimer {
   align-items: flex-start;
   background: var(--medium-blue);
-  box-shadow: 0 2px 4px rgba(128, 128, 128, 0.5);
+  box-shadow: 0 2px 4px #ccc;
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -290,7 +290,7 @@ textarea:invalid {
 
 .disclaimer h2 {
   background: var(--dark-red);
-  color: var(---white-text);
+  color: var(--white-text);
   font-size: 1.2rem;
   font-weight: bold;
   text-align: center;
@@ -300,6 +300,22 @@ textarea:invalid {
 .disclaimer.hidden {
   display: none;
   visibility: hidden;
+}
+
+.disclaimer-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.disclaimer-buttons button {
+  width: 150px;
+}
+
+.disclaimer-content {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 4px;
 }
 
 .error {
@@ -315,6 +331,7 @@ textarea:invalid {
   display: flex;
   flex-direction: column;
   gap: 8px;
+  position: relative;
 }
 
 .home h1,
@@ -599,8 +616,6 @@ ol {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  margin-left: 16px;
-  margin-right: 16px;
   list-style: decimal inside;
 }
 
