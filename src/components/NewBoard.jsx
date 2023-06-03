@@ -20,22 +20,22 @@ export default function NewBoard({
 
   useEffect(() => {
     if (boardID === '' && boardName === '') {
-      setError('board ID and name required');
+      setError('Board ID and name required');
     }
     if (validID && boardName === '') {
-      setError('board name required');
+      setError('Board name required');
     }
     if (validName && boardID === '') {
-      setError('board ID required');
+      setError('Board ID required');
     }
     if (!validID && boardID !== '') {
-      setError('invalid ID (1-5 lowercase letters only)');
+      setError('Invalid ID (1-5 lowercase letters only)');
     }
     if (validID && validName) {
       if (validRules) {
         setError(null);
       } else {
-        setError('no blank rules');
+        setError('No blank rules');
       }
     }
   }, [boardID, boardName, boardRules]);
@@ -129,10 +129,7 @@ export default function NewBoard({
 
   const submitForm = async () => {
     try {
-      const restrictedIDs = [
-        'dash',
-        'rules',
-      ];
+      const restrictedIDs = ['dash', 'rules'];
 
       if (
         boardID.length >= 1
@@ -187,7 +184,7 @@ export default function NewBoard({
     <form
       className={enabled ? 'new-board-form visible' : 'new-board-form hidden'}
     >
-      <h2>New Board:</h2>
+      <h2>New Board</h2>
       <label htmlFor="new-board-id">
         Board ID:
         <input
@@ -200,10 +197,10 @@ export default function NewBoard({
           type="text"
           value={boardID}
         />
-        <span>1-5 lowercase letters</span>
+        <span className="description">1-5 lowercase letters</span>
       </label>
       <label htmlFor="new-board-name">
-        Board Name:
+        Board name:
         <input
           type="text"
           id="new-board-name"
@@ -213,11 +210,12 @@ export default function NewBoard({
           required
           value={boardName}
         />
-        <span>a title for your board</span>
+        <span className="description">a title for your board</span>
       </label>
-      <span className={error ? 'error' : 'error hidden'}>{error}</span>
       <h3>Board Rules:</h3>
-      <span>(optional - global rules always apply)</span>
+      <span className="description">
+        (optional - global rules always apply)
+      </span>
       {boardRules.map((rule) => (
         <label
           htmlFor={`new-board-rule#${rule.id}`}
@@ -237,20 +235,26 @@ export default function NewBoard({
           </button>
         </label>
       ))}
-
-      <button onClick={addRule} type="button">
-        Add Rule
+      <button className="add-rule-button" onClick={addRule} type="button">
+        Add rule
       </button>
-      <button
-        disabled={error || !validID || !validName || !validRules}
-        onClick={submitForm}
-        type="button"
-      >
-        Submit
-      </button>
-      <button onClick={cancel} type="button">
-        Cancel
-      </button>
+      <div>
+        <span className={error ? 'error' : 'error hidden'}>
+          {error || 'error'}
+        </span>
+        <div>
+          <button
+            disabled={error || !validID || !validName || !validRules}
+            onClick={submitForm}
+            type="button"
+          >
+            Submit
+          </button>
+          <button onClick={cancel} type="button">
+            Cancel
+          </button>
+        </div>
+      </div>
     </form>
   );
 }

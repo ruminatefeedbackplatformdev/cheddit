@@ -1,11 +1,25 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap');
 
+:root {
+  --dark-blue: #98e;
+  --dark-purple: #c4aaf2;
+  --dark-red: #da2834;
+  --greentext: #789922;
+  --light-blue: #d6daf0;
+  --light-green: #c9ffc6;
+  --light-purple: #d5c5f2;
+  --light-red: #ffc6c9;
+  --lightest-blue: #e6eafa;
+  --medium-blue: #c5ccf2;
+  --white-text: #eee;
+}
+
 * {
   box-sizing: border-box;
 }
 
 a {
-  color: #da2834;
+  color: var(--dark-red);
 }
 
 body {
@@ -16,23 +30,36 @@ body {
 }
 
 button {
+  background: var(--dark-purple);
+  border: none;
   cursor: pointer;
+  font-size: 0.95rem;
+  padding: 4px 8px 4px 8px;
 }
 
 button:disabled {
-  background: #ffc6c9;
+  background: var(--light-red);
+}
+
+button:disabled:hover {
+  outline: none;
+}
+
+button:focus,
+button:hover {
+  outline: 1px solid #001;
 }
 
 footer {
   align-items: center;
-  background: #9988ee;
+  background: var(--dark-blue);
   display: flex;
   justify-content: center;
 }
 
 header {
   align-items: center;
-  background: #9988ee;
+  background: var(--dark-blue);
   display: flex;
   flex-wrap: wrap;
   gap: 4px;
@@ -72,7 +99,7 @@ header nav img {
 
 header nav > * {
   align-items: center;
-  background: #d5c5f2;
+  background: var(--light-purple);
   display: flex;
   gap: 8px;
   padding: 0 12px 0 12px;
@@ -85,7 +112,7 @@ header nav > *:focus {
 
 header .account {
   align-items: center;
-  background: #d5c5f2;
+  background: var(--light-purple);
   display: flex;
   gap: 8px;
   padding: 0px 8px 0px 8px;
@@ -121,7 +148,7 @@ header .current-location {
 }
 
 header .menu {
-  background: #d5c5f2;
+  background: var(--light-purple);
   box-shadow: 0 4px 4px #aaa;
   gap: 16px;
   left: 0;
@@ -158,7 +185,6 @@ header .menu ul {
 }
 
 input,
-button,
 textarea {
   border: 2px solid #ccc;
   font-size: 1rem;
@@ -166,16 +192,13 @@ textarea {
 }
 
 input:focus,
-button:focus,
-button:hover,
 textarea:focus {
-  border: 2px solid #98e;
+  border: 2px solid var(--dark-blue);
 }
 
 input:invalid,
-button:disabled,
 textarea:invalid {
-  border: 2px solid #ffc6c9;
+  border: 2px solid var(--light-red);
 }
 
 .board {
@@ -201,15 +224,12 @@ textarea:invalid {
   padding: 4px;
 }
 
-.boards {
-}
-
 .button.hidden {
-  visibility: hidden;
+  display: none;
 }
 
 .container {
-  background: #e6eafa;
+  background: var(--lightest-blue);
   box-shadow: 0 4px 4px 4px #aaa;
   display: grid;
   grid-template-rows: auto 1fr 32px;
@@ -218,15 +238,36 @@ textarea:invalid {
   min-height: 100vh;
 }
 
+.dashboard .auth-info {
+  padding: 4px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
 .dashboard .change-displayname {
   align-items: flex-start;
   display: flex;
   flex-direction: column;
+  padding: 4px;
 }
 
 .dashboard .change-displayname label {
   display: flex;
   flex-direction: column;
+  max-width: 300px;
+  width: 100%;
+}
+
+.dashboard .change-displayname button {
+  width: 146px;
+}
+
+.dashboard .error {
+  max-width: 300px;
+  height: auto;
+  padding: 4px 8px 4px 8px;
+  width: 100%;
 }
 
 .dashboard-loading,
@@ -239,7 +280,7 @@ textarea:invalid {
 
 .disclaimer {
   align-items: flex-start;
-  background: #c5ccf2;
+  background: var(--medium-blue);
   box-shadow: 0 2px 4px rgba(128, 128, 128, 0.5);
   display: flex;
   flex-direction: column;
@@ -248,8 +289,8 @@ textarea:invalid {
 }
 
 .disclaimer h2 {
-  background: #da2834;
-  color: #eee;
+  background: var(--dark-red);
+  color: var(---white-text);
   font-size: 1.2rem;
   font-weight: bold;
   text-align: center;
@@ -262,7 +303,7 @@ textarea:invalid {
 }
 
 .error {
-  background: #ffc6c9;
+  background: var(--light-red);
   height: 1.2rem;
 }
 
@@ -276,8 +317,9 @@ textarea:invalid {
   gap: 8px;
 }
 
-.home h1 {
-  background: #c5ccf2;
+.home h1,
+.dashboard h1 {
+  background: var(--medium-blue);
   font-size: 1.05rem;
   padding: 4px;
   text-align: center;
@@ -292,7 +334,17 @@ textarea:invalid {
 } 
 
 .new-board-form {
-  gap: 4px;
+  align-items: flex-start;
+  background: var(--light-blue);
+  box-shadow: 0 2px 4px #ccc;
+  gap: 8px;
+  padding: 4px;
+  width: 100%;
+}
+
+.new-board-form h2 {
+  font-size: 1rem;
+  font-weight: bold;
 }
 
 .new-board-form.hidden {
@@ -305,14 +357,44 @@ textarea:invalid {
   visibility: visible;
 }
 
+.new-board-form .add-rule-button {
+  width: 146px;
+}
+
 .new-board-form,
 .new-board-form label {
   display: flex;
   flex-direction: column;
 }
 
+.new-board-form label {
+  max-width: 300px;
+  width: 100%;
+}
+
+.new-board-form .description {
+  font-style: italic;
+}
+
+.new-board-form > div:last-child {
+  display: flex;
+  flex-direction: column;
+  max-width: 300px;
+  width: 100%;
+}
+
+.new-board-form > div:last-child div {
+  align-items: center;
+  display: flex;
+  gap: 8px;
+}
+
+.new-board-form > div:last-child button {
+  width: 50%;
+}
+
 .post {
-  background: #c5ccf2;
+  background: var(--medium-blue);
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -326,7 +408,7 @@ textarea:invalid {
 
 .post .mod-info {
   align-items: center;
-  color: #da2834;
+  color: var(--dark-red);
   display: flex;
   font-weight: bold;
   gap: 4px;
@@ -343,7 +425,7 @@ textarea:invalid {
 }
 
 .post .greentext {
-  color: #789922;
+  color: var(--greentext);
 }
 
 .post .linked-posts {
@@ -354,7 +436,7 @@ textarea:invalid {
 .post .sticky-info {
   align-items: center;
   color: #ffe;
-  background: #da2834;
+  background: var(--dark-red);
   display: flex;
   gap: 16px;
   justify-content: center;
@@ -377,11 +459,11 @@ textarea:invalid {
 }
 
 .post.reply {
-  background: #d6daf0;
+  background: var(--light-blue);
 }
 
 .post.sticky {
-  background: #d5c5f2;
+  background: var(--light-purple);
 }
 
 .post [aria-label="post content"] {
@@ -427,7 +509,7 @@ textarea:invalid {
 .reply-container,
 .new-thread-container {
   align-items: flex-start;
-  background: #e6eafa;
+  background: var(--lightest-blue);
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -534,15 +616,78 @@ ol > li::marker {
   position: relative;
 }
 
+.user-board {
+  align-items: flex-start;
+  display: flex;
+  flex-direction: column;
+  max-width: 300px;
+  width: 100%;
+}
+
+.user-board > span:first-child {
+  align-items: center;
+  display: flex;
+  gap: 8px;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.user-board .confirm {
+  width: 100%;
+}
+
+.user-board .confirm .confirm-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.user-board .confirm .confirm-buttons button {
+  width: 50%;
+}
+
+.user-board .confirm .confirm-buttons .confirm-delete {
+  color: var(--white-text);
+  background: var(--dark-red);
+}
+
+.user-board .confirm.hidden {
+  display: none;
+}
+
+.user-board .delete-icon {
+  border: none;
+  background: var(--dark-purple);
+  height: 32px;
+}
+
+.user-board .delete-icon.hidden {
+  visibility: hidden;
+}
+
+.user-board .delete-icon:hover,
+.user-board .delete-icon:focus {
+  outline: 1px solid #001;
+}
+
 .user-boards,
 .user-threads,
 .user-posts {
   align-items: flex-start;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 4px;
+  padding: 4px;
+}
+
+.user-threads,
+.user-posts {
+  gap: 16px;
+}
+
+.user-boards button:first-child {
+  width: 146px;
 }
 
 .valid {
-  background: #c9ffc6;
+  background: var(--light-green);
 }

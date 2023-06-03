@@ -60,33 +60,8 @@ export default function UserBoards({ boards, setUser, user }) {
   };
 
   return (
-    <div className="user-boards">
-      <h2>Your Boards</h2>
-      {userBoards.map((board) => (
-        <div key={`ub-${board.id}`}>
-          <UserBoard
-            board={board}
-            deleteBoard={deleteBoard}
-            loading={loading}
-          />
-          <span className="error" hidden={!error}>
-            Error
-          </span>
-        </div>
-      ))}
-      {loading ? (
-        <span className="loading">
-          Loading...
-          <img alt="" src={hourglass} />
-        </span>
-      ) : null}
-      <button
-        className={enabled ? 'button hidden' : 'button visible'}
-        onClick={enableForm}
-        type="button"
-      >
-        ADD NEW BOARD
-      </button>
+    <div>
+      <h1>Your Boards</h1>
       <NewBoard
         boards={boards}
         enabled={enabled}
@@ -94,6 +69,32 @@ export default function UserBoards({ boards, setUser, user }) {
         setUser={setUser}
         user={user}
       />
+      <div className="user-boards">
+        <button
+          className={enabled ? 'button hidden' : 'button visible'}
+          onClick={enableForm}
+          type="button"
+        >
+          Add new board
+        </button>
+        <span className="error" hidden={!error}>
+          Error
+        </span>
+        {userBoards.map((board) => (
+          <UserBoard
+            board={board}
+            deleteBoard={deleteBoard}
+            loading={loading}
+            key={`ub-${board.id}`}
+          />
+        ))}
+        {loading ? (
+          <span className="loading">
+            Loading...
+            <img alt="" src={hourglass} />
+          </span>
+        ) : null}
+      </div>
     </div>
   );
 }

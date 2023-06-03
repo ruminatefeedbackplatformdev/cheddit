@@ -38,16 +38,18 @@ export default function UserPosts({ boards, user }) {
   };
 
   return (
-    <div className="user-posts">
-      <h2>Your Posts</h2>
-      {boardsWithPosts.map((board) => posts[board].map((post) => (
-        <Link
-          key={`${board}_t${post.thread}#${post.number}`}
-          to={`/${board}_t${post.thread}#${post.number}`}
-        >
-          {`/${board}/ - #${post.number} (${shortenPostContent(post.content)})`}
-        </Link>
-      )))}
+    <div>
+      <h1>Your Posts</h1>
+      <div className="user-posts">
+        {boardsWithPosts.map((board) => posts[board].map((post) => (
+          <Link
+            key={`${board}_t${post.thread}#${post.number}`}
+            to={`/${board}_t${post.thread}#${post.number}`}
+          >
+            {`/${board}/ - #${post.number} (${shortenPostContent(post.content)})`}
+          </Link>
+        )))}
+      </div>
     </div>
   );
 }

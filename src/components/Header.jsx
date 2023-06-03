@@ -100,11 +100,7 @@ export default function Header({ boards, setUser, user }) {
         <span className="header-loading">
           {user ? (
             <span>
-              {user === 'loading' ? null : (
-                <Link onClick={blur} to="/dash/">
-                  {user.displayName}
-                </Link>
-              )}
+              {user === 'loading' ? null : user.displayName}
             </span>
           ) : (
             <Link className="login" onClick={blur} to="/dash">

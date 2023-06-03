@@ -19,11 +19,11 @@ export default function Dashboard({ boards, setUser, user }) {
 
   useEffect(() => {
     if (user) {
-      if (!validName) {
-        setError('Name must be between 1-20 characters');
+      if (displayName === '') {
+        setError('Name required');
       }
-      if (displayName === user.displayName && validName) {
-        setError('new name must be different than current');
+      if (displayName !== '' && !validName) {
+        setError('20 character limit');
       }
       if (displayName !== user.displayName && validName) {
         setError(null);
@@ -36,7 +36,8 @@ export default function Dashboard({ boards, setUser, user }) {
     setValidName(event.target.validity.valid);
   };
 
-  const submitNameChange = () => {
+  const submitNameChange = (event) => {
+    event.target.blur();
     try {
       // change local user state
       setUser({
@@ -70,19 +71,18 @@ export default function Dashboard({ boards, setUser, user }) {
     return (
       <div className="dashboard">
         <h1>{`Welcome ${user.displayName}`}</h1>
-        <div>
+        <div className="auth-info">
           <div>
-            Logged in with
-            {user.email}
+            {`Logged in with ${user.email},`}
+            {' '}
           </div>
           <div>
-            using
-            {' '}
             {user.authProvider === 'google.com'
-              ? 'Google authentication'
-              : 'your email and password'}
+              ? 'using Google authentication.'
+              : 'using your email and password.'}
           </div>
         </div>
+        <h1>Identity</h1>
         <form className="change-displayname">
           <label htmlFor="displayname">
             Posting as:
@@ -96,6 +96,9 @@ export default function Dashboard({ boards, setUser, user }) {
               value={displayName || ''}
             />
           </label>
+          <span className={error ? 'error' : 'error hidden'}>
+            {error || 'error'}
+          </span>
           <button
             disabled={error || !validName}
             onClick={submitNameChange}
@@ -103,7 +106,6 @@ export default function Dashboard({ boards, setUser, user }) {
           >
             Change Name
           </button>
-          <span className={error ? 'error' : 'error hidden'}>{error}</span>
         </form>
         <UserBoards boards={boards} user={user} setUser={setUser} />
         <UserThreads user={user} />

@@ -64,15 +64,17 @@ export default function UserThreads({ user }) {
   }, [user]);
 
   return (
-    <div className="user-threads">
-      <h2>Your Threads</h2>
-      {Object.keys(threads).map((board) => threads[board].map((thread) => (
-        <Link key={`ut-${board}t${thread}`} to={`/${board}_t${thread}`}>
-          {`/${board}/ - #${thread} (${
-            threadSubjects ? threadSubjects[board][thread] : null
-          })`}
-        </Link>
-      )))}
+    <div>
+      <h1>Your Threads</h1>
+      <div className="user-threads">
+        {Object.keys(threads).map((board) => threads[board].map((thread) => (
+          <Link key={`ut-${board}t${thread}`} to={`/${board}_t${thread}`}>
+            {`/${board}/ - #${thread} (${
+              threadSubjects ? threadSubjects[board][thread] : null
+            })`}
+          </Link>
+        )))}
+      </div>
     </div>
   );
 }

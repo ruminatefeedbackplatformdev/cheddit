@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import deleteIcon from '../images/delete.svg';
 
 export default function UserBoard({ board, deleteBoard, loading }) {
   const [confirming, setConfirming] = useState(false);
@@ -9,31 +10,40 @@ export default function UserBoard({ board, deleteBoard, loading }) {
   };
 
   return (
-    <span className="user-board">
-      <Link to={`/${board.id}`}>{`/${board.id}/ - ${board.name}`}</Link>
+    <div className="user-board">
+      <span>
+        <Link to={`/${board.id}`}>{`/${board.id}/ - ${board.name}`}</Link>
+        {!loading ? (
+          <input
+            aria-label="delete board"
+            className={confirming ? 'delete-icon hidden' : 'delete-icon'}
+            onClick={toggleConfirm}
+            src={deleteIcon}
+            type="image"
+          />
+        ) : null}
+      </span>
       {!loading ? (
-        <button hidden={confirming} onClick={toggleConfirm} type="button">
-          Delete Board
-        </button>
-      ) : null}
-      {!loading ? (
-        <div>
-          <div className="error" hidden={!confirming}>
-            Are you sure? All posts will be lost forever!
+        <div className={confirming ? 'confirm' : 'confirm hidden'}>
+          <div className="error">
+            You sure? Posts will be gone forever!
           </div>
-          <button
-            data-board={board.id}
-            hidden={!confirming}
-            onClick={deleteBoard}
-            type="button"
-          >
-            Confirm Delete
-          </button>
-          <button hidden={!confirming} onClick={toggleConfirm} type="button">
-            Cancel
-          </button>
+          <div className="confirm-buttons">
+            <button
+              className="confirm-delete"
+              data-board={board.id}
+              hidden={!confirming}
+              onClick={deleteBoard}
+              type="button"
+            >
+              {`Delete /${board.id}/`}
+            </button>
+            <button hidden={!confirming} onClick={toggleConfirm} type="button">
+              Cancel
+            </button>
+          </div>
         </div>
       ) : null}
-    </span>
+    </div>
   );
 }
