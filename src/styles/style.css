@@ -187,7 +187,8 @@ header .menu ul {
 input,
 textarea {
   border: 2px solid #ccc;
-  font-size: 1rem;
+  font-family: "Noto Sans", sans-serif;
+  font-size: 0.95rem;
   outline: none;
 }
 
@@ -335,11 +336,11 @@ textarea:invalid {
 }
 
 .home h1,
-.dashboard h1 {
+.dashboard h1,
+.rules h1 {
   background: var(--medium-blue);
   font-size: 1.05rem;
   padding: 4px;
-  text-align: center;
   width: 100%;
 }
 
@@ -577,15 +578,6 @@ textarea:invalid {
   width: 100%;
 }
 
-.reply-form input,
-.thread-form input,
-.reply-form textarea,
-.thread-form textarea,
-.dashboard textarea {
-  font-family: "Noto Sans", sans-serif;
-  font-size: 1rem;
-}
-
 .reply-form label,
 .thread-form label {
   display: flex;
@@ -593,30 +585,63 @@ textarea:invalid {
   gap: 4px;
 }
 
-.rules .global-rules,
-.rules .per-board-rules {
+.rules .board-rules,
+.rules .global-rules {
   display: flex;
   flex-direction: column;
   gap: 16px;
+  padding: 4px;
 }
 
-.rules h1 {
-  text-align: center;
-  font-size: 1.5rem;
-  font-weight: bold;
+.rules .per-board-rules h1 {
+  align-items: center;
+  display: flex;
+  gap: 16px;
 }
 
-.rules h2 {
-  text-align: center;
-  font-size: 1.2rem;
-  font-weight: bold;
+.rules .per-board-rules li {
+  display: list-item;
+  max-width: 300px;
+  width: 100%;
+}
+
+.rules .per-board-rules li button {
+  width: 100%;
+}
+
+.rules .per-board-rules li textarea {
+  width: 100%;
+}
+
+.rules .per-board-rules .delete-rule {
+  color: var(--white-text);
+  background: var(--dark-red);
+}
+
+.rules .per-board-rules .edit-rules-control {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 300px;
+  width: 100%;
+}
+
+.rules .per-board-rules .edit-rules-control > div {
+  display: flex;
+  gap: 8px;
+  max-width: 300px;
+  width: 100%;
+}
+
+.rules .per-board-rules .edit-rules-control > div button {
+  width: 50%;
 }
 
 ol {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  list-style: decimal inside;
+  padding: 16px;
 }
 
 ol > li::marker {

@@ -4,8 +4,8 @@ import BoardRules from './BoardRules';
 export default function Rules({ boards, user }) {
   return (
     <div className="rules">
+      <h1>Global Rules</h1>
       <div className="global-rules">
-        <h1>Global Rules</h1>
         <ol>
           <li>
             You will not upload, post, discuss, request, or link to anything
@@ -43,7 +43,6 @@ export default function Rules({ boards, user }) {
         </p>
       </div>
       <div className="per-board-rules">
-        <h1>Per-Board Rules</h1>
         {boards.map((board) => (
           <BoardRules board={board} key={`${board.id}-rules`} user={user} />
         ))}

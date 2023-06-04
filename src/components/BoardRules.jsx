@@ -98,84 +98,92 @@ export default function BoardRules({ board, user }) {
 
   return (
     <div>
-      <h2>
-        {`/${board.id}/ - ${board.name}`}
+      <h1>
         {user && user.uid === board.owner ? (
           <button hidden={editing} onClick={toggleEdit} type="button">
             Edit Rules
           </button>
         ) : null}
-      </h2>
-      {rules.length ? (
-        <ol>
-          {rules.map((rule) => {
-            if (editing) {
-              return (
-                <li key={`${board.id}-rule#${rule.id}`}>
-                  <textarea
-                    data-id={rule.id}
-                    onChange={editRule}
-                    value={rules[rules.indexOf(rule)].rule}
-                  />
-                  <button data-id={rule.id} onClick={deleteRule} type="button">
-                    Delete Rule
+        {`/${board.id}/ - ${board.name}`}
+      </h1>
+      <div className="board-rules">
+        {rules.length ? (
+          <ol>
+            {rules.map((rule) => {
+              if (editing) {
+                return (
+                  <li key={`${board.id}-rule#${rule.id}`}>
+                    <textarea
+                      data-id={rule.id}
+                      onChange={editRule}
+                      rows="3"
+                      value={rules[rules.indexOf(rule)].rule}
+                    />
+                    <button
+                      className="delete-rule"
+                      data-id={rule.id}
+                      onClick={deleteRule}
+                      type="button"
+                    >
+                      Delete Rule
+                    </button>
+                  </li>
+                );
+              }
+              return <li key={`${board.id}-rule#${rule.id}`}>{rule.rule}</li>;
+            })}
+            {editing ? (
+              <div className="edit-rules-control">
+                <button onClick={addRule} type="button">
+                  Add Rule
+                </button>
+                <div>
+                  <div className="error" hidden={!error}>
+                    <span>{error}</span>
+                  </div>
+                  <button
+                    disabled={error || !validRules}
+                    onClick={submitEdit}
+                    type="button"
+                  >
+                    Submit
                   </button>
-                </li>
-              );
-            }
-            return <li key={`${board.id}-rule#${rule.id}`}>{rule.rule}</li>;
-          })}
-          {editing ? (
-            <div>
-              <button onClick={addRule} type="button">
-                Add Rule
-              </button>
-              <div>
-                <div className="error" hidden={!error}>
-                  <span>{error}</span>
+                  <button onClick={cancelEdit} type="button">
+                    Cancel
+                  </button>
                 </div>
-                <button onClick={cancelEdit} type="button">
-                  Cancel
-                </button>
-                <button
-                  disabled={error || !validRules}
-                  onClick={submitEdit}
-                  type="button"
-                >
-                  Submit
-                </button>
               </div>
-            </div>
-          ) : null}
-        </ol>
-      ) : (
-        <ol>
-          {editing ? (
-            <div>
-              <button onClick={addRule} type="button">
-                Add Rule
-              </button>
-              <div>
-                <div className="error" hidden={!error}>
-                  <span>{error}</span>
+            ) : null}
+          </ol>
+        ) : (
+          <ol>
+            {editing ? (
+              <div className="edit-rules-control">
+                <button onClick={addRule} type="button">
+                  Add Rule
+                </button>
+                <div>
+                  <div className="error" hidden={!error}>
+                    <span>{error}</span>
+                  </div>
+                  <button
+                    disabled={error || !validRules}
+                    onClick={submitEdit}
+                    type="button"
+                  >
+                    Submit
+                  </button>
+                  <button onClick={cancelEdit} type="button">
+                    Cancel
+                  </button>
                 </div>
-                <button onClick={cancelEdit} type="button">
-                  Cancel
-                </button>
-                <button
-                  disabled={error || !validRules}
-                  onClick={submitEdit}
-                  type="button"
-                >
-                  Submit
-                </button>
               </div>
-            </div>
-          ) : (
-            <li>No additional rules - global rules still apply.</li>
-          )}
-        </ol>
-      )}
+            ) : (
+              <li>No additional rules - global rules still apply.</li>
+            )}
+          </ol>
+        )}
+      </div>
     </div>
   );
 }
