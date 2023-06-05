@@ -13,20 +13,28 @@ export default function None() {
 
   return (
     <div className="invalid-route">
-      {loading ? (
-        <span className="loading">
-          Loading...
-          <img src={hourglass} alt="" />
-        </span>
-      ) : (
-        <span>
-          Nothing to see here...perhaps you&apos;ve visited a bad link or
-          entered an invalid URL? Try heading back
-          {' '}
-          <Link to="/">home</Link>
-          .
-        </span>
-      )}
+      <h1>Invalid Route</h1>
+      <div>
+        {loading ? (
+          <div className="loading">
+            Loading...
+            <img src={hourglass} alt="" />
+          </div>
+        ) : (
+          <div className="invalid-message">
+            <div>
+              Nothing to see here... perhaps you&apos;ve visited a bad link or
+              entered an invalid URL?
+            </div>
+            <div>
+              Try heading back
+              {' '}
+              <Link to="/">home</Link>
+              .
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
