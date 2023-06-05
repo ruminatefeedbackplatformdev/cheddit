@@ -129,7 +129,7 @@ export default function NewBoard({
 
   const submitForm = async () => {
     try {
-      const restrictedIDs = ['dash', 'rules'];
+      const restrictedIDs = ['about', 'dash', 'rules'];
 
       if (
         boardID.length >= 1
