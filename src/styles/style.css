@@ -529,6 +529,18 @@ textarea:invalid {
   flex-direction: column;
 }
 
+.post-control {
+  align-items: flex-start;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.post-control .delete-confirm {
+  background: var(--dark-red);
+  color: var(--white-text);
+}
+
 .post-control .delete-post.hidden,
 .post-control .confirm.hidden {
   display: none;
@@ -540,6 +552,7 @@ textarea:invalid {
   align-items: flex-start;
   display: flex;
   flex-direction: column;
+  gap: 4px;
   visibility: visible;
 }
 

@@ -12,10 +12,7 @@ import { useNavigate } from 'react-router-dom';
 import database from '../util/firestore';
 
 export default function PostControl({
-  board,
-  isSticky,
-  number,
-  thread,
+  board, isSticky, number, thread,
 }) {
   const navigate = useNavigate();
 
@@ -173,25 +170,23 @@ export default function PostControl({
           onClick={promptConfirm}
           type="button"
         >
-          DELETE THREAD
+          Delete thread
         </button>
         <div className={confirming ? 'confirm visible' : 'confirm hidden'}>
-          <span className="error" hidden={!error}>{error}</span>
+          <span className="error" hidden={!error}>
+            {error}
+          </span>
           <button
             className="delete-confirm"
             onClick={deleteThread}
             type="button"
           >
-            CONFIRM DELETE
+            Confirm delete
           </button>
-          <button
-            className="delete-confirm"
-            onClick={cancelDelete}
-            type="button"
-          >
-            CANCEL
+          <button onClick={cancelDelete} type="button">
+            Cancel
           </button>
-          <span>
+          <span className="error">
             Are you sure? Threads and their posts cannot be recovered once
             deleted!
           </span>
@@ -206,17 +201,21 @@ export default function PostControl({
         onClick={promptConfirm}
         type="button"
       >
-        DELETE POST
+        Delete post
       </button>
       <div className={confirming ? 'confirm visible' : 'confirm hidden'}>
-        <span className="error" hidden={!error}>{error}</span>
+        <span className="error" hidden={!error}>
+          {error}
+        </span>
         <button className="delete-confirm" onClick={deletePost} type="button">
-          CONFIRM DELETE
+          Confirm delete
         </button>
-        <button className="delete-confirm" onClick={cancelDelete} type="button">
-          CANCEL
+        <button onClick={cancelDelete} type="button">
+          Cancel
         </button>
-        <span>Are you sure? Posts cannot be recovered once deleted!</span>
+        <span className="error">
+          Are you sure? Posts cannot be recovered once deleted!
+        </span>
       </div>
     </span>
   );
