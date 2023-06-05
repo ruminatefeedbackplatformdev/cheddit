@@ -314,6 +314,11 @@ textarea:invalid {
   gap: 8px;
 }
 
+.dashboard-loading,
+.home-loading {
+  padding: 4px;
+}
+
 .disclaimer {
   align-items: flex-start;
   background: var(--medium-blue);
@@ -625,7 +630,7 @@ textarea:invalid {
 .reply-container,
 .new-thread-container {
   align-items: flex-start;
-  background: var(--lightest-blue);
+  background: var(--light-blue);
   box-shadow: 0 2px 2px var(--medium-gray);
   display: flex;
   flex-direction: column;
