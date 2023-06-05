@@ -23,7 +23,7 @@ export default function Home({ boards }) {
         setAgreed={setAgreed}
         setVisible={setVisible}
       />
-      <h1>What is Cheddit?</h1>
+      <h1>Welcome</h1>
       <div className="site-info">
         <p>
           Cheddit is yet another imageboard site, where you can create and
