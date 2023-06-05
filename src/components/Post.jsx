@@ -54,7 +54,8 @@ export default function Post({
     }
   }, []);
 
-  const toggleExpandedImage = () => {
+  const toggleExpandedImage = (event) => {
+    event.target.blur();
     setExpanded(!expanded);
   };
 
@@ -117,12 +118,16 @@ export default function Post({
             [
             {replies.map((reply) => (
               <span key={`/${board}_${number}-${reply}`}>
-                <a
-                  key={`${number}-${reply}`}
-                  href={`#${reply}`}
-                >
-                  {`>>${reply}`}
-                </a>
+                {replies.indexOf(reply) === replies.length - 1 ? (
+                  <span>
+                    <a href={`#${reply}`}>{`>>${reply}`}</a>
+                  </span>
+                ) : (
+                  <span>
+                    <a href={`#${reply}`}>{`>>${reply}`}</a>
+                    ,
+                  </span>
+                )}
               </span>
             ))}
             ]

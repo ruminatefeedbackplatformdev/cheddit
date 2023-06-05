@@ -72,6 +72,16 @@ export default function Board({
   const [postCounts, setPostCounts] = useState({});
   const [threadReplies, setThreadReplies] = useState({});
 
+  const getThreadInfo = (count) => {
+    if (count === 1) {
+      return '1 post - ';
+    }
+    if (count <= 4) {
+      return `${count} posts - `;
+    }
+    return `${count} posts (${count - 4} hidden) - `;
+  };
+
   const sortSticky = (threadsToSort) => {
     // put the sticky threads first
     const sticky = [];
@@ -143,7 +153,7 @@ export default function Board({
   if (threads.length > 0) {
     return (
       <main className="board">
-        <h1>{`/${id}/ - ${name}`}</h1>
+        <h1>{`${name}`}</h1>
         <NewThread
           board={id}
           readDatabase={readDatabase}
@@ -151,32 +161,39 @@ export default function Board({
           user={user}
         />
         {threads.map((thread) => (
-          <div key={`board${id}-post#${thread.number}`}>
-            <Post
-              author={thread.author}
-              authorID={thread.authorID}
-              board={id}
-              content={thread.content}
-              image={thread.image}
-              isSticky={thread.isSticky}
-              number={thread.number}
-              replies={thread.replies}
-              setUser={setUser}
-              subject={thread.subject}
-              thread={thread.number}
-              thumb={thread.thumb}
-              time={thread.time}
-              user={user}
-            />
-            <span>
-              {`${postCounts[thread.number]} ${
-                postCounts[thread.number] === 1 ? 'post' : 'posts'
-              } - `}
-              <Link to={`/${id}_t${thread.number}`}>View thread</Link>
-            </span>
+          <div
+            className="thread-container"
+            key={`board${id}-post#${thread.number}`}
+          >
+            <div className="thread-op">
+              <Post
+                author={thread.author}
+                authorID={thread.authorID}
+                board={id}
+                content={thread.content}
+                image={thread.image}
+                isSticky={thread.isSticky}
+                number={thread.number}
+                replies={thread.replies}
+                setUser={setUser}
+                subject={thread.subject}
+                thread={thread.number}
+                thumb={thread.thumb}
+                time={thread.time}
+                user={user}
+              />
+              <span
+                className={
+                  thread.isSticky ? 'thread-info sticky' : 'thread-info'
+                }
+              >
+                {getThreadInfo(postCounts[thread.number])}
+                <Link to={`/${id}_t${thread.number}`}>View thread</Link>
+              </span>
+            </div>
             <div className="thread-replies">
               {threadReplies[+thread.number] !== undefined
-                && threadReplies[+thread.number] !== null
+              && threadReplies[+thread.number] !== null
                 ? Object.keys(threadReplies[+thread.number]).map(
                   (postNumber) => {
                     const post = threadReplies[+thread.number][postNumber];

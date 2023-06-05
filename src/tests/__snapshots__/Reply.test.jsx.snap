@@ -10,16 +10,6 @@ exports[`Reply component displays reply button 1`] = `
       class="reply-form"
     >
       <label
-        for="post-author"
-      >
-        Name:
-        <span
-          id="post-author"
-        >
-          Anonymous
-        </span>
-      </label>
-      <label
         for="post-content"
       >
         Comment:

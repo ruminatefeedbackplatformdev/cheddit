@@ -238,14 +238,6 @@ export default function Reply({
     return (
       <div className="reply-container">
         <form aria-label="reply form" className="reply-form">
-          <label htmlFor="post-author">
-            Name:
-            {user ? (
-              <span id="post-author">{postAuthor}</span>
-            ) : (
-              <span id="post-author">Anonymous</span>
-            )}
-          </label>
           <label htmlFor="post-content">
             Comment:
             <textarea

@@ -1,17 +1,22 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap');
 
 :root {
+  --black-text: #001;
   --dark-blue: #98e;
   --dark-purple: #c4aaf2;
   --dark-red: #da2834;
   --greentext: #789922;
   --light-blue: #d6daf0;
+  --light-gray: #ccc;
   --light-green: #c9ffc6;
   --light-purple: #d5c5f2;
   --light-red: #ffc6c9;
   --lightest-blue: #e6eafa;
   --medium-blue: #c5ccf2;
-  --white-text: #eee;
+  --medium-gray: #aaa;
+  --post-author-green: #117743;
+  --post-subject-blue: #0f1367;
+  --white-text: #eef;
 }
 
 * {
@@ -23,7 +28,7 @@ a {
 }
 
 body {
-  background: #ccc;
+  background: var(--light-gray);
   font-family: "Noto Sans", sans-serif;
   font-size: 0.95rem;
   line-height: 1.2;
@@ -47,7 +52,7 @@ button:disabled:hover {
 
 button:focus,
 button:hover {
-  outline: 1px solid #001;
+  outline: 1px solid var(--black-text);
 }
 
 footer {
@@ -78,7 +83,7 @@ header {
 
 header a,
 footer a {
-  color: #001;
+  color: var(--black-text);
   text-decoration: none;
 }
 
@@ -107,7 +112,7 @@ header nav > * {
 
 header nav > *:hover,
 header nav > *:focus {
-  outline: 1px solid #001;
+  outline: 1px solid var(--black-text);
 }
 
 header .account {
@@ -132,7 +137,7 @@ header .account img {
 header .account:focus,
 header .account:hover {
   cursor: pointer;
-  outline: 1px solid #001;
+  outline: 1px solid var(--black-text);
 }
 
 header .arrow {
@@ -149,10 +154,10 @@ header .current-location {
 
 header .menu {
   background: var(--light-purple);
-  box-shadow: 0 2px 4px #ccc;
+  box-shadow: 0 2px 4px var(--light-gray);
   gap: 16px;
   left: 0;
-  outline: 1px solid #001;
+  outline: 1px solid var(--black-text);
   padding: 4px 8px 4px 8px;
   position: absolute;
   top: 35px;
@@ -186,7 +191,7 @@ header .menu ul {
 
 input,
 textarea {
-  border: 2px solid #ccc;
+  border: 2px solid var(--light-gray);
   font-family: "Noto Sans", sans-serif;
   font-size: 0.95rem;
   outline: none;
@@ -204,16 +209,43 @@ textarea:invalid {
 
 .board {
   position: relative;
+  width: 100%;
+}
+
+.board h1 {
+  font-size: 1.15rem;
+  padding: 4px;
+}
+
+.board .thread-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.board .thread-container hr {
+  width: 100%;
+}
+
+.board .thread-info {
+  background: var(--medium-blue);
+  border-top: 1px solid var(--medium-gray);
+  padding: 4px 4px 4px 8px;
+}
+
+.board .thread-info.sticky {
+  background: var(--light-purple);
+}
+
+.board .thread-op {
+  display: flex;
+  flex-direction: column;
 }
 
 .board .thread-replies {
   display: flex;
   flex-direction: column;
   gap: 16px;
-}
-
-.board .thread-replies > article {
-  margin-left: 32px;
 }
 
 .boards,
@@ -231,7 +263,7 @@ textarea:invalid {
 
 .container {
   background: var(--lightest-blue);
-  box-shadow: 0 4px 4px 4px #aaa;
+  box-shadow: 0 4px 4px 4px var(--medium-gray);
   display: grid;
   grid-template-rows: auto 1fr 32px;
   margin: auto;
@@ -282,7 +314,7 @@ textarea:invalid {
 .disclaimer {
   align-items: flex-start;
   background: var(--medium-blue);
-  box-shadow: 0 2px 4px #ccc;
+  box-shadow: 0 2px 4px var(--light-gray);
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -354,7 +386,7 @@ textarea:invalid {
 .new-board-form {
   align-items: flex-start;
   background: var(--light-blue);
-  box-shadow: 0 2px 4px #ccc;
+  box-shadow: 0 2px 4px var(--light-gray);
   gap: 8px;
   padding: 4px;
   width: 100%;
@@ -421,7 +453,7 @@ textarea:invalid {
 }
 
 .post .mod-badge {
-  font-size: 1.4rem;
+  font-size: 1.2rem;
 }
 
 .post .mod-info {
@@ -433,8 +465,14 @@ textarea:invalid {
 }
 
 .post input {
+  border: none;
   height: auto;
   max-width: 100%;
+}
+
+.post input:focus,
+.post input:hover {
+  outline: 1px solid var(--black-text);
 }
 
 .post p {
@@ -448,12 +486,12 @@ textarea:invalid {
 
 .post .linked-posts {
   display: flex;
-  gap: 8px;
+  gap: 4px;
 }
 
 .post .sticky-info {
   align-items: center;
-  color: #ffe;
+  color: var(--white-text);
   background: var(--dark-red);
   display: flex;
   gap: 16px;
@@ -507,16 +545,16 @@ textarea:invalid {
   align-items: center;
   display: flex;
   flex-wrap: wrap;
-  gap: 16px;
+  gap: 8px;
 }
 
 .post-info [aria-label="author"] {
   font-weight: bold;
-  color: #117743;
+  color: var(--post-author-green);
 }
 
 .post-info [aria-label="subject"] {
-  color: #0f1367;
+  color: var(--post-subject-blue);
   font-weight: bold;
 }
 
@@ -528,9 +566,11 @@ textarea:invalid {
 .new-thread-container {
   align-items: flex-start;
   background: var(--lightest-blue);
+  box-shadow: 0 2px 2px var(--medium-gray);
   display: flex;
   flex-direction: column;
   gap: 8px;
+  padding: 8px 4px 8px 4px;
   position: sticky;
   top: 40px;
 }
@@ -542,10 +582,26 @@ textarea:invalid {
   gap: 8px;
 }
 
+.reply-form .buttons,
+.thread-form .buttons {
+  display: flex;
+  gap: 8px;
+}
+
 .reply-form .buttons.hidden,
 .thread-form .buttons.hidden {
   display: none;
   visibility: hidden;
+}
+
+.reply-form .file-input,
+.thread-form .file-input {
+  border: none;
+}
+
+.reply-form .file-input:focus,
+.thread-form .file-input:focus {
+  outline: 2px solid var(--dark-blue);
 }
 
 .reply-form .loading.hidden,
@@ -652,7 +708,7 @@ ol > li::marker {
 .board {
   display: flex;
   flex-direction: column;
-  gap: 32px;
+  gap: 8px;
   position: relative;
 }
 
@@ -706,7 +762,7 @@ ol > li::marker {
 
 .user-board .delete-icon:hover,
 .user-board .delete-icon:focus {
-  outline: 1px solid #001;
+  outline: 1px solid var(--black-text);
 }
 
 .user-boards,

@@ -236,14 +236,6 @@ export default function NewThread({
     return (
       <div className="new-thread-container">
         <form aria-label="thread form" className="thread-form">
-          <label htmlFor="thread-author">
-            Name:
-            {user ? (
-              <span id="thread-author">{threadAuthor}</span>
-            ) : (
-              <span id="thread-author">Anonymous</span>
-            )}
-          </label>
           <label htmlFor="thread-subject">
             Subject:
             <input
@@ -268,6 +260,7 @@ export default function NewThread({
             Image:
             <input
               accept="image/jpeg, image/gif, image/png"
+              className="file-input"
               id="thread-image"
               name="thread-image"
               onChange={changeFile}
@@ -301,7 +294,7 @@ export default function NewThread({
   return (
     <div className="new-thread-container">
       <button onClick={enableForm} type="button">
-        Start a Thread
+        Start a thread
       </button>
     </div>
   );
