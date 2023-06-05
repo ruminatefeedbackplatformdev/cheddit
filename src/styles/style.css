@@ -502,6 +502,7 @@ textarea:invalid {
 
 .post .sticky-info img {
   filter: invert(1);
+  height: 32px;
 }
 
 .post-content {
