@@ -237,6 +237,7 @@ export default function Reply({
   if (enabled) {
     return (
       <div className="reply-container">
+        <h2>Reply to Thread</h2>
         <form aria-label="reply form" className="reply-form">
           <label htmlFor="post-content">
             Comment:
@@ -248,29 +249,34 @@ export default function Reply({
               value={postContent}
             />
           </label>
-          <label htmlFor="post-image">
-            Image:
-            <input
-              accept="image/jpeg, image/gif, image/png"
-              id="post-image"
-              name="post=image"
-              onChange={changeFile}
-              type="file"
-            />
-          </label>
+          <span>Image:</span>
+          <span className="file-input-container">
+            <label className="custom-file-input" htmlFor="post-image">
+              Choose file
+              <input
+                accept="image/jpeg, image/gif, image/png"
+                className="file-input"
+                id="post-image"
+                name="post-image"
+                onChange={changeFile}
+                type="file"
+              />
+            </label>
+            <span>{file ? file.name : 'No file chosen'}</span>
+          </span>
           <span className="error" hidden={!error}>
             {error}
           </span>
           <div className={loading ? 'buttons hidden' : 'buttons visible'}>
             <button onClick={resetForm} type="button">
-              CANCEL
+              Cancel
             </button>
             <button
               disabled={error || !validComment || !validFile}
               onClick={submitPost}
               type="button"
             >
-              POST
+              Post
             </button>
           </div>
           <div className={loading ? 'loading visible' : 'loading hidden'}>

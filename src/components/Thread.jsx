@@ -43,7 +43,7 @@ export default function Thread({
   if (posts.length > 0) {
     return (
       <div aria-label="thread" className="thread">
-        <h1>{`/${board}/ - ${name}`}</h1>
+        <h1>{name}</h1>
         <Reply
           board={board}
           enabled={replyEnabled}

@@ -228,7 +228,7 @@ export default function Board({
   }
   return (
     <main className="board">
-      <h1>{`/${id}/ - ${name}`}</h1>
+      <h1>{name}</h1>
       <NewThread
         board={id}
         readDatabase={readDatabase}

@@ -212,7 +212,9 @@ textarea:invalid {
   width: 100%;
 }
 
-.board h1 {
+.board h1,
+.thread h1 {
+  background: var(--medium-blue);
   font-size: 1.15rem;
   padding: 4px;
 }
@@ -353,7 +355,7 @@ textarea:invalid {
 
 .error {
   background: var(--light-red);
-  height: 1.2rem;
+  padding: 4px;
 }
 
 .error.hidden {
@@ -575,11 +577,18 @@ textarea:invalid {
   top: 40px;
 }
 
+.reply-container h2,
+.new-thread-container h2 {
+  font-size: 1.05rem;
+}
+
 .reply-form,
 .thread-form {
   display: flex;
   flex-direction: column;
   gap: 8px;
+  max-width: 300px;
+  width: 100%;
 }
 
 .reply-form .buttons,
@@ -596,7 +605,23 @@ textarea:invalid {
 
 .reply-form .file-input,
 .thread-form .file-input {
+  display: none;
   border: none;
+}
+
+.reply-form .custom-file-input,
+.thread-form .custom-file-input {
+  background: var(--dark-purple);
+  cursor: pointer;
+  padding: 4px 8px 4px 8px;
+  width: max-content;
+}
+
+.reply-form .file-input-container,
+.thread-form .file-input-container {
+  align-items: center;
+  display: flex;
+  gap: 8px;
 }
 
 .reply-form .file-input:focus,

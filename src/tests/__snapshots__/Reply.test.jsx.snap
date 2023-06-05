@@ -5,6 +5,9 @@ exports[`Reply component displays reply button 1`] = `
   <div
     class="reply-container"
   >
+    <h2>
+      Reply to Thread
+    </h2>
     <form
       aria-label="reply form"
       class="reply-form"
@@ -19,17 +22,29 @@ exports[`Reply component displays reply button 1`] = `
           rows="6"
         />
       </label>
-      <label
-        for="post-image"
-      >
+      <span>
         Image:
-        <input
-          accept="image/jpeg, image/gif, image/png"
-          id="post-image"
-          name="post=image"
-          type="file"
-        />
-      </label>
+      </span>
+      <span
+        class="file-input-container"
+      >
+        <label
+          class="custom-file-input"
+          for="post-image"
+        >
+          Choose file
+          <input
+            accept="image/jpeg, image/gif, image/png"
+            class="file-input"
+            id="post-image"
+            name="post-image"
+            type="file"
+          />
+        </label>
+        <span>
+          No file chosen
+        </span>
+      </span>
       <span
         class="error"
         hidden=""
@@ -40,12 +55,12 @@ exports[`Reply component displays reply button 1`] = `
         <button
           type="button"
         >
-          CANCEL
+          Cancel
         </button>
         <button
           type="button"
         >
-          POST
+          Post
         </button>
       </div>
       <div

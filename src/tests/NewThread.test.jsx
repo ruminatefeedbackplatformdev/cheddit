@@ -11,7 +11,7 @@ describe('NewThread component', () => {
         <NewThread />
       </BrowserRouter>,
     );
-    expect(screen.getByRole('button', { name: 'Start a Thread' })).toBeTruthy();
+    expect(screen.getByRole('button', { name: 'Start a thread' })).toBeTruthy();
   });
 
   it('displays thread form when button clicked', () => {
@@ -21,7 +21,7 @@ describe('NewThread component', () => {
       </BrowserRouter>,
     );
     act(() => {
-      userEvent.click(screen.getByRole('button', { name: 'Start a Thread' }));
+      userEvent.click(screen.getByRole('button', { name: 'Start a thread' }));
     });
     expect(screen.getByRole('form', { name: 'thread form' })).toBeTruthy();
   });
@@ -33,10 +33,10 @@ describe('NewThread component', () => {
       </BrowserRouter>,
     );
     act(() => {
-      userEvent.click(screen.getByRole('button', { name: 'Start a Thread' }));
+      userEvent.click(screen.getByRole('button', { name: 'Start a thread' }));
     });
     expect(screen.getByLabelText('Subject:')).toBeTruthy();
     expect(screen.getByLabelText('Comment:')).toBeTruthy();
-    expect(screen.getByLabelText('Image:')).toBeTruthy();
+    expect(screen.getByLabelText('Choose file')).toBeTruthy();
   });
 });

@@ -235,6 +235,7 @@ export default function NewThread({
   if (enabled) {
     return (
       <div className="new-thread-container">
+        <h2>New Thread</h2>
         <form aria-label="thread form" className="thread-form">
           <label htmlFor="thread-subject">
             Subject:
@@ -256,30 +257,34 @@ export default function NewThread({
               value={threadContent}
             />
           </label>
-          <label htmlFor="thread-image">
-            Image:
-            <input
-              accept="image/jpeg, image/gif, image/png"
-              className="file-input"
-              id="thread-image"
-              name="thread-image"
-              onChange={changeFile}
-              type="file"
-            />
-          </label>
+          <span>Image:</span>
+          <span className="file-input-container">
+            <label className="custom-file-input" htmlFor="thread-image">
+              Choose file
+              <input
+                accept="image/jpeg, image/gif, image/png"
+                className="file-input"
+                id="thread-image"
+                name="thread-image"
+                onChange={changeFile}
+                type="file"
+              />
+            </label>
+            <span>{file ? file.name : 'No file chosen'}</span>
+          </span>
           <span className="error" hidden={!error}>
             {error}
           </span>
           <div className={loading ? 'buttons hidden' : 'buttons visible'}>
             <button onClick={resetForm} type="button">
-              CANCEL
+              Cancel
             </button>
             <button
               disabled={error || !validContent || !validFile}
               onClick={submitThread}
               type="button"
             >
-              POST
+              Post
             </button>
           </div>
           <div className={loading ? 'loading visible' : 'loading hidden'}>
