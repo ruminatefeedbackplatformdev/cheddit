@@ -28,6 +28,9 @@ export default function Header({ boards, setUser, user }) {
       case '':
         setCurrentLocation('Home');
         break;
+      case 'about':
+        setCurrentLocation('About');
+        break;
       case 'rules':
         setCurrentLocation('Rules');
         break;

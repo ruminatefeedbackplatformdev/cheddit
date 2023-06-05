@@ -223,6 +223,34 @@ textarea:invalid {
   border: 2px solid var(--light-red);
 }
 
+.about-container,
+.about-cheddit {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.about-cheddit {
+  padding: 4px;
+}
+
+.about-cheddit li {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.about-cheddit ul {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.about-cheddit img {
+  height: 24px;
+}
+
 .board {
   position: relative;
   width: 100%;
@@ -231,7 +259,8 @@ textarea:invalid {
 .board h1,
 .thread h1,
 .login h1,
-.invalid-route h1 {
+.invalid-route h1,
+.about-container h1 {
   background: var(--medium-blue);
   font-size: 1.15rem;
   padding: 4px;
