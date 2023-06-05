@@ -7,6 +7,7 @@ import {
 } from 'firebase/auth';
 import SignUp from './SignUp';
 import PasswordReset from './PasswordReset';
+import googleLogo from '../images/google-logo.png';
 
 export default function Login() {
   const [creatingAccount, setCreatingAccount] = useState(false);
@@ -87,11 +88,7 @@ export default function Login() {
   };
 
   if (resettingPassword) {
-    return (
-      <PasswordReset
-        togglePasswordReset={togglePasswordReset}
-      />
-    );
+    return <PasswordReset togglePasswordReset={togglePasswordReset} />;
   }
 
   if (creatingAccount) {
@@ -106,8 +103,8 @@ export default function Login() {
   return (
     <div className="login">
       <div>
+        <h1>Sign in</h1>
         <form>
-          <h2>Sign in</h2>
           <label htmlFor="email-login">
             email:
             <input
@@ -128,31 +125,37 @@ export default function Login() {
               value={loginPassword || ''}
             />
           </label>
-          <button disabled={error} type="button" onClick={emailLogin}>
-            Sign in
-          </button>
-          {error || !validEmail || !validPassword ? (
-            <span className="error">{error}</span>
-          ) : null}
-          <button onClick={togglePasswordReset} type="button">
-            Forgot Password
-          </button>
+          <div className="login-buttons">
+            <button disabled={error} type="button" onClick={emailLogin}>
+              Sign in
+            </button>
+            <button onClick={togglePasswordReset} type="button">
+              Forgot password
+            </button>
+          </div>
+          <span
+            className={
+              error || !validEmail || !validPassword ? 'error' : 'error hidden'
+            }
+          >
+            {error || 'error'}
+          </span>
+          <div className="create-account">
+            <span>New to Cheddit:</span>
+            <button onClick={toggleCreate} type="button">
+              Create account
+            </button>
+          </div>
         </form>
       </div>
       <div>
-        <h2>Or:</h2>
-        <button type="button" onClick={googleLogin}>
-          Continue with Google
-        </button>
-      </div>
-      <div>
-        <span>
-          New to Cheddit?
-          {' '}
-          <button onClick={toggleCreate} type="button">
-            Create account.
+        <h1>Or</h1>
+        <div className="other-options">
+          <button className="google-login" onClick={googleLogin} type="button">
+            Continue with Google
+            <img alt="" src={googleLogo} />
           </button>
-        </span>
+        </div>
       </div>
     </div>
   );

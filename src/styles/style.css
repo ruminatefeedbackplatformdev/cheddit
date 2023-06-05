@@ -213,7 +213,8 @@ textarea:invalid {
 }
 
 .board h1,
-.thread h1 {
+.thread h1,
+.login h1 {
   background: var(--medium-blue);
   font-size: 1.15rem;
   padding: 4px;
@@ -378,12 +379,55 @@ textarea:invalid {
   width: 100%;
 }
 
+.login {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.login .google-login {
+  align-items: center;
+  display: flex;
+  gap: 8px;
+}
+
+.login .login-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.login .other-options {
+  align-items: flex-start;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 4px;
+}
+
+.login .other-options img {
+  background: var(--white-text);
+  border-radius: 50%;
+  padding: 4px;
+  height: 28px;
+}
+
+.login .create-account {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
 .login form,
 .login form label {
   align-items: flex-start;
   display: flex;
   flex-direction: column;
+  gap: 4px;
 } 
+
+.login form {
+  padding: 4px;
+}
 
 .new-board-form {
   align-items: flex-start;
@@ -825,4 +869,5 @@ ol > li::marker {
 
 .valid {
   background: var(--light-green);
+  padding: 4px;
 }

@@ -63,30 +63,33 @@ export default function PasswordReset({ togglePasswordReset }) {
 
   return (
     <div className="login">
-      <h2>Reset password</h2>
-      <form>
-        <label htmlFor="forgot-email">
-          email:
-          <input
-            id="forgot-email"
-            onChange={changeEmail}
-            required
-            type="email"
-            value={email || ''}
-          />
-        </label>
-        <span className={toggleMessage()}>{error || success}</span>
-        <button
-          disabled={error || !validEmail}
-          onClick={sendResetEmail}
-          type="button"
-        >
-          Reset password
-        </button>
-        <button onClick={togglePasswordReset} type="button">
-          Back to login
-        </button>
-      </form>
+      <div>
+        <h1>Reset password</h1>
+        <form>
+          <span>Enter your email to request a password reset link</span>
+          <label htmlFor="forgot-email">
+            email:
+            <input
+              id="forgot-email"
+              onChange={changeEmail}
+              required
+              type="email"
+              value={email || ''}
+            />
+          </label>
+          <span className={toggleMessage()}>{error || success || 'error'}</span>
+          <button
+            disabled={error || !validEmail}
+            onClick={sendResetEmail}
+            type="button"
+          >
+            Reset password
+          </button>
+          <button onClick={togglePasswordReset} type="button">
+            Back to login
+          </button>
+        </form>
+      </div>
     </div>
   );
 }

@@ -6,6 +6,7 @@ import {
   signInWithRedirect,
   updateProfile,
 } from 'firebase/auth';
+import googleLogo from '../images/google-logo.png';
 
 export default function SignUp({ creatingAccount, setCreatingAccount }) {
   const [confirmedPassword, setConfirmedPassword] = useState('');
@@ -144,8 +145,8 @@ export default function SignUp({ creatingAccount, setCreatingAccount }) {
   return (
     <div className="login">
       <div>
+        <h1>Create Account</h1>
         <form>
-          <h2>Create Account</h2>
           <label htmlFor="email-create">
             email:
             <input
@@ -170,6 +171,15 @@ export default function SignUp({ creatingAccount, setCreatingAccount }) {
           </label>
           <label htmlFor="password-create">
             password:
+            <input
+              id="password-create"
+              minLength={8}
+              onChange={changePassword}
+              pattern={passwordRegex}
+              required
+              type="password"
+              value={newPassword || ''}
+            />
             <span className={validPassword ? 'valid' : 'error'}>
               requirements
             </span>
@@ -194,15 +204,6 @@ export default function SignUp({ creatingAccount, setCreatingAccount }) {
                 1 symbol (~!@#$%^&* etc)
               </li>
             </ul>
-            <input
-              id="password-create"
-              minLength={8}
-              onChange={changePassword}
-              pattern={passwordRegex}
-              required
-              type="password"
-              value={newPassword || ''}
-            />
           </label>
           <label htmlFor="password-confirm">
             confirm password:
@@ -215,35 +216,37 @@ export default function SignUp({ creatingAccount, setCreatingAccount }) {
               value={confirmedPassword || ''}
             />
           </label>
-          <button
-            disabled={
-              error
-              || !validConfirm
-              || !validEmail
-              || !validPassword
-              || !validName
-            }
-            type="button"
-            onClick={createAccount}
-          >
-            Register
-          </button>
-          {error ? <span className="error">{error}</span> : null}
+          <div className="login-buttons">
+            <button
+              disabled={
+                error
+                || !validConfirm
+                || !validEmail
+                || !validPassword
+                || !validName
+              }
+              type="button"
+              onClick={createAccount}
+            >
+              Register
+            </button>
+            <button onClick={toggleCreate} type="button">
+              Return to login
+            </button>
+          </div>
+          <span className={error ? 'error' : 'error hidden'}>
+            {error || 'error'}
+          </span>
         </form>
       </div>
       <div>
-        <h2>Or:</h2>
-        <button onClick={googleLogin} type="button">
-          Continue with Google
-        </button>
-      </div>
-      <div>
-        <span>
-          {' '}
-          <button onClick={toggleCreate} type="button">
-            Cancel
+        <h1>Or</h1>
+        <div className="other-options">
+          <button className="google-login" onClick={googleLogin} type="button">
+            Continue with Google
+            <img alt="" src={googleLogo} />
           </button>
-        </span>
+        </div>
       </div>
     </div>
   );

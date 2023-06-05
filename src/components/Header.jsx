@@ -34,7 +34,7 @@ export default function Header({ boards, setUser, user }) {
       case 'dash':
         setCurrentLocation('Dashboard');
         if (!user) {
-          setCurrentLocation('Sign In');
+          setCurrentLocation('Account');
         }
         if (user && user === 'loading') {
           setCurrentLocation('Loading...');
