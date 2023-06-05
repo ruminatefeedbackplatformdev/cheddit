@@ -25,6 +25,11 @@
 
 a {
   color: var(--dark-red);
+  text-decoration: none;
+}
+
+a:hover {
+  font-weight: bold;
 }
 
 body {
@@ -59,7 +64,17 @@ footer {
   align-items: center;
   background: var(--dark-blue);
   display: flex;
-  justify-content: center;
+  font-size: 0.85rem;
+  justify-content: space-between;
+  padding: 4px;
+}
+
+footer span a {
+  font-weight: bold;
+}
+
+footer a:hover {
+  text-decoration: underline;
 }
 
 header {
@@ -90,6 +105,7 @@ footer a {
 header a:hover,
 header a:focus {
   font-weight: bold;
+  text-decoration: none;
 }
 
 header nav {
@@ -214,7 +230,8 @@ textarea:invalid {
 
 .board h1,
 .thread h1,
-.login h1 {
+.login h1,
+.invalid-route h1 {
   background: var(--medium-blue);
   font-size: 1.15rem;
   padding: 4px;
@@ -268,7 +285,7 @@ textarea:invalid {
   background: var(--lightest-blue);
   box-shadow: 0 4px 4px 4px var(--medium-gray);
   display: grid;
-  grid-template-rows: auto 1fr 32px;
+  grid-template-rows: auto 1fr auto;
   margin: auto;
   max-width: 900px;
   min-height: 100vh;
@@ -382,6 +399,16 @@ textarea:invalid {
   font-size: 1.05rem;
   padding: 4px;
   width: 100%;
+}
+
+.invalid-route > div {
+  padding: 4px;
+}
+
+.invalid-route .invalid-message {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
 .login {
