@@ -83,7 +83,7 @@ export default function About() {
             {' '}
             <a
               target="_blank"
-              href="https://www.flaticon.com/free-icons/cheese"
+              href="https://www.flaticon.com/free-icon/cheese_4063297"
               rel="noreferrer"
             >
               Good Ware - Flaticon
@@ -131,7 +131,7 @@ export default function About() {
             {' '}
             <a
               target="_blank"
-              href="https://www.flaticon.com/free-icons/sticky-notes"
+              href="https://www.flaticon.com/free-icon/sticky-notes_4147058"
               rel="noreferrer"
             >
               mpanicon - Flaticon
