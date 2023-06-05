@@ -60,6 +60,7 @@ export default function Header({ boards, setUser, user }) {
     return null;
   };
 
+  // eslint-disable-next-line
   const hideMenu = () => {
     setMenuVisible(false);
   };
@@ -68,9 +69,9 @@ export default function Header({ boards, setUser, user }) {
     const auth = getAuth();
     setUser(null);
     signOut(auth);
-    hideMenu();
   };
 
+  // eslint-disable-next-line
   const showMenu = () => {
     if (user && user !== 'loading') {
       setMenuVisible(true);
@@ -88,14 +89,10 @@ export default function Header({ boards, setUser, user }) {
       <span className="current-location">{currentLocation}</span>
       <span
         className="account"
-        onBlur={hideMenu}
-        onClick={showMenu}
-        onFocus={showMenu}
-        onKeyPress={showMenu}
-        onMouseOut={hideMenu}
-        onMouseOver={showMenu}
-        role="button"
-        tabIndex="0"
+        onBlur={menuVisible ? hideMenu : null}
+        onFocus={menuVisible ? null : showMenu}
+        onMouseLeave={menuVisible ? hideMenu : null}
+        onMouseOver={menuVisible ? null : showMenu}
       >
         <span className="header-loading">
           {user ? (
@@ -119,14 +116,12 @@ export default function Header({ boards, setUser, user }) {
           className={
             menuVisible && user && user !== 'loading' ? 'menu' : 'menu hidden'
           }
-          onBlur={hideMenu}
-          onMouseOut={hideMenu}
         >
           {user && user !== 'loading' ? (
             <span>
               <ul>
                 <li>
-                  <Link onClick={blur} to="/dash">
+                  <Link onClick={hideMenu} to="/dash">
                     Dashboard
                   </Link>
                 </li>
