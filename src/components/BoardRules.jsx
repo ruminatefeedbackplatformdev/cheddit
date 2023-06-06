@@ -112,7 +112,10 @@ export default function BoardRules({ board, user }) {
             {rules.map((rule) => {
               if (editing) {
                 return (
-                  <li key={`${board.id}-rule#${rule.id}`}>
+                  <li
+                    className="editing-rule"
+                    key={`${board.id}-rule#${rule.id}`}
+                  >
                     <textarea
                       data-id={rule.id}
                       onChange={editRule}

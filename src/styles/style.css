@@ -799,7 +799,7 @@ textarea:invalid {
   gap: 16px;
 }
 
-.rules .per-board-rules li {
+.rules .per-board-rules li.editing-rule {
   display: list-item;
   max-width: 300px;
   width: 100%;
